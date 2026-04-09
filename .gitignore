@@ -1,0 +1,22 @@
+
+# Cache e dados locais
+**/__pycache__/
+**/*.pyc
+**/.cache/
+**/cache/
+**/*.log
+
+# Segredos
+**/.env
+**/secrets*
+**/credentials*
+**/token*
+
+# Específicos KDE que são gerados dinamicamente
+kdeconnect/
+plasma*/
+kdeglobals  # contém caminhos absolutos
+
+# Específicos de máquina
+**/mimeapps.list
+**/recently-used*
