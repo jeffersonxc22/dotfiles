@@ -1,57 +1,99 @@
 * {
-    font-family: "JetBrainsMono Nerd Font", "Noto Sans";
+    font-family: "CaskaydiaCove Nerd Font", "Noto Sans";
     background-image: none;
+    box-shadow: none;
 }
 
 window {
-    background-color: rgba(23, 26, 29, 0.9);
+    background-color: rgba(30, 30, 46, 0.90);
 }
 
 button {
-    color: #eff0f1;
-    background-color: rgba(49, 54, 59, 0.8);
+    font-size: 22px;
+    border-radius: 8px;
+    border-color: rgba(205, 214, 244, 0.1);
+    text-decoration-color: #cdd6f4;
+    color: #cdd6f4;
+    background-color: #181825;
     border-style: solid;
     border-width: 2px;
-    border-color: rgba(61, 174, 233, 0);
-    border-radius: 8px;
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 35%;
-    margin: 8px;
-    transition: all 0.2s ease;
-}
-
-button:focus,
-button:hover {
-    background-color: rgba(61, 174, 233, 0.15);
-    border-color: rgba(61, 174, 233, 0.8);
-    color: #3daee9;
+    background-size: 25%;
+    transition: background-color 200ms ease,
+                border-color 200ms ease,
+                color 200ms ease,
+                background-size 200ms ease;
 }
 
 button:active {
-    background-color: rgba(61, 174, 233, 0.3);
+    background-size: 28%;
 }
 
+/* Lock — Mauve */
+#lock:hover {
+    background-color: rgba(203, 166, 247, 0.15);
+    border-color: #cba6f7;
+    color: #cba6f7;
+    background-size: 30%;
+}
+
+/* Hibernate — Blue */
+#hibernate:hover {
+    background-color: rgba(137, 180, 250, 0.15);
+    border-color: #89b4fa;
+    color: #89b4fa;
+    background-size: 30%;
+}
+
+/* Logout — Green */
+#logout:hover {
+    background-color: rgba(166, 227, 161, 0.15);
+    border-color: #a6e3a1;
+    color: #a6e3a1;
+    background-size: 30%;
+}
+
+/* Shutdown — Red */
+#shutdown:hover {
+    background-color: rgba(243, 139, 168, 0.15);
+    border-color: #f38ba8;
+    color: #f38ba8;
+    background-size: 30%;
+}
+
+/* Suspend — Peach */
+#suspend:hover {
+    background-color: rgba(250, 179, 135, 0.15);
+    border-color: #fab387;
+    color: #fab387;
+    background-size: 30%;
+}
+
+/* Reboot — Yellow */
+#reboot:hover {
+    background-color: rgba(249, 226, 175, 0.15);
+    border-color: #f9e2af;
+    color: #f9e2af;
+    background-size: 30%;
+}
+
+/* — Ícones — */
 #lock {
-    background-image: image(url("/usr/share/wlogout/icons/lock.png"));
+    background-image: url("/home/jefferson/.config/wlogout/icons/lock_mauve.svg");
 }
-
 #hibernate {
-    background-image: image(url("/usr/share/wlogout/icons/hibernate.png"));
+    background-image: url("/home/jefferson/.config/wlogout/icons/hibernate_blue.svg");
 }
-
 #logout {
-    background-image: image(url("/usr/share/wlogout/icons/logout.png"));
+    background-image: url("/home/jefferson/.config/wlogout/icons/logout_green.svg");
 }
-
 #shutdown {
-    background-image: image(url("/usr/share/wlogout/icons/shutdown.png"));
+    background-image: url("/home/jefferson/.config/wlogout/icons/shutdown_red.svg");
 }
-
 #suspend {
-    background-image: image(url("/usr/share/wlogout/icons/suspend.png"));
+    background-image: url("/home/jefferson/.config/wlogout/icons/suspend_peach.svg");
 }
-
 #reboot {
-    background-image: image(url("/usr/share/wlogout/icons/reboot.png"));
+    background-image: url("/home/jefferson/.config/wlogout/icons/reboot_yellow.svg");
 }
