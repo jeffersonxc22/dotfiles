@@ -10,7 +10,7 @@ cursor = "#F5E0DC"
 
 [colors.vi_mode_cursor]
 text = "#1E1E2E"
-cursor = "#B4BEFE"
+cursor = "#74C7EC"
 
 [colors.search.matches]
 foreground = "#1E1E2E"

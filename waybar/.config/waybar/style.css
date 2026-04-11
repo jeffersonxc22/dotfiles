@@ -30,8 +30,8 @@ button {
 
 button:hover {
     background: inherit;
-    color: @mauve;
-    border-top: 2px solid @mauve;
+    color: @sapphire;
+    border-top: 2px solid @sapphire;
 }
 
 #workspaces button {
@@ -46,8 +46,8 @@ button:hover {
 
 #workspaces button.active {
     background-color: rgba(0, 0, 0, 0.3);
-    color: @mauve;
-    border-top: 2px solid @mauve;
+    color: @sapphire;
+    border-top: 2px solid @sapphire;
 }
 
 #workspaces button.urgent {
@@ -82,8 +82,8 @@ button:hover {
 }
 
 #clock.date {
-    color: @mauve;
-    border-bottom: 2px solid @mauve;
+    color: @sapphire;
+    border-bottom: 2px solid @sapphire;
 }
 
 #pulseaudio {
