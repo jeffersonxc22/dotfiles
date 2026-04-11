@@ -20,7 +20,7 @@ set -gx PGHOST /var/run/postgresql
 
 # PATH
 fish_add_path /usr/local/go/bin
-
+fish_add_path ~/.local/bin
 
 #Init TMUX
 if not set -q TMUX
