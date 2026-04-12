@@ -1,4 +1,4 @@
-# Carrega config base do CachyOS
+#  Carrega config base do CachyOS
 source /usr/share/cachyos-fish-config/cachyos-config.fish
 
 # Starship
@@ -22,13 +22,8 @@ set -gx PGHOST /var/run/postgresql
 fish_add_path /usr/local/go/bin
 fish_add_path ~/.local/bin
 
-#Init TMUX
-if not set -q TMUX
-    if tmux has-session 2>/dev/null
-        exec tmux attach
-    else
-        exec tmux
-    end
+# TMUX
+if status is-interactive && not set -q TMUX
+    new_tmux
 end
-
 
