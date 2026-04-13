@@ -8,10 +8,11 @@ local M = {}
 M.base46 = {
 	theme = "catppuccin",
 
-	-- hl_override = {
+	hl_override = {
+    CodeiumSuggestion = { fg = "#49425b", italic = true },
 	-- 	Comment = { italic = true },
 	-- 	["@comment"] = { italic = true },
-	-- },
+	},
 }
 
 -- M.nvdash = { load_on_startup = true }

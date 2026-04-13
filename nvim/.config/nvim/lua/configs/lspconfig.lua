@@ -1,38 +1,41 @@
--- Carrega as configurações padrão do NvChad (on_attach e capabilities)
-local configs = require("nvchad.configs.lspconfig")
-local on_attach = configs.on_attach
-local on_init = configs.on_init
-local capabilities = configs.capabilities
+-- 1. Pega as configurações de elite do NVChad
+local nvlsp = require("nvchad.configs.lspconfig")
+local on_attach = nvlsp.on_attach
+local capabilities = nvlsp.capabilities
 
-local lspconfig = require "lspconfig"
-local util = require "lspconfig/util"
-
--- 1. Servidores que usam a configuração padrão (HTML, CSS, etc.)
+-- 2. Servidores Simples (HTML, CSS)
 local servers = { "html", "cssls" }
 
 for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup {
-    on_attach = on_attach,
-    on_init = on_init,
-    capabilities = capabilities,
-  }
+  -- FORMA CORRETA 0.11: Define a configuração no registro nativo
+  vim.lsp.config(lsp, {
+    default_config = {
+      on_attach = on_attach,
+      capabilities = capabilities,
+    },
+  })
+  -- Ativa o servidor para os arquivos correspondentes
+  vim.lsp.enable(lsp)
 end
 
--- 2. Configuração customizada para o Go (gopls)
-lspconfig.gopls.setup {
-  on_attach = on_attach,
-  on_init = on_init,
-  capabilities = capabilities,
-  cmd = { "gopls" },
-  filetypes = { "go", "gomod", "gowork", "gotmpl" },
-  root_dir = util.root_pattern("go.work", "go.mod", ".git"),
-  settings = {
-    gopls = {
-      completeUnimported = true,
-      usePlaceholders = true,
-      analyses = {
-        unusedparams = true,
+-- 3. Implementação Customizada para Go (gopls)
+vim.lsp.config("gopls", {
+  default_config = {
+    cmd = { "gopls" },
+    filetypes = { "go", "gomod", "gowork", "gotmpl" },
+    -- Usamos vim.fs.root (nova função nativa do 0.11) para achar o projeto
+    root_dir = vim.fs.root(0, { "go.work", "go.mod", ".git" }),
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+      gopls = {
+        completeUnimported = true,
+        usePlaceholders = true,
+        analyses = { unusedparams = true },
       },
     },
   },
-}
+})
+
+-- Ativa o gopls
+vim.lsp.enable("gopls")

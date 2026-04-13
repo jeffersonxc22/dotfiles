@@ -9,7 +9,7 @@ $directory\
 [](fg:peach bg:green)\
 $git_branch\
 $git_status\
-[](fg:green bg:teal)\
+[](fg:green bg:sapphire)\
 $c\
 $rust\
 $golang\
@@ -19,11 +19,10 @@ $java\
 $kotlin\
 $haskell\
 $python\
-[](fg:teal bg:blue)\
+[](fg:sapphire bg:mauve)\
 $docker_context\
-[](fg:blue bg:purple)\
-$time\
-[ ](fg:purple)\
+$aws\
+[ ](fg:mauve)\
 $line_break$character"""
 
 palette = 'catppuccin_mocha'
@@ -44,10 +43,11 @@ color_yellow = '#d79921'
 rosewater = "#f5e0dc"
 flamingo = "#f2cdcd"
 pink = "#f5c2e7"
-orange = "#cba6f7"
+mauve = "#cba6f7"    # Este é o roxo que estava no seu 'orange'
 red = "#f38ba8"
 maroon = "#eba0ac"
-peach = "#fab387"
+peach = "#fab387"    # O laranja claro que você gosta
+orange = "#fab387"   # No Mocha oficial, Peach e Orange são frequentemente associados
 yellow = "#f9e2af"
 green = "#a6e3a1"
 teal = "#94e2d5"
@@ -115,21 +115,21 @@ truncation_symbol = "…/"
 
 [git_branch]
 symbol = ""
-style = "bg:teal"
-format = '[[ $symbol $branch ](fg:base bg:green)]($style)'
+style = "bg:green"
+format = '[[ $symbol $branch ](fg:mantle bg:green)]($style)'
 
 [git_status]
-style = "bg:teal"
-format = '[[($all_status$ahead_behind )](fg:base bg:green)]($style)'
+style = "bg:lavender"
+format = '[[($all_status$ahead_behind )](fg:mantle bg:green)]($style)'
 
 [nodejs]
 symbol = ""
-style = "bg:teal"
+style = "bg:sapphire"
 format = '[[ $symbol( $version) ](fg:base bg:teal)]($style)'
 
 [c]
 symbol = " "
-style = "bg:teal"
+style = "bg:sapphire"
 format = '[[ $symbol( $version) ](fg:base bg:teal)]($style)'
 
 [rust]
@@ -139,8 +139,8 @@ format = '[[ $symbol( $version) ](fg:base bg:teal)]($style)'
 
 [golang]
 symbol = ""
-style = "bg:teal"
-format = '[[ $symbol( $version) ](fg:base bg:teal)]($style)'
+style = "bg:sapphire"
+format = '[[ $symbol( $version) ](fg:mantle bg:sapphire)]($style)'
 
 [php]
 symbol = ""
@@ -169,14 +169,15 @@ format = '[[ $symbol( $version) ](fg:base bg:teal)]($style)'
 
 [docker_context]
 symbol = ""
-style = "bg:mantle"
-format = '[[ $symbol( $context) ](fg:#83a598 bg:color_bg3)]($style)'
+disabled = false
+style = "bg:yellow"
+format = '[[ $symbol( $context) ](fg:mantle bg:yellow)]($style)'
 
 [time]
 disabled = false
 time_format = "%R"
-style = "bg:peach"
-format = '[[  $time ](fg:mantle bg:purple)]($style)'
+style = "bg:rosewater"
+format = '[[  $time ](fg:mantle bg:rosewater)]($style)'
 
 [line_break]
 disabled = false
@@ -189,3 +190,13 @@ vimcmd_symbol = '[](bold fg:creen)'
 vimcmd_replace_one_symbol = '[](bold fg:purple)'
 vimcmd_replace_symbol = '[](bold fg:purple)'
 vimcmd_visual_symbol = '[](bold fg:lavender)'
+
+[aws]
+symbol = ""
+style = "bg:mauve"
+format = '[[ $symbol( $profile) ](fg:mantle bg:mauve)]($style)'
+
+[aws.region_aliases]
+us-east-1 = "ue1"
+us-west-2 = "uw2"
+sa-east-1 = "br"
