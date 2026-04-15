@@ -27,3 +27,5 @@ if status is-interactive && not set -q TMUX
     new_tmux
 end
 
+# AWS Profile Default
+asp kumo
