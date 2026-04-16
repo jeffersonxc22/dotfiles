@@ -1,12 +1,15 @@
 {
+  "layer": "top",
   "position": "top",
-  "modules-left": ["hyprland/workspaces"],
-  "modules-center": ["hyprland/window"],
-  "modules-right": ["bluetooth", "network", "pulseaudio", "battery", "clock"],
+  "modules-left": ["hyprland/workspaces", "hyprland/window"],
+  "modules-center": [],
+  "modules-right": ["tray", "bluetooth", "network", "pulseaudio", "battery", "clock"],
+  
   "clock": {
     "format": "<span foreground='#f5c2e7'> 󰃭 </span>{:%a %d %H:%M}",
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
   },
+  
   "battery": {
     "states": {
       "warning": 30,
@@ -22,6 +25,7 @@
     "format-icons": ["󰁺", "󰁼", "󰁾", "󰂀", "󰂂"],
     "tooltip-format": "{time}"
   },
+  
   "bluetooth": {
     "format": "<span size='13000' foreground='#89b4fa'> 󰂯 </span>{status}",
     "format-connected": "<span size='13000' foreground='#89b4fa'> 󰂱 </span>{device_alias}",
@@ -31,19 +35,32 @@
     "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
     "on-click": "blueman-manager"
   },
+  
   "network": {
     "format-wifi": "<span size='13000' foreground='#f5e0dc'> 󰤨 </span>{essid}",
     "format-ethernet": "<span size='13000' foreground='#f5e0dc'> 󰈀 </span>{ifname}",
     "format-linked": "<span size='13000' foreground='#f5e0dc'> 󰈀 </span>{ifname} (No IP)",
     "format-disconnected": "<span size='13000' foreground='#f5e0dc'> 󰤭 </span>Disconnected",
-    "tooltip-format-wifi": "Signal Strenght: {signalStrength}%"
+    "tooltip-format-wifi": "Signal Strength: {signalStrength}%",
+    "on-click": "alacritty -e nmtui"
   },
+  
   "pulseaudio": {
-    "format": "{icon}  {volume}%",
+    "format": "{icon} {volume}%",
     "format-muted": "󰝟",
     "format-icons": {
       "default": ["󰕿", "󰖀", "󰕾"]
     },
     "on-click": "pavucontrol"
+  },
+
+  "tray": {
+    "icon-size": 18,
+    "spacing": 10
+  },
+
+  "hyprland/window": {
+    "format": "{}",
+    "max-length": 40
   }
 }
