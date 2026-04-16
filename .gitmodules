@@ -1,0 +1,6 @@
+[submodule "tmux/.tmux/plugins/tpm"]
+	path = tmux/.tmux/plugins/tpm
+	url = https://github.com/tmux-plugins/tpm
+[submodule "hypr/.config/hypr/modules/catppuccin-hyprland"]
+	path = hypr/.config/hypr/modules/catppuccin-hyprland
+	url = https://github.com/catppuccin/hyprland.git
