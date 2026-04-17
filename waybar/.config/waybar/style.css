@@ -1,133 +1,89 @@
 @import "mocha.css"; 
 
 * {
-    font-family: "CaskaydiaCove Nerd Font Mono";
-    font-size: 16px;
-    min-height: 0;
+    font-family: "CaskaydiaCove Nerd Font Mono", sans-serif;
+    font-size: 15px;
     font-weight: bold;
-}
-
-window#waybar {
-    background: transparent;
-    background-color: @crust;
-    color: @overlay0;
-    transition-property: background-color;
-    transition-duration: 0.1s;
-    border-bottom: 1px solid @overlay1;
-}
-
-#window {
-    margin: 8px;
-    padding-left: 8;
-    padding-right: 8;
-}
-
-button {
-    box-shadow: inset 0 -3px transparent;
     border: none;
     border-radius: 0;
 }
 
-button:hover {
-    background: inherit;
-    color: @sapphire;
-    border-top: 2px solid @sapphire;
+window#waybar {
+    background: transparent;
+}
+
+/* Estilo Geral dos Blocos (Pílulas com Relevo) */
+#workspaces,
+#window,
+#pulseaudio,
+#battery,
+#clock,
+#tray {
+    background-color: @base;
+    color: @text;
+    border-radius: 12px;
+    margin: 4px 6px;
+    padding: 2px 12px;
+    /* Efeito de Alto Relevo: Sombra escura embaixo e brilho leve em cima */
+    box-shadow: inset 0px -2px 4px rgba(0,0,0,0.6), 0px 3px 6px rgba(0,0,0,0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* --- Workspaces Estilo Quadrados Espaçados --- */
+#workspaces {
+    background: transparent; /* Removemos o fundo do container */
+    box-shadow: none;
+    border: none;
+    padding: 0;
 }
 
 #workspaces button {
-    padding: 0 4px;
-}
-
-#workspaces button.focused {
-    background-color: rgba(0, 0, 0, 0.3);
-    color: @rosewater;
-    border-top: 2px solid @rosewater;
+    background-color: @base;
+    color: @overlay0;
+    margin: 0 4px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    /* Relevo individual para cada quadrado */
+    box-shadow: inset 0px -2px 3px rgba(0,0,0,0.5), 0px 2px 4px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
 }
 
 #workspaces button.active {
-    background-color: rgba(0, 0, 0, 0.3);
     color: @sapphire;
-    border-top: 2px solid @sapphire;
-}
-
-#workspaces button.urgent {
-    background-color: #eb4d4b;
-}
-
-#pulseaudio,
-#clock,
-#battery,
-#cpu,
-#memory,
-#disk,
-#temperature,
-#backlight,
-#wireplumber,
-#tray,
-#network,
-#bluetooth,
-#mode,
-#scratchpad {
-  margin-top: 2px;
-  margin-bottom: 2px;
-  margin-left: 4px;
-  margin-right: 4px;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#clock {
-    color: @maroon;
-    border-bottom: 2px solid @maroon;
-}
-
-#clock.date {
-    color: @sapphire;
+    background-color: @mantle;
+    /* Inverte o relevo para parecer "pressionado" */
+    box-shadow: inset 0px 2px 4px rgba(0,0,0,0.8);
     border-bottom: 2px solid @sapphire;
 }
 
-#pulseaudio {
-    color: @blue;
-    border-bottom: 2px solid @blue;
+#workspaces button.urgent {
+    background-color: @red;
+    color: @base;
 }
 
-#network {
-    color: @yellow;
-    border-bottom: 2px solid @yellow;
+/* --- Detalhes de Cores --- */
+#clock { color: @maroon; }
+#pulseaudio { color: @blue; }
+#battery { color: @green; }
+#battery.warning { color: @yellow; }
+#battery.critical { color: @red; }
+
+/* Ajuste do Tray (Wi-Fi e BT) */
+#tray {
+    padding: 0 15px;
 }
 
-#idle_inhibitor {
-    margin-right: 12px;
-    color: #7cb342;
+#tray menu {
+    background-color: @base;
+    border: 1px solid @surface0;
 }
 
-#idle_inhibitor.activated {
-    color: @red;
-}
-
-#battery {
-    color: @green;
-    border-bottom: 2px solid @green;
-}
-
-/* If workspaces is the leftmost module, omit left margin */
-.modules-left>widget:first-child>#workspaces {
-    margin-left: 0;
-}
-
-/* If workspaces is the rightmost module, omit right margin */
-.modules-right>widget:last-child>#workspaces {
-    margin-right: 0;
-}
-
-#custom-vpn {
-    color: @lavender;
+#window {
+    background-color: @base;
+    color: @text;
     border-radius: 15px;
-    padding-left: 6px;
-    padding-right: 6px;
+    padding: 2px 12px;
+    margin: 4px;
+    font-size: 18px; /* Aumenta um pouco para o ícone ficar visível */
 }
 
-#bluetooth {
-    color: @teal;
-    border-bottom: 2px solid @teal;
-}

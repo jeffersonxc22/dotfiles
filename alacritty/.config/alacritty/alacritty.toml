@@ -33,3 +33,14 @@ style = "Regular"
 import = [
   "~/.config/alacritty/catppuccin-mocha.toml"
 ]
+
+# No Alacritty (exemplo em TOML)
+[[keyboard.bindings]]
+chars = "\u0003"
+key = "C"
+mods = "Super"
+
+[[keyboard.bindings]]
+chars = "\u0016"
+key = "V"
+mods = "Super"

@@ -1,66 +1,45 @@
 {
   "layer": "top",
   "position": "top",
-  "modules-left": ["hyprland/workspaces", "hyprland/window"],
-  "modules-center": [],
-  "modules-right": ["tray", "bluetooth", "network", "pulseaudio", "battery", "clock"],
-  
+  "margin-top": 5,
+  "modules-left": ["hyprland/workspaces"],
+  "modules-center": ["hyprland/window"],
+  "modules-right": ["pulseaudio", "battery", "clock", "tray"],
+
+  "hyprland/workspaces": {
+    "disable-scroll": true,
+    "all-outputs": true,
+    "format": "{name}",
+    "on-click": "activate"
+  },
+
   "clock": {
-    "format": "<span foreground='#f5c2e7'> 󰃭 </span>{:%a %d %H:%M}",
+    "format": "󰃭 {:%H:%M}",
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
   },
-  
+
   "battery": {
-    "states": {
-      "warning": 30,
-      "critical": 15
-    },
-    "format": "<span size='13000' foreground='#a6e3a1'>{icon} </span> {capacity}%",
-    "format-warning": "<span size='13000' foreground='#B1E3AD'>{icon} </span> {capacity}%",
-    "format-critical": "<span size='13000' foreground='#E38C8F'>{icon} </span> {capacity}%",
-    "format-charging": "<span size='13000' foreground='#B1E3AD'> 󰂄 </span>{capacity}%",
-    "format-plugged": "<span size='13000' foreground='#B1E3AD'> 󰚥 </span>{capacity}%",
-    "format-alt": "<span size='13000' foreground='#B1E3AD'>{icon} </span> {time}",
-    "format-full": "<span size='13000' foreground='#B1E3AD'> 󰁹 </span>{capacity}%",
+    "states": { "warning": 30, "critical": 15 },
+    "format": "{icon} {capacity}%",
     "format-icons": ["󰁺", "󰁼", "󰁾", "󰂀", "󰂂"],
-    "tooltip-format": "{time}"
+    "format-charging": "󰂄 {capacity}%"
   },
-  
-  "bluetooth": {
-    "format": "<span size='13000' foreground='#89b4fa'> 󰂯 </span>{status}",
-    "format-connected": "<span size='13000' foreground='#89b4fa'> 󰂱 </span>{device_alias}",
-    "format-connected-battery": "<span size='13000' foreground='#89b4fa'> 󰂱 </span>{device_alias} {device_battery_percentage}%",
-    "tooltip-format": "{controller_alias}\t{controller_address}",
-    "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
-    "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
-    "on-click": "blueman-manager"
-  },
-  
-  "network": {
-    "format-wifi": "<span size='13000' foreground='#f5e0dc'> 󰤨 </span>{essid}",
-    "format-ethernet": "<span size='13000' foreground='#f5e0dc'> 󰈀 </span>{ifname}",
-    "format-linked": "<span size='13000' foreground='#f5e0dc'> 󰈀 </span>{ifname} (No IP)",
-    "format-disconnected": "<span size='13000' foreground='#f5e0dc'> 󰤭 </span>Disconnected",
-    "tooltip-format-wifi": "Signal Strength: {signalStrength}%",
-    "on-click": "alacritty -e nmtui"
-  },
-  
+
   "pulseaudio": {
     "format": "{icon} {volume}%",
     "format-muted": "󰝟",
-    "format-icons": {
-      "default": ["󰕿", "󰖀", "󰕾"]
-    },
+    "format-icons": { "default": ["󰕿", "󰖀", "󰕾"] },
     "on-click": "pavucontrol"
   },
 
   "tray": {
-    "icon-size": 18,
+    "icon-size": 20, // Aumentei um pouco como você pediu
     "spacing": 10
   },
-
+  
   "hyprland/window": {
-    "format": "{}",
+    "format": "{}", // Adiciona o ícone antes do título
     "max-length": 40
   }
+
 }
