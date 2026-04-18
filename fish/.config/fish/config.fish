@@ -29,10 +29,6 @@ end
 fish_add_path /usr/local/go/bin
 fish_add_path ~/.local/bin
 
-# TMUX
-if status is-interactive && not set -q TMUX
-    new_tmux
-end
 
 # AWS Profile Default
 asp kumo
