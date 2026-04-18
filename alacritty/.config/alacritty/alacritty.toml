@@ -7,7 +7,7 @@ padding = { x = 15, y = 10 }
 dynamic_padding = false
 
 [font]
-size = 14.0
+size = 18.0
 
 [font.bold]
 # family = "MesloLGS Nerd Font Mono"
