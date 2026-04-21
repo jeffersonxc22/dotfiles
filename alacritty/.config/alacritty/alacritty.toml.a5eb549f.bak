@@ -44,8 +44,3 @@ mods = "Super"
 chars = "\u0016"
 key = "V"
 mods = "Super"
-
-[[keyboard.bindings]]
-key = "Return"
-mods = "Shift"
-chars = "\u001B\r"
