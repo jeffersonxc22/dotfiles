@@ -1,5 +1,4 @@
 #  Carrega config base do CachyOS
-source /usr/share/cachyos-fish-config/cachyos-config.fish
 
 # Starship
 starship init fish | source
