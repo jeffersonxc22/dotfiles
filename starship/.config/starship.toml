@@ -164,9 +164,6 @@ symbol = " "
 [hg_branch]
 symbol = " "
 
-[hostname]
-ssh_symbol = " "
-
 [julia]
 symbol = " "
 
