@@ -1,9 +1,3 @@
-[submodule "tmux/.tmux/plugins/tpm"]
-	path = tmux/.tmux/plugins/tpm
-	url = https://github.com/tmux-plugins/tpm
-[submodule "kitty/.config/kitty/themes/catppuccin"]
-	path = kitty/.config/kitty/themes/catppuccin
-	url = https://github.com/catppuccin/kitty
 [submodule "zsh/.oh-my-zsh/custom/plugins/zsh-autosuggestions"]
 	path = zsh/.oh-my-zsh/custom/plugins/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions
