@@ -1,8 +1,0 @@
-[Unit]
-Description=Rclone sync Obsidian Vault para Google Drive
-
-[Service]
-Type=oneshot
-ExecStart=/usr/bin/rclone bisync /var/home/jefferson/Obsidian google:Kode-D-Obsidian \
-    --filter-from %h/.config/rclone/obsidian-filter.txt \
-    --log-level ERROR
