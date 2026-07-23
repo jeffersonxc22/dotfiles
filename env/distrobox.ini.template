@@ -1,0 +1,14 @@
+# distrobox.ini.template
+#
+# Vive em ~/dotfiles/env/distrobox.ini.template (versionado). Não é usado
+# diretamente pelo distrobox — o new-env.sh lê este template, substitui os
+# placeholders e ANEXA a entrada resultante em ~/dotfiles/env/distrobox.ini
+# (esse sim, o arquivo real que o `distrobox assemble` lê).
+#
+# Placeholders: {{NAME}} {{IMAGE}} {{USER}} {{NVIDIA}}
+
+[{{NAME}}]
+image={{IMAGE}}
+home=/home/{{USER}}/Envs/{{NAME}}
+volume=/home/{{USER}}/dotfiles:/home/{{USER}}/dotfiles:rw
+nvidia={{NVIDIA}}
