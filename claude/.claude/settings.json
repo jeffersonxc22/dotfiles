@@ -13,5 +13,52 @@
       "Bash(git push --force*)",
       "Bash(git reset --hard*)"
     ]
-  }
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rtk hook claude"
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "context-mode@context-mode": true,
+    "superpowers@superpowers-marketplace": true,
+    "hivemind-vault@nemu-skills": true,
+    "obsidian@obsidian-skills": true,
+    "skill-creator@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "context-mode": {
+      "source": {
+        "source": "github",
+        "repo": "mksglu/context-mode"
+      }
+    },
+    "superpowers-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "obra/superpowers-marketplace"
+      }
+    },
+    "obsidian-skills": {
+      "source": {
+        "source": "github",
+        "repo": "kepano/obsidian-skills"
+      }
+    },
+    "nemu-skills": {
+      "source": {
+        "source": "github",
+        "repo": "nemu-brazil/nemu-skills"
+      }
+    }
+  },
+  "theme": "dark"
 }

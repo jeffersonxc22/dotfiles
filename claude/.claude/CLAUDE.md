@@ -71,3 +71,5 @@ Topologies).
 This is **global** context (via dotfiles, the same across every
 environment/project). Project-specific instructions go in that repo's
 own CLAUDE.md, not here.
+
+@RTK.md
