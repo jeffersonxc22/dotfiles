@@ -10,3 +10,6 @@
 [submodule "claude/.claude/plugins/marketplaces/obsidian-skills"]
 	path = claude/.claude/plugins/marketplaces/obsidian-skills
 	url = https://github.com/kepano/obsidian-skills
+[submodule "claude/.claude/plugins/marketplaces/superpowers-marketplace"]
+	path = claude/.claude/plugins/marketplaces/superpowers-marketplace
+	url = https://github.com/obra/superpowers-marketplace
