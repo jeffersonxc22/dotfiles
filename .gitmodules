@@ -7,3 +7,6 @@
 [submodule "claude/.claude/plugins/marketplaces/context-mode"]
 	path = claude/.claude/plugins/marketplaces/context-mode
 	url = https://github.com/mksglu/context-mode
+[submodule "claude/.claude/plugins/marketplaces/obsidian-skills"]
+	path = claude/.claude/plugins/marketplaces/obsidian-skills
+	url = https://github.com/kepano/obsidian-skills
