@@ -25,3 +25,6 @@
 [submodule "zsh/.oh-my-zsh/custom/plugins/zsh-abbr"]
 	path = zsh/.oh-my-zsh/custom/plugins/zsh-abbr
 	url = https://github.com/olets/zsh-abbr
+[submodule "zsh/.fzf-catppuccin"]
+	path = zsh/.fzf-catppuccin
+	url = https://github.com/catppuccin/fzf
