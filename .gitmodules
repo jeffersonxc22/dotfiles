@@ -16,3 +16,12 @@
 [submodule "zsh/.oh-my-zsh/custom/plugins/fzf-tab"]
 	path = zsh/.oh-my-zsh/custom/plugins/fzf-tab
 	url = https://github.com/Aloxaf/fzf-tab
+[submodule "zsh/.oh-my-zsh/custom/plugins/zsh-completions"]
+	path = zsh/.oh-my-zsh/custom/plugins/zsh-completions
+	url = https://github.com/zsh-users/zsh-completions
+[submodule "zsh/.oh-my-zsh/custom/plugins/you-should-use"]
+	path = zsh/.oh-my-zsh/custom/plugins/you-should-use
+	url = https://github.com/MichaelAquilina/zsh-you-should-use
+[submodule "zsh/.oh-my-zsh/custom/plugins/zsh-abbr"]
+	path = zsh/.oh-my-zsh/custom/plugins/zsh-abbr
+	url = https://github.com/olets/zsh-abbr
