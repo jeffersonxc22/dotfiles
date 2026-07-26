@@ -186,3 +186,8 @@ if command -v claude-desktop >/dev/null 2>&1; then
 fi
 
 log "Bootstrap concluído. Abra um novo shell (zsh) para aplicar tudo."
+
+# Claude Code plugins pontuais do marketplace oficial (sem vendorar o repo inteiro)
+claude plugin marketplace add anthropics/claude-plugins-official
+claude plugin install context7@claude-plugins-official
+claude plugin install skill-creator@claude-plugins-official
