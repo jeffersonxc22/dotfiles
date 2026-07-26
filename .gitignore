@@ -20,3 +20,4 @@ kdeglobals  # contém caminhos absolutos
 # Específicos de máquina
 **/mimeapps.list
 **/recently-used*
+claude/.claude/plugins/marketplaces/nemu-skills/
