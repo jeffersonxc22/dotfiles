@@ -13,3 +13,6 @@
 [submodule "claude/.claude/plugins/marketplaces/superpowers-marketplace"]
 	path = claude/.claude/plugins/marketplaces/superpowers-marketplace
 	url = https://github.com/obra/superpowers-marketplace
+[submodule "zsh/.oh-my-zsh/custom/plugins/fzf-tab"]
+	path = zsh/.oh-my-zsh/custom/plugins/fzf-tab
+	url = https://github.com/Aloxaf/fzf-tab
