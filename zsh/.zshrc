@@ -4,7 +4,25 @@
 export PATH="$HOME/.local/bin:$PATH"
 
 # Path to your Oh My Zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
+# De proposito um path FIXO do host (nao $HOME-relativo): Oh My Zsh nao
+# guarda autenticacao nem identidade, e so framework/tema - entao segue
+# a mesma regra que aplicamos pra tudo que nao e auth: compartilhado
+# entre host e todos os ambientes, path unico. Isolado por ambiente
+# fica reservado so pro que precisa mesmo (git identity, tokens MCP,
+# credenciais de CLI de cloud/agent).
+export ZSH="/home/${USER}/.oh-my-zsh"
+
+# Nome do ambiente/container atual, pra usar no prompt (Starship) em vez
+# do $USER (que e sempre o mesmo usuario do host, nao diferencia
+# ambiente). Mesma logica que o bootstrap.sh ja usa pra nomear o export
+# do Claude Desktop - calculado aqui de novo porque $HOME muda por
+# ambiente mas esse .zshrc e o mesmo arquivo compartilhado em todos.
+export ENV_NAME="$(basename "$HOME")"
+
+# Custom plugins/tema lidos direto do dotfiles versionado (nao de
+# $ZSH/custom) - assim ficam sob controle de versao e iguais em
+# qualquer lugar, sem precisar de um Stow target separado so pra isso.
+export ZSH_CUSTOM="/home/${USER}/dotfiles/zsh/.oh-my-zsh/custom"
 
 # Exports 
 export BAT_THEME="Catppuccin Mocha"
