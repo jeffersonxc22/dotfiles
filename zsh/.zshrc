@@ -156,8 +156,8 @@ alias cat='bat --paging=never'
 eval "$(starship init zsh)"
 
 # Mise 
-eval "$(~/.local/bin/mise activate zsh)"
+eval "$(mise activate zsh)"
 
 # FZF Style
-source ~/dotfiles/zsh/.fzf-catppuccin/themes/catppuccin-fzf-mocha.sh
+source "/home/${USER}/dotfiles/zsh/.fzf-catppuccin/themes/catppuccin-fzf-mocha.sh"
 zstyle ':fzf-tab:*' use-fzf-default-opts yes

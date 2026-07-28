@@ -33,6 +33,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         fd-find \
         fzf \
         bat \
+        zoxide \
         xclip \
         stow \
         neovim \
