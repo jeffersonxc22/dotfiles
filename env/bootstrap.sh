@@ -76,6 +76,29 @@ fi
 # infraestrutura (Dockerfile, bootstrap.sh, new-env.sh, distrobox.ini),
 # não são "dotfiles" pra virar link solto na raiz do $HOME. Fica
 # acessível só via ~/dotfiles/env/.
+# .claude precisa ficar "desdobrado" (diretório real, não um symlink
+# único pra pasta inteira) antes do Stow — senão o Stow faz tree
+# folding e cria UM link só pra ~/.claude inteiro. Nesse caso, qualquer
+# estado que o Claude Code grave ali em runtime (auth, plugins
+# instalados, cache de marketplace) vira o MESMO arquivo físico em
+# TODOS os ambientes, porque dotfiles é um volume compartilhado — foi
+# exatamente isso que quebrou o install de plugin num ambiente novo
+# (installLocation gravado com o path absoluto de outro ambiente).
+#
+# Convertendo .claude e .claude/plugins em diretórios reais antes do
+# Stow, ele passa a linkar arquivo por arquivo dentro deles: o que é
+# config compartilhável (settings.json, CLAUDE.md, plugins/marketplaces/
+# — os clones dos marketplaces em si, reaproveitados sem re-clonar)
+# continua linkado; o que é estado de instalação (installed_plugins.json,
+# known_marketplaces.json, plugin-catalog-cache.json, plugins/cache/)
+# nem existe mais no dotfiles (removido do repo), então fica como
+# arquivo real, local, reconstruído do zero por este próprio bootstrap
+# em cada ambiente — mesmo tratamento que já damos pra git identity.
+for d in "${HOME}/.claude" "${HOME}/.claude/plugins"; do
+    [ -L "$d" ] && rm "$d"
+    mkdir -p "$d"
+done
+
 STOW_PACKAGES=()
 for pkg in */; do
     pkg="${pkg%/}"

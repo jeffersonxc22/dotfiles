@@ -35,3 +35,16 @@ claude/.claude/policy-limits.json
 claude/.claude/settings.json.bak
 claude/.claude/.last-cleanup
 claude/.claude/.config/
+
+# Estado de plugins do Claude Code — installPath tem caminho absoluto do
+# home isolado do ambiente onde foi instalado (ex: ~/Envs/ubuntu-nemu/...).
+# Como claude/.claude é compartilhado por volume+Stow entre TODOS os
+# ambientes, versionar isso faz um ambiente novo herdar um installPath
+# que não existe no seu próprio home isolado. O que fica compartilhado
+# de propósito é só o settings.json (enabledPlugins + hooks) — o
+# bootstrap.sh já reinstala os plugins do zero em cada ambiente novo,
+# reconstruindo esse estado localmente.
+claude/.claude/plugins/installed_plugins.json
+claude/.claude/plugins/known_marketplaces.json
+claude/.claude/plugins/plugin-catalog-cache.json
+claude/.claude/plugins/.last_inuse_sweep
