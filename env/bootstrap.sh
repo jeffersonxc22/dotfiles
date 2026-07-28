@@ -32,8 +32,15 @@ fi
 # Fica aqui, e não no Dockerfile, porque instala em $HOME (~/.oh-my-zsh) —
 # que é isolado por ambiente. Não é "pacote de sistema", é config de usuário.
 log "Instalando Oh My Zsh"
+# ZSH= explícito de propósito: o Distrobox herda variáveis de ambiente do
+# host no `enter`, então se o usuário real também roda Oh My Zsh, o host
+# já exporta ZSH=/home/<user>/.oh-my-zsh — e o instalador usa esse valor
+# herdado em vez de calcular a partir do $HOME isolado deste container.
+# Sem isso, o instalador vê o ~/.oh-my-zsh do HOST (não deste ambiente),
+# recusa sobrescrever e sai com erro, derrubando o bootstrap inteiro
+# (set -euo pipefail) antes mesmo de chegar no Stow.
 if [ ! -d "${HOME}/.oh-my-zsh" ]; then
-    RUNZSH=no CHSH=no KEEP_ZSHRC=yes \
+    RUNZSH=no CHSH=no KEEP_ZSHRC=yes ZSH="${HOME}/.oh-my-zsh" \
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
 
