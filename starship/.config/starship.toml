@@ -3,7 +3,7 @@
 format = """
 [](red)\
 $os\
-$env_var_ENV_NAME\
+$env_var\
 [](bg:peach fg:red)\
 $directory\
 [](bg:yellow fg:peach)\

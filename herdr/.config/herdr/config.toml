@@ -1,0 +1,16 @@
+onboarding = false
+[theme]
+name = "catppuccin"
+dark_name = "catppuccin"
+light_name = "catppuccin-latte"
+auto_switch = false
+
+[ui]
+show_agent_labels_on_pane_borders = true
+
+[experimental]
+switch_ascii_input_source_in_prefix = false
+pane_history = true
+
+[ui.sound]
+enabled = true

@@ -1,0 +1,41 @@
+# ~/.config/ghostty/config
+
+# Fonte
+font-family = CaskaydiaMono Nerd Font Mono
+font-size = 18
+font-feature = +calt
+font-feature = +liga
+
+# Tema Catppuccin
+theme = Catppuccin Mocha
+# Outras opções: Catppuccin Latte, Catppuccin Frappe, Catppuccin Macchiato
+
+# Ajustes visuais
+window-padding-x = 10
+window-padding-y = 10
+background-opacity = 0.95
+cursor-style = block
+cursor-style-blink = false
+adjust-cell-height = 0%
+
+# Comportamento de janela
+window-decoration = true
+confirm-close-surface = false
+window-theme = dark
+gtk-single-instance = true
+
+# Shell integration (zsh)
+shell-integration = zsh
+shell-integration-features = cursor,sudo,title
+
+# Mouse e clipboard
+copy-on-select = clipboard
+mouse-hide-while-typing = true
+
+# Menos ruído visual
+resize-overlay = never
+app-notifications = no-clipboard-copy
+
+# Compatibilidade de cores com Starship/tmux
+term = xterm-256color
+
