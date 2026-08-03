@@ -34,7 +34,7 @@ export BAT_THEME="Catppuccin Mocha"
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME=""
 
-# Set list of themes to pick from when loading at random
+  # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
 # a theme from this variable instead of looking in $ZSH/themes/
 # If set to an empty array, this variable will have no effect.
@@ -161,3 +161,7 @@ eval "$(mise activate zsh)"
 # FZF Style
 source "/home/${USER}/dotfiles/zsh/.fzf-catppuccin/themes/catppuccin-fzf-mocha.sh"
 zstyle ':fzf-tab:*' use-fzf-default-opts yes
+
+
+### execution
+herdr

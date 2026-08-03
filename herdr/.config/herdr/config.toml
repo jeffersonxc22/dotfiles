@@ -8,6 +8,7 @@ auto_switch = false
 [ui]
 show_agent_labels_on_pane_borders = true
 
+agent_panel_sort = "priority"
 [experimental]
 switch_ascii_input_source_in_prefix = false
 pane_history = true
