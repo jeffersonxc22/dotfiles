@@ -1,6 +1,4 @@
 if status is-interactive
-    # Config padrão do CachyOS (fastfetch, aliases de pacman/eza, !!/!$)
-    source /usr/share/cachyos-fish-config/cachyos-config.fish
 
     # Starship
     starship init fish | source
@@ -10,7 +8,6 @@ if status is-interactive
 
     # FZF — key bindings e fuzzy completion, tema Catppuccin Mocha
     fzf --fish | source
-    source "$HOME/dotfiles/zsh/.fzf-catppuccin/themes/catppuccin-fzf-mocha.fish"
 
     # Mise
     mise activate fish | source
@@ -37,5 +34,4 @@ if status is-interactive
     fish_add_path ~/.local/bin
 
     # execução
-    herdr
 end
