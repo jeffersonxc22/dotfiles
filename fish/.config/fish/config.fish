@@ -1,4 +1,6 @@
 if status is-interactive
+    # Greetting
+    set -g fish_greeting
 
     # Starship
     starship init fish | source
@@ -6,8 +8,8 @@ if status is-interactive
     # Zoxide
     zoxide init fish | source
 
-    # FZF — key bindings e fuzzy completion, tema Catppuccin Mocha
-    fzf --fish | source
+    # FZF — key bindings (Ctrl-T, Ctrl-R, Alt-C)
+    fzf_key_bindings
 
     # Mise
     mise activate fish | source
@@ -25,8 +27,8 @@ if status is-interactive
 
     # Garante que o ssh-agent está rodando e com a chave carregada
     if not set -q SSH_AUTH_SOCK
-        eval (ssh-agent -c) > /dev/null
-        ssh-add ~/.ssh/id_ed25519 2> /dev/null
+        eval (ssh-agent -c) >/dev/null
+        ssh-add ~/.ssh/id_ed25519 2>/dev/null
     end
 
     # PATH
@@ -35,3 +37,6 @@ if status is-interactive
 
     # execução
 end
+
+# opencode
+fish_add_path /home/jefferson/.opencode/bin
