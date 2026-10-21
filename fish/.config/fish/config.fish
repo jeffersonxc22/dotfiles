@@ -11,9 +11,6 @@ if status is-interactive
     # FZF — key bindings (Ctrl-T, Ctrl-R, Alt-C)
     fzf_key_bindings
 
-    # Mise
-    mise activate fish | source
-
     # Variáveis de ambiente
     set -gx EDITOR nvim
     set -gx SUDO_EDITOR nvim
@@ -40,3 +37,7 @@ end
 
 # opencode
 fish_add_path /home/jefferson/.opencode/bin
+
+# Mise — fora do bloco interativo de propósito: assim o ambiente (ferramentas e
+# variáveis de persona) também vale em `fish -c`, scripts e `mise run`.
+mise activate fish | source
