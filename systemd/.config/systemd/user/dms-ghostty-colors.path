@@ -1,0 +1,10 @@
+[Unit]
+Description=Observa as cores do DMS para atualizar o Ghostty
+
+[Path]
+PathChanged=%h/.cache/dms/dms-colors.json
+PathModified=%h/.cache/dms/dms-colors.json
+Unit=dms-ghostty-colors.service
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+# Gera as cores do Ghostty a partir do DankMaterialShell (DMS).
+#
+# Lê ~/.cache/dms/dms-colors.json (o mesmo arquivo que o shell/GTK usam) e
+# escreve ~/.config/ghostty/dms-colors, que é incluído pelo config principal.
+#
+# A base é Catppuccin (Mocha no dark, Latte no light) e o accent (cursor),
+# a seleção e o fundo/texto vêm do tema atual do DMS. Assim o terminal
+# acompanha o DMS sem perder a paleta ANSI clássica do Catppuccin.
+#
+# Roda pelo systemd (dms-ghostty-colors.path) quando o DMS muda as cores.
+
+set -euo pipefail
+
+state="${XDG_CACHE_HOME:-$HOME/.cache}/dms/dms-colors.json"
+out="${XDG_CONFIG_HOME:-$HOME/.config}/ghostty/dms-colors"
+
+[[ -r "$state" ]] || exit 0
+
+mode="$(jq -r '.mode // "dark"' "$state" 2>/dev/null || echo dark)"
+[[ "$mode" == "light" ]] || mode="dark"
+
+get() {
+  jq -r --arg mode "$mode" --arg key "$1" '.colors[$mode][$key] // empty' "$state"
+}
+
+bg="$(get background)"
+fg="$(get on_background)"
+[[ -n "$fg" ]] || fg="$(get on_surface)"
+accent="$(get primary)"
+sel_bg="$(get primary_container)"
+sel_fg="$(get on_primary_container)"
+[[ -n "$sel_fg" ]] || sel_fg="$fg"
+
+if [[ "$mode" == "light" ]]; then
+  : "${bg:=#eff1f5}"
+  : "${fg:=#4c4f69}"
+  : "${accent:=#179299}"
+  : "${sel_bg:=#acb0be}"
+  palette=(
+    "#5c5f77" "#d20f39" "#40a02b" "#df8e1d"
+    "#1e66f5" "#ea76cb" "#179299" "#acb0be"
+    "#6c6f85" "#de293e" "#49af3d" "#eea02d"
+    "#456eff" "#fe85d8" "#2d9fa8" "#bcc0cc"
+  )
+else
+  : "${bg:=#1e1e2e}"
+  : "${fg:=#cdd6f4}"
+  : "${accent:=#94e2d5}"
+  : "${sel_bg:=#585b70}"
+  palette=(
+    "#45475a" "#f38ba8" "#a6e3a1" "#f9e2af"
+    "#89b4fa" "#f5c2e7" "#94e2d5" "#a6adc8"
+    "#585b70" "#f37799" "#89d88b" "#ebd391"
+    "#74a8fc" "#f2aede" "#6bd7ca" "#bac2de"
+  )
+fi
+
+tmp="$(mktemp "${out}.XXXXXX")"
+trap 'rm -f "$tmp"' EXIT
+
+{
+  echo "# Gerado por dms-theme a partir de dms-colors.json -- não edite à mão."
+  echo "background = $bg"
+  echo "foreground = $fg"
+  echo "cursor-color = $accent"
+  echo "cursor-text = $bg"
+  echo "selection-background = $sel_bg"
+  echo "selection-foreground = $sel_fg"
+  echo "window-theme = $mode"
+  for i in "${!palette[@]}"; do
+    echo "palette = $i=${palette[$i]}"
+  done
+} >"$tmp"
+
+if [[ -f "$out" ]] && cmp -s "$tmp" "$out"; then
+  exit 0
+fi
+
+mv "$tmp" "$out"
+trap - EXIT
+
+# Ghostty não observa o config sozinho; SIGUSR2 recarrega.
+if pgrep -x ghostty >/dev/null 2>&1; then
+  pkill -USR2 -x ghostty 2>/dev/null || true
+fi

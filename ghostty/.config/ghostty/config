@@ -1,0 +1,53 @@
+# ~/.config/ghostty/config
+# Gerenciado pelos dotfiles (stow). As cores vêm do DMS via `dms-theme`.
+
+# Fonte
+font-family = CaskaydiaMono Nerd Font Mono
+font-size = 18
+font-feature = +calt
+font-feature = +liga
+
+# Tema de fallback: Catppuccin Mocha + teal.
+# O include do DMS (última linha) sobrescreve as cores quando disponível.
+theme = Catppuccin Mocha
+cursor-color = #94e2d5
+cursor-text = #1e1e2e
+selection-background = #2e5e59
+selection-foreground = #cdd6f4
+
+# Ajustes visuais
+window-padding-x = 10
+window-padding-y = 10
+background-opacity = 0.95
+background-blur-radius = 32
+cursor-style = block
+cursor-style-blink = false
+adjust-cell-height = 0%
+unfocused-split-opacity = 0.7
+unfocused-split-fill = #44464f
+window-decoration = true
+gtk-titlebar = false
+window-theme = dark
+gtk-single-instance = true
+
+# Comportamento
+confirm-close-surface = false
+copy-on-select = clipboard
+mouse-hide-while-typing = true
+resize-overlay = never
+app-notifications = false
+scrollback-limit = 3023
+term = xterm-256color
+shell-integration = detect
+shell-integration-features = cursor,sudo,title
+
+# Atalhos
+keybind = ctrl+shift+n=new_window
+keybind = ctrl+t=new_tab
+keybind = ctrl+plus=increase_font_size:1
+keybind = ctrl+minus=decrease_font_size:1
+keybind = ctrl+zero=reset_font_size
+keybind = shift+enter=text:\n
+
+# Cores geradas a partir do DMS (incluído por último, sobrescreve o tema).
+config-file = ~/.config/ghostty/dms-colors

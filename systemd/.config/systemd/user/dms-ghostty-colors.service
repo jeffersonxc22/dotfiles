@@ -1,0 +1,9 @@
+[Unit]
+Description=Aplica as cores do DMS no Ghostty
+
+[Service]
+Type=oneshot
+ExecStart=%h/.config/ghostty/dms-theme
+
+[Install]
+WantedBy=default.target
