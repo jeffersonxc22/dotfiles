@@ -1,0 +1,15 @@
+[tools]
+go = "latest"
+java = "latest"
+maven = "latest"
+node = "latest"
+python = "latest"
+rust = "latest"
+usage = { version = "latest", workflow = "publish-cli.yml" }
+
+# Persona padrão. O mise só exporta esta variável; os caminhos derivados
+# (KODE_D_PERSONA_DIR, CLAUDE_CONFIG_DIR, CODEX_HOME) são calculados pela
+# função __mise_persona_env no fish (~/.config/fish/conf.d/mise-persona.fish).
+# Projetos sobrescrevem apenas KODE_D_PERSONA.
+[env]
+KODE_D_PERSONA = "personal"
