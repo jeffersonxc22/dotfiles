@@ -48,3 +48,6 @@ claude/.claude/plugins/installed_plugins.json
 claude/.claude/plugins/known_marketplaces.json
 claude/.claude/plugins/plugin-catalog-cache.json
 claude/.claude/plugins/.last_inuse_sweep
+
+# Estado de runtime do fish (gerado automaticamente, específico da máquina)
+fish/.config/fish/fish_variables
