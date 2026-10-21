@@ -4,6 +4,11 @@
 -- on every palette change -- the same file kitty and the shell read. We feed it
 -- into tokyonight's on_colors so nvim matches the terminal, keep habamax as the
 -- safety net, and re-tint a running editor when the palette changes.
+--
+-- NOTE (jefferson): the active colorscheme is Catppuccin Mocha + teal, set in
+-- lua/plugins/catppuccin.lua. The tint below is dormant and only kicks in if
+-- you explicitly `:colorscheme tokyonight`; on a machine without the Ryoku
+-- theme daemon, ~/.cache/ryoku/colors.json is absent and this is a no-op.
 local uv = vim.uv or vim.loop
 local COLORS = vim.fn.expand("~/.cache/ryoku/colors.json")
 
@@ -63,15 +68,5 @@ return {
       opts.style = opts.style or "night"
       opts.on_colors = tint
     end,
-  },
-  {
-    "LazyVim/LazyVim",
-    opts = {
-      colorscheme = function()
-        if not pcall(vim.cmd.colorscheme, "tokyonight-night") then
-          vim.cmd.colorscheme("habamax")
-        end
-      end,
-    },
   },
 }
