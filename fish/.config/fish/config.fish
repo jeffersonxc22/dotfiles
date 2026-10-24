@@ -20,7 +20,15 @@ if status is-interactive
     # Aliases
     alias fishconfig="$EDITOR ~/.config/fish/config.fish"
     alias fishsource="source ~/.config/fish/config.fish"
-    alias cat="bat --paging=never"
+
+    # bat no lugar de cat. No Ubuntu o pacote `bat` instala o binário como
+    # `batcat` (o nome `bat` conflita com outro pacote), então cobrimos os dois.
+    if type -q bat
+        alias cat="bat --paging=never"
+    else if type -q batcat
+        alias bat="batcat"
+        alias cat="batcat --paging=never"
+    end
 
     # Garante que o ssh-agent está rodando e com a chave carregada
     if not set -q SSH_AUTH_SOCK
@@ -41,3 +49,6 @@ fish_add_path /home/jefferson/.opencode/bin
 # Mise — fora do bloco interativo de propósito: assim o ambiente (ferramentas e
 # variáveis de persona) também vale em `fish -c`, scripts e `mise run`.
 mise activate fish | source
+
+# opencode
+fish_add_path /home/jefferson-xenofonte/.opencode/bin
