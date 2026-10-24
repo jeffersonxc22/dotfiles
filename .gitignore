@@ -51,3 +51,7 @@ claude/.claude/plugins/.last_inuse_sweep
 
 # Estado de runtime do fish (gerado automaticamente, específico da máquina)
 fish/.config/fish/fish_variables
+
+# Estado de runtime do zsh. O compdump normal fica em ~/.cache/zsh, mas se
+# algum compinit global escapar, não deve entrar no repositório.
+zsh/.config/zsh/.zcompdump*

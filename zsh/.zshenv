@@ -6,6 +6,12 @@
 
 export ZDOTDIR="${ZDOTDIR:-$HOME/.config/zsh}"
 
+# O /etc/zsh/zshrc da Ubuntu chama `compinit` antes do .zshrc do usuário e grava
+# o .zcompdump em ${ZDOTDIR}/.zcompdump — que aqui é um symlink do stow, ou seja,
+# sujaria o repositório. O nosso .zshrc chama compinit com -d apontando para o
+# cache; desligar o global também evita rodar compinit duas vezes no startup.
+skip_global_compinit=1
+
 # Shims do mise: deixam as ferramentas disponíveis em shells não interativos
 # (`zsh -c`, scripts, editores). No shell interativo quem assume é o
 # `mise activate zsh` do .zshrc.
