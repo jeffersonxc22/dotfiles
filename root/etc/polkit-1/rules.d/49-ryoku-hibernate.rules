@@ -1,0 +1,16 @@
+// Hibernar no Ryoku sem o prompt do polkit.
+//
+// Por que existe: o ryoku-shell mantém um inhibitor "block" de propósito
+// ("route suspend through a compositor-secure session lock"), então hibernar
+// exige `systemctl hibernate -i`. O logind pede auth_admin_keep para
+// org.freedesktop.login1.hibernate-ignore-inhibit, e o diálogo não é
+// respondível com a sessão trancada — que é justamente o fluxo do desktop
+// (trancar e hibernar). Resultado: o botão de hibernar nunca completa.
+//
+// Escopo: só a variante ignore-inhibit, só usuário local, ativo e do grupo
+// wheel. Nenhuma outra ação do logind (poweroff, reboot, suspend, lid) muda.
+polkit.addRule(function (action, subject) {
+    if (action.id == "org.freedesktop.login1.hibernate-ignore-inhibit" &&
+        subject.local && subject.active && subject.isInGroup("wheel"))
+        return polkit.Result.YES;
+});
