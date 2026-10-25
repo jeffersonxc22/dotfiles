@@ -16,7 +16,7 @@ fica de fora: quando há uma mudança a fazer, ela vai para o override que o
 `ryoku owner <path>` apontar.
 
 ```
-ryoku/.gitconfig                      helpers do `gh` para credencial https
+ryoku/.gitconfig                      identidade + helpers do `gh` (sem segredo)
 ryoku/.config/fish/user.fish          override oficial do fish
 ryoku/.config/fish/functions/         funções próprias
 ryoku/.config/hypr/user.lua           overrides do Hyprland (carrega por último)
