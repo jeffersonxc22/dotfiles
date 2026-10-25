@@ -1,5 +1,9 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "instructions": ["~/Projetos/IA/kode-d-harness/AGENTS.md"],
-  "skills": ["~/Projetos/IA/kode-d-harness/skills"]
+  "skills": [
+    "~/Projetos/IA/kode-d-harness/skills",
+    "~/.agents/skills"
+  ],
+  "plugin": ["context-mode"]
 }

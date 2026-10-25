@@ -25,23 +25,7 @@ if status is-interactive; and not set -q SSH_AUTH_SOCK; and test -f ~/.ssh/id_ed
     ssh-add ~/.ssh/id_ed25519 2>/dev/null
 end
 
-# --- personas do mise (Kode-D) ------------------------------------------
-# O mise só exporta KODE_D_PERSONA; os caminhos derivados são calculados aqui.
-# Vive em user.fish (e não em conf.d/) porque ~/.config/fish/conf.d é do Ryoku.
-function __mise_persona_env --on-variable KODE_D_PERSONA --description 'Deriva KODE_D_PERSONA_DIR, CLAUDE_CONFIG_DIR e CODEX_HOME'
-    if test -z "$KODE_D_PERSONA"
-        set -e KODE_D_PERSONA_DIR
-        set -e CLAUDE_CONFIG_DIR
-        set -e CODEX_HOME
-        return
-    end
-
-    set -gx KODE_D_PERSONA_DIR "$HOME/.local/share/$KODE_D_PERSONA"
-    set -gx CLAUDE_CONFIG_DIR "$KODE_D_PERSONA_DIR/claude"
-    set -gx CODEX_HOME "$KODE_D_PERSONA_DIR/codex"
-end
-
-# O mise já exportou a variável antes deste arquivo: aplica uma vez agora.
-if set -q KODE_D_PERSONA
-    __mise_persona_env
-end
+# --- contas do Kode-D ---------------------------------------------------
+# CLAUDE_CONFIG_DIR e CODEX_HOME vêm inteiros do mise
+# (~/.config/mise/config.toml, com override por .mise.toml no projeto).
+# Não há função aqui: uma camada só evita divergir do que o mise exporta.

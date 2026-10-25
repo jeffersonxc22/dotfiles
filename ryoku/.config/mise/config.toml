@@ -1,8 +1,21 @@
-# Config global do mise. Persona padrão do Kode-D Harness.
-# Os caminhos derivados (KODE_D_PERSONA_DIR, CLAUDE_CONFIG_DIR, CODEX_HOME)
-# são calculados pela função __mise_persona_env em ~/.config/fish/user.fish.
+# Config global do mise. Dono das variáveis de conta do Kode-D Harness.
+#
+# Cada agente lê o diretório apontado abaixo: o Claude Code usa
+# CLAUDE_CONFIG_DIR (CLAUDE.md, skills, settings, auth) e o Codex usa
+# CODEX_HOME (AGENTS.md, config.toml, auth, sessions).
+#
+# Conta por diretório: um .mise.toml dentro do projeto sobrescreve estes
+# valores e vale para todos os subdiretórios. ATENÇÃO: o mise avalia o config
+# global ANTES do projeto, então o arquivo do projeto precisa repetir os
+# caminhos derivados; trocar apenas KODE_D_*_ACCOUNT não recalcula os caminhos.
+#
+# Layout: ~/.local/share/kode-d/{claude,codex}/<conta>
 [env]
-KODE_D_PERSONA = "personal"
+KODE_D_ROOT = "{{env.HOME}}/.local/share/kode-d"
+KODE_D_CLAUDE_ACCOUNT = "personal"
+KODE_D_CODEX_ACCOUNT = "personal"
+CLAUDE_CONFIG_DIR = "{{env.KODE_D_ROOT}}/claude/{{env.KODE_D_CLAUDE_ACCOUNT}}"
+CODEX_HOME = "{{env.KODE_D_ROOT}}/codex/{{env.KODE_D_CODEX_ACCOUNT}}"
 
 [tools]
 herdr = "latest"

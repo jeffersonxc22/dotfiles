@@ -22,9 +22,27 @@ ryoku/.config/fish/functions/         funções próprias
 ryoku/.config/hypr/user.lua           overrides do Hyprland (carrega por último)
 ryoku/.config/hypr/keyboard.lua       layout base dos teclados (seed do Ryoku)
 ryoku/.config/herdr/config.toml       tema "terminal" = segue a paleta do Ryoku
-ryoku/.config/mise/config.toml        persona padrão (KODE_D_PERSONA)
-ryoku/.config/opencode/opencode.json  instructions + skills do Kode-D Harness
+ryoku/.config/mise/config.toml        contas do Kode-D (CLAUDE_CONFIG_DIR, CODEX_HOME)
+ryoku/.config/opencode/opencode.json  instructions + skills + plugin do Kode-D Harness
 ```
+
+### Contas dos agentes
+
+O `mise` é a fonte única das variáveis. O global define a conta padrão; um
+`.mise.toml` na raiz do projeto troca a conta daquela pasta e dos subdiretórios.
+
+```
+~/.local/share/kode-d/claude/<conta>/   CLAUDE_CONFIG_DIR (Claude Code)
+~/.local/share/kode-d/codex/<conta>/    CODEX_HOME (Codex CLI)
+~/.local/share/kode-d/RTK.md            instruções compartilhadas do rtk
+~/.local/share/kode-d/vendor/           skills upstream (Obsidian)
+```
+
+- O estado (auth, sessões, plugins, caches) fica fora deste repositório.
+- Este repositório guarda só o mapa de variáveis e a receita de instalação:
+  `~/Projetos/IA/kode-d-harness/INSTALL.md`.
+- O `mise` avalia o config global antes do projeto, então o `.mise.toml` do
+  projeto repete os caminhos derivados; trocar só a conta não basta.
 
 ## root/
 
