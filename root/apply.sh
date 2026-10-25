@@ -53,9 +53,13 @@ fi
 if grep -q 'result=yes' <<<"$pk_out"; then
     echo "  pkcheck: result=yes (sem prompt)"
 else
-    echo "  sem confirmação automática de pkcheck; confira na sua sessão:"
+    # Daqui não dá para provar: rodando como root (ou via runuser) o subject do
+    # polkit não é o seu, e a regra exige usuário local/ativo. Mostrar o que
+    # voltou e apontar a checagem que vale, na sessão.
+    echo "  pkcheck inconclusivo daqui (o subject do polkit seria outro, não o seu):"
+    sed 's/^/    /' <<<"$pk_out"
+    echo "  confira na sua sessão, onde o resultado esperado é polkit.result=yes:"
     echo "    pkcheck --action-id org.freedesktop.login1.hibernate-ignore-inhibit --process \$\$"
-    echo "  resposta esperada: polkit.result=yes"
 fi
 
 echo
