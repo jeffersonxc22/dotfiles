@@ -1,0 +1,8 @@
+# Config global do mise. Persona padrão do Kode-D Harness.
+# Os caminhos derivados (KODE_D_PERSONA_DIR, CLAUDE_CONFIG_DIR, CODEX_HOME)
+# são calculados pela função __mise_persona_env em ~/.config/fish/user.fish.
+[env]
+KODE_D_PERSONA = "personal"
+
+[tools]
+herdr = "latest"

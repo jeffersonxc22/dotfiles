@@ -1,0 +1,18 @@
+onboarding = false
+
+# Tema: "terminal" faz a UI do Herdr seguir a paleta ANSI do terminal hospedeiro.
+# O Ryoku mantém a paleta do kitty via ryogami, então isto acompanha o wallpaper
+# sem nenhum arquivo de cor duplicado. Um redraw (resize ou SIGWINCH) relê as cores.
+[theme]
+name = "terminal"
+auto_switch = false
+
+[ui]
+show_agent_labels_on_pane_borders = true
+agent_panel_sort = "priority"
+
+[ui.sound]
+enabled = true
+
+[experimental]
+pane_history = true
