@@ -28,7 +28,9 @@ hl.device({ name = "at-translated-set-2-keyboard", kb_layout = "br" })
 hl.device({ name = "mx-mchncl-m-keyboard", kb_layout = "us", kb_variant = "intl" })
 
 -- --- workspaces: round-robin across three outputs -------------------------
--- ws 1 -> eDP-2, ws 2 -> DP-1, ws 3 -> DP-2, ws 4 -> eDP-2, ...
+-- ws 1 -> eDP-2, ws 2 -> DP-1, ws 3 -> DP-3, ws 4 -> eDP-2, ...
+-- The order below is physical, left to right. Confirm the real names with
+-- `hyprctl monitors all`; a name that does not exist is simply skipped.
 -- DESKTOPS * 10 covers three Ryoku desktop blocks (ws 1..30).
 --
 -- Only outputs that are actually connected take part: a workspace bound to a
@@ -40,7 +42,7 @@ hl.on("monitor.added", function()
     hl.exec_cmd("sleep 2; ryoku wm act config.reload")
 end)
 
-local wanted = { "eDP-2", "DP-1", "DP-2" }
+local wanted = { "eDP-2", "DP-1", "DP-3" }
 local live = {}
 for _, name in ipairs(wanted) do
     for _, mon in ipairs(hl.get_monitors()) do
