@@ -21,11 +21,11 @@
 
 -- --- keyboards: one layout per device -------------------------------------
 -- Notebook keeps pt-BR. The Logitech MX Mechanical Mini gets en-US intl
--- through its own device rule: uncomment and fill the exact name once it is
--- paired (`hyprctl devices -j | jq -r '.keyboards[]|.name'`). Device rules
--- match the name exactly, so a wrong name fails silently.
+-- through its own device rule. Device rules match the name exactly, so a
+-- wrong name fails silently: confirm with
+--   hyprctl devices -j | jq -r '.keyboards[]|.name'
 hl.device({ name = "at-translated-set-2-keyboard", kb_layout = "br" })
--- hl.device({ name = "<mx-mechanical>", kb_layout = "us", kb_variant = "intl" })
+hl.device({ name = "mx-mchncl-m-keyboard", kb_layout = "us", kb_variant = "intl" })
 
 -- --- workspaces: round-robin across three outputs -------------------------
 -- ws 1 -> eDP-2, ws 2 -> DP-1, ws 3 -> DP-2, ws 4 -> eDP-2, ...
