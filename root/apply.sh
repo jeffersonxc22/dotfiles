@@ -27,6 +27,14 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
+# Este pacote é só do Arch: mkinitcpio/UKI e o nvidia.conf que o instalador do
+# Arch escreve. No Fedora o Ryoku usa dracut e mantém a NVIDIA no nouveau, e no
+# Void o initramfs é outro; nada aqui se aplica.
+if ! command -v mkinitcpio >/dev/null 2>&1; then
+    echo "este pacote é só do Arch (mkinitcpio/UKI); nada a fazer neste host." >&2
+    exit 1
+fi
+
 echo "== 1. regra polkit (hibernate-ignore-inhibit) =="
 rule_src="$here/etc/polkit-1/rules.d/49-ryoku-hibernate.rules"
 rule_dst=/etc/polkit-1/rules.d/49-ryoku-hibernate.rules

@@ -1,5 +1,10 @@
 # root/
 
+> **Só Arch.** Este diretório conserta o mkinitcpio/UKI e o `nvidia.conf` que o
+> instalador do Arch escreve. No Fedora o Ryoku usa dracut, mantém o bootloader
+> da casa e deixa a NVIDIA no nouveau; no Void o initramfs também é outro. Lá,
+> pule este pacote — `apply.sh` recusa rodar fora do Arch.
+
 O que a hibernação do Ryoku precisa e vive **fora de `$HOME`** — arquivos de
 root, que o `stow` não entrega. Nada aqui é aplicado sozinho: rode com sudo.
 

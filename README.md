@@ -23,7 +23,7 @@ ryoku/.config/hypr/user.lua           overrides do Hyprland (carrega por último
 ryoku/.config/hypr/keyboard.lua       layout base dos teclados (seed do Ryoku)
 ryoku/.config/herdr/config.toml       tema "terminal" = segue a paleta do Ryoku
 ryoku/.config/mise/config.toml        contas do Kode-D (CLAUDE_CONFIG_DIR, CODEX_HOME)
-ryoku/.config/opencode/opencode.json  instructions + skills + plugin do Kode-D Harness
+ryoku/.config/opencode/opencode.json  instructions + skills + MCP do context-mode
 ```
 
 ### Contas dos agentes
@@ -68,19 +68,53 @@ lsinitcpio /boot/EFI/Linux/ryoku_linux.efi | grep -c extramodules/nvidia   # dev
 
 ## Deploy
 
-```sh
-# stow do pacote (do diretório deste repo)
-stow --adopt -t "$HOME" ryoku
+Numa máquina em que os arquivos ainda não existem:
 
-# o que não é dotfile
+```sh
+stow -t "$HOME" ryoku
+```
+
+Numa máquina que já tem Ryoku, `~/.config` está preenchido e o `stow` recusa.
+Adote (o arquivo vivo entra no repo), revise o diff e, se o repo é a fonte da
+verdade, restaure o repo — os symlinks já apontam para ele:
+
+```sh
+stow --adopt -t "$HOME" ryoku
+git diff
+git checkout -- ryoku
+```
+
+`--adopt` faz o conteúdo vivo ganhar. Num install novo isso importaria os
+defaults do Ryoku por cima do repo; por isso o `git diff` é obrigatório.
+
+O que não é dotfile (só no Arch):
+
+```sh
 sudo ./root/apply.sh
 ```
 
-`--adopt` move o arquivo vivo para dentro do repo antes de criar o symlink, então
-o conteúdo local sempre ganha. Para desfazer: `stow -D -t "$HOME" ryoku`.
+Para desfazer: `stow -D -t "$HOME" ryoku`.
+
+`opencode.json` é cópia de referência: o OpenCode reescreve o arquivo vivo, então
+ele não fica stowado — compare os dois antes de copiar.
 
 `~/.config/opencode/AGENTS.md` não é versionado: é gerado por
 `ryoku-rashin wire opencode` e muda a cada reindex do Ryoku.
+
+## Fedora
+
+O `ryoku/` é o mesmo pacote: no Fedora 44/45 o Ryoku usa os mesmos caminhos em
+`~/.config`. Use um Fedora mutável (Workstation, KDE, Server ou spin; Atomic/
+rpm-ostree não é suportado) e rode o instalador oficial uma vez:
+
+```sh
+sudo dnf5 upgrade --refresh
+sudo dnf5 install curl
+curl -fsSL https://raw.githubusercontent.com/Ryoku-dev/ryoku/main/ryoku-shell-installer/install.sh | bash
+```
+
+O instalador mantém o bootloader do Fedora e deixa a NVIDIA no nouveau. O pacote
+`root/` **não** se aplica lá (ver `root/README.md`).
 
 ## O que NÃO está aqui
 
