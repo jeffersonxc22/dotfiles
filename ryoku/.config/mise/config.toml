@@ -18,4 +18,7 @@ CLAUDE_CONFIG_DIR = "{{env.KODE_D_ROOT}}/claude/{{env.KODE_D_CLAUDE_ACCOUNT}}"
 CODEX_HOME = "{{env.KODE_D_ROOT}}/codex/{{env.KODE_D_CODEX_ACCOUNT}}"
 
 [tools]
+bun = "latest"
+gcloud = "latest"
 herdr = "latest"
+kubectl = "latest"
