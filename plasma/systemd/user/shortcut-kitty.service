@@ -1,0 +1,6 @@
+[Unit]
+Description=Open a Kitty window from a keyboard shortcut
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemd-run --user --collect -- /usr/bin/kitty

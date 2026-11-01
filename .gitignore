@@ -26,3 +26,6 @@
 # Estado do OpenCode: service.json guarda a senha do servidor
 opencode/**/service.json
 **/service.json
+
+# Backup histórico local: contém estado de sessão e histórico de terminal.
+/archive/pre-fedora-reorg.tar.gz

@@ -1,0 +1,20 @@
+onboarding = false
+
+# O Herdr tem temas próprios; usamos o catppuccin para não depender de a
+# paleta ANSI do terminal estar disponível na UI.
+[theme]
+name = "catppuccin"
+dark_name = "catppuccin"
+light_name = "catppuccin-latte"
+auto_switch = false
+
+[ui]
+show_agent_labels_on_pane_borders = true
+agent_panel_sort = "priority"
+
+[ui.sound]
+enabled = true
+
+[experimental]
+switch_ascii_input_source_in_prefix = false
+pane_history = true

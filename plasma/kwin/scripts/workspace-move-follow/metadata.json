@@ -1,0 +1,11 @@
+{
+  "KPackageStructure": "KWin/Script",
+  "KPlugin": {
+    "Id": "workspace-move-follow",
+    "Name": "Move window and follow",
+    "Description": "Move the active window to a virtual desktop and follow it",
+    "Version": "1.0"
+  },
+  "X-Plasma-API": "javascript",
+  "X-Plasma-MainScript": "code/main.js"
+}

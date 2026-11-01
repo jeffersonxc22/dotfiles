@@ -1,0 +1,9 @@
+[Unit]
+Description=Observa o kdeglobals para atualizar as cores do kitty
+
+[Path]
+PathChanged=%h/.config/kdeglobals
+Unit=kitty-colors.service
+
+[Install]
+WantedBy=default.target

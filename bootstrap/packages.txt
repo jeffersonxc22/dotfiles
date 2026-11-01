@@ -1,0 +1,36 @@
+# Pacotes Fedora instalados pelo bootstrap/install.sh.
+# Linhas em branco e começando com # são ignoradas.
+
+# Shell e terminal
+zsh
+kitty
+fzf
+zoxide
+bat
+eza
+wl-clipboard
+
+# Neovim / LazyVim
+neovim
+git
+stow
+curl
+unzip
+tar
+ripgrep
+fd-find
+gcc
+make
+python3
+
+# Fontes
+rsms-inter-fonts
+cascadia-mono-nf-fonts
+
+# KDE / tema
+papirus-icon-theme-dark
+kde-gtk-config
+
+# Plugins zsh empacotados no Fedora
+zsh-autosuggestions
+zsh-syntax-highlighting

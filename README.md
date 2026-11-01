@@ -1,123 +1,53 @@
-# dotfiles
+# Dotfiles — Fedora KDE
 
-Configurações da máquina. Um pacote GNU Stow por frente.
+Configuração para Fedora KDE: zsh, LazyVim, kitty, Starship, mise e Herdr.
+Cada diretório de configuração é um pacote GNU Stow; arquivos do KDE não são
+stowados. O histórico está na tag `pre-fedora-reorg`; o arquivo local
+`archive/pre-fedora-reorg.tar.gz` não é publicado, pois inclui estado de sessão
+e histórico de terminal.
 
-```
-ryoku/     o que é SEU no Ryoku Linux e sobrevive a `ryoku update`
-root/      o que a hibernação precisa em /etc (não é stow: rodar com sudo)
-legacy/    o que veio da máquina Ubuntu/niri e não se aplica aqui (histórico)
-```
+## Estado da implementação
 
-## ryoku/
+A sessão atual usa Layan Dark, Krohnkite e Geometry Change. O perfil do Plasma
+está documentado em [plasma/README.md](plasma/README.md); a aplicação em uma
+instalação nova ainda precisa ser validada. A configuração anterior do mise foi preservada em
+`~/.config/mise/config.toml.pre-dotfiles-20261101125604` e os links foram
+implantados. O arquivo `~/.zshrc` existente também permanece intacto;
+o zsh passará a usar o `ZDOTDIR` definido em `~/.zshenv`.
 
-Só caminhos que o Ryoku não sobrescreve. Tudo o que o `ryoku materialize`
-reescreve (por exemplo `~/.config/fish/config.fish` ou `~/.config/nvim/`)
-fica de fora: quando há uma mudança a fazer, ela vai para o override que o
-`ryoku owner <path>` apontar.
+## Instalação
 
-```
-ryoku/.gitconfig                      identidade + helpers do `gh` (sem segredo)
-ryoku/.config/fish/user.fish          override oficial do fish
-ryoku/.config/fish/functions/         funções próprias
-ryoku/.config/hypr/user.lua           overrides do Hyprland (carrega por último)
-ryoku/.config/hypr/keyboard.lua       layout base dos teclados (seed do Ryoku)
-ryoku/.config/herdr/config.toml       tema "terminal" = segue a paleta do Ryoku
-ryoku/.config/mise/config.toml        contas do Kode-D (CLAUDE_CONFIG_DIR, CODEX_HOME)
-ryoku/.config/opencode/opencode.json  instructions + skills + MCP do context-mode
-```
+1. Revise `bootstrap/packages.txt` e rode `./bootstrap/install.sh` (solicita sudo).
+2. Resolva os conflitos existentes e rode `./deploy.sh`. O script usa
+   `stow --no-folding`, com simulação prévia, sem `--adopt`.
+3. Para o perfil atual de espaços, painel e atalhos, consulte
+   [plasma/README.md](plasma/README.md) e, após instalar os pré-requisitos,
+   rode `./plasma/apply.sh --apply` dentro da sessão Plasma. A instalação
+   completa do Layan ainda não é automatizada.
+4. Opcional: `sudo ./theme/greeter.sh layan` configura o Plasma Login Manager
+   após instalar o esquema Layan e Future Cursors. Não é configuração do SDDM;
+   a aparência deve ser verificada no próximo login.
+5. `mise install` instala as ferramentas configuradas. Starship e mise devem
+   estar instalados separadamente; o bootstrap avisa se faltarem.
 
-### Contas dos agentes
+O Neovim usa Catppuccin e tenta acompanhar as cores de `kdeglobals`; sem cores
+válidas usa Mocha. O kitty recebe cores do KDE por um serviço de usuário e usa
+paletas ANSI Catppuccin. GTK usa Breeze e as cores geradas pelo KDE. Aplicativos
+Flatpak e libadwaita podem não respeitar todos os aspectos do tema do host.
+Na sessão atual, Qt usa Kvantum Layan Dark e o KRunner acompanha o tema Plasma
+Layan. O comando de greeter configura cores, fontes e cursor, não instala um
+layout Layan completo; a aparência deve ser conferida no próximo login.
 
-O `mise` é a fonte única das variáveis. O global define a conta padrão; um
-`.mise.toml` na raiz do projeto troca a conta daquela pasta e dos subdiretórios.
+## Upgrade do Fedora
 
-```
-~/.local/share/kode-d/claude/<conta>/   CLAUDE_CONFIG_DIR (Claude Code)
-~/.local/share/kode-d/codex/<conta>/    CODEX_HOME (Codex CLI)
-~/.local/share/kode-d/RTK.md            instruções compartilhadas do rtk
-~/.local/share/kode-d/vendor/           skills upstream (Obsidian)
-```
+`./bootstrap/fedora-upgrade.sh --check` mostra a próxima versão, calculada a
+partir de `rpm -E %fedora`. Sem `--check`, o script atualiza pacotes, baixa a
+próxima versão e pergunta antes de reiniciar. Verifique antes se ela foi lançada
+ e faça backup; não é necessário atualizar o Fedora 44 agora.
 
-- O estado (auth, sessões, plugins, caches) fica fora deste repositório.
-- Este repositório guarda só o mapa de variáveis e a receita de instalação:
-  `~/Projetos/IA/kode-d-harness/INSTALL.md`.
-- O `mise` avalia o config global antes do projeto, então o `.mise.toml` do
-  projeto repete os caminhos derivados; trocar só a conta não basta.
+## Alternativa Catppuccin
 
-## root/
-
-Arquivos de root que fazem a hibernação funcionar. Não entram por `stow`; são
-aplicados por um script idempotente:
-
-```sh
-sudo ./root/apply.sh
-```
-
-```
-root/etc/polkit-1/rules.d/49-ryoku-hibernate.rules  libera só hibernate-ignore-inhibit
-root/apply.sh                                       aplica, reconstrói a UKI e confere
-```
-
-O detalhe do "por quê" (inhibitor do `ryoku-shell`, `resume failed (-5)` da
-NVIDIA no initramfs) está em `root/README.md`. Há uma checagem que vale rodar
-depois de update de kernel ou de driver:
-
-```sh
-lsinitcpio /boot/EFI/Linux/ryoku_linux.efi | grep -c extramodules/nvidia   # deve dar 0
-```
-
-## Deploy
-
-Numa máquina em que os arquivos ainda não existem:
-
-```sh
-stow -t "$HOME" ryoku
-```
-
-Numa máquina que já tem Ryoku, `~/.config` está preenchido e o `stow` recusa.
-Adote (o arquivo vivo entra no repo), revise o diff e, se o repo é a fonte da
-verdade, restaure o repo — os symlinks já apontam para ele:
-
-```sh
-stow --adopt -t "$HOME" ryoku
-git diff
-git checkout -- ryoku
-```
-
-`--adopt` faz o conteúdo vivo ganhar. Num install novo isso importaria os
-defaults do Ryoku por cima do repo; por isso o `git diff` é obrigatório.
-
-O que não é dotfile (só no Arch):
-
-```sh
-sudo ./root/apply.sh
-```
-
-Para desfazer: `stow -D -t "$HOME" ryoku`.
-
-`opencode.json` é cópia de referência: o OpenCode reescreve o arquivo vivo, então
-ele não fica stowado — compare os dois antes de copiar.
-
-`~/.config/opencode/AGENTS.md` não é versionado: é gerado por
-`ryoku-rashin wire opencode` e muda a cada reindex do Ryoku.
-
-## Fedora
-
-O `ryoku/` é o mesmo pacote: no Fedora 44/45 o Ryoku usa os mesmos caminhos em
-`~/.config`. Use um Fedora mutável (Workstation, KDE, Server ou spin; Atomic/
-rpm-ostree não é suportado) e rode o instalador oficial uma vez:
-
-```sh
-sudo dnf5 upgrade --refresh
-sudo dnf5 install curl
-curl -fsSL https://raw.githubusercontent.com/Ryoku-dev/ryoku/main/ryoku-shell-installer/install.sh | bash
-```
-
-O instalador mantém o bootloader do Fedora e deixa a NVIDIA no nouveau. O pacote
-`root/` **não** se aplica lá (ver `root/README.md`).
-
-## O que NÃO está aqui
-
-- Dotfiles do desktop em si (barra, tema, keybinds, monitores): o dono é o
-  Ryoku, via `ryoku-shell`, `ryoku-hub` e `ryogami`. Ver a skill `ryoku`.
-- Segredos, tokens, sessões e caches.
+`./theme/install.sh mocha sapphire` instala Catppuccin e altera o tema do
+sistema, incluindo alguns componentes em `/usr/share` e overrides Flatpak.
+Revise os scripts antes de executar; a reversão completa entre Catppuccin e
+Layan ainda não foi validada.

@@ -1,0 +1,11 @@
+{
+  "KPackageStructure": "KWin/Script",
+  "KPlugin": {
+    "Id": "app-launch-shortcuts",
+    "Name": "Application launch shortcuts",
+    "Description": "Launch Kitty and Chrome windows",
+    "Version": "1.0"
+  },
+  "X-Plasma-API": "javascript",
+  "X-Plasma-MainScript": "code/main.js"
+}

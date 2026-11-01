@@ -1,0 +1,6 @@
+[Unit]
+Description=Gera as cores do kitty a partir do kdeglobals
+
+[Service]
+Type=oneshot
+ExecStart=@REPO@/theme/kitty-colors.sh

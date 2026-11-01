@@ -1,0 +1,53 @@
+# Perfil Plasma 6
+
+Este diretório guarda o perfil de janelas, painel e atalhos da sessão Fedora
+KDE. Não substitui arquivos completos do Plasma: IDs de telas, atividades e
+desktops são específicos de cada instalação.
+
+## Aplicação
+
+Com uma sessão Plasma Wayland ativa, instale primeiro Kitty, Google Chrome,
+Krohnkite **0.9.10.0** e o efeito **Geometry Change 1.5**. Os dois últimos
+são componentes de terceiros e não são instalados automaticamente:
+
+- https://codeberg.org/anametologin/Krohnkite/releases/tag/0.9.10.0
+- https://github.com/peterfajdiga/kwin4_effect_geometry_change/releases/tag/v1.5
+
+Depois revise e execute `./plasma/apply.sh --apply`. O script cria um backup
+em `~/.local/state/dotfiles/`, instala os scripts e serviços deste diretório,
+configura os gaps e o efeito, cria até dez espaços sem apagar outros existentes,
+e ajusta o primeiro painel com bandeja. Os dez primeiros espaços recebem nomes
+numéricos; os outros são preservados. O script altera atalhos existentes,
+inclusive Meta+0, Meta+Q, Meta+T e Meta+B. Revise conflitos específicos da
+máquina antes de rodar: não há detecção completa de todos os conflitos.
+
+Atalhos de movimento foram configurados para o teclado brasileiro ABNT2:
+Meta+Shift+2 é registrado como Meta+@, por exemplo. Outros layouts podem
+precisar de ajustes. Meta+1…9 e Meta+0 mudam de espaço; acrescentar Shift move
+a janela ativa e acompanha a janela. Meta sozinho abre KRunner; Meta+Espaço
+também. Meta+Q fecha a janela, Meta+T abre Kitty, Meta+B abre uma nova janela
+do Chrome e Meta+X abre a tela de sessão. Meta+E e Meta+L dependem dos atalhos
+existentes do KDE. O possível conflito de Meta+L com foco do Krohnkite deve ser
+verificado em cada instalação. Alt+F4 e Ctrl+Alt+Del são preservados.
+
+Krohnkite usa gaps de 12 px e 20 px embaixo; Meta+M usa Monocle sem
+maximização automática. Maxpadd fica desativado. Geometry Change anima o
+redimensionamento; confirme visualmente a compatibilidade com a versão do KWin.
+
+## Layan
+
+`appearance/` preserva o esquema Layan, a configuração Kvantum Dark e a
+decoração Aurorae personalizada (transparência e botões coloridos), derivadas
+do tema Layan de https://github.com/vinceliuice/Layan-kde e
+https://github.com/vinceliuice/Layan-kvantum. `aurorae-Layan` foi modificado
+em 2026-11-01; a licença GPL-3.0 do projeto
+original está em `appearance/LICENSE-Layan-GPL-3.0`.
+Instale os temas originais e o
+Kvantum antes de aplicar essas personalizações. **Ainda não há instalador
+automatizado e validado para o Layan completo**: não copie estes arquivos por
+cima de uma instalação existente sem fazer backup. O tema Plasma, o SVG do
+Kvantum, os cursores e o greeter não são instalados por `plasma/apply.sh`.
+
+Catppuccin continua como alternativa em `theme/`; o retorno completo entre os
+dois temas ainda precisa ser validado. O greeter é separado e requer sudo:
+`sudo ./theme/greeter.sh layan`, após instalar o esquema e os cursores.
