@@ -11,3 +11,13 @@ for (let index = 0; index < 10; index++) {
             workspace.activeWindow = window;
         });
 }
+
+registerShortcut("Minimize desktop windows", "Minimize desktop windows", "", function () {
+    const desktop = workspace.currentDesktop;
+    const windows = workspace.stackingOrder;
+    for (const window of windows) {
+        if (window.normalWindow && window.minimizable && !window.minimized &&
+            (window.desktops.length === 0 || window.desktops.indexOf(desktop) !== -1))
+            window.minimized = true;
+    }
+});

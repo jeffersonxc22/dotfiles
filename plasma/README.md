@@ -30,9 +30,11 @@ do Chrome e Meta+X abre a tela de sessão. Meta+E e Meta+L dependem dos atalhos
 existentes do KDE. O possível conflito de Meta+L com foco do Krohnkite deve ser
 verificado em cada instalação. Alt+F4 e Ctrl+Alt+Del são preservados.
 
-Krohnkite usa gaps de 12 px e 20 px embaixo; Meta+M usa Monocle sem
-maximização automática. Maxpadd fica desativado. Geometry Change anima o
-redimensionamento; confirme visualmente a compatibilidade com a versão do KWin.
+Krohnkite usa BTree como layout padrão, com gaps de 12 px e 20 px embaixo;
+Meta+F alterna entre Monocle sem maximização automática e o layout anterior.
+Meta+D minimiza as janelas da área de trabalho atual; restaure-as pelo painel.
+Maxpadd fica desativado. Geometry Change anima o redimensionamento; confirme
+visualmente a compatibilidade com a versão do KWin.
 
 ## Layan
 

@@ -40,11 +40,17 @@ for key in screenGapLeft screenGapRight screenGapTop screenGapBetween; do
 done
 kwriteconfig6 --file kwinrc --group Script-krohnkite --key screenGapBottom 20
 kwriteconfig6 --file kwinrc --group Script-krohnkite --key monocleMaximize --type bool false
+kwriteconfig6 --file kwinrc --group Script-krohnkite --key binaryTreeLayoutOrder 1
+kwriteconfig6 --file kwinrc --group Script-krohnkite --key tileLayoutOrder 11
 for plugin in krohnkite kwin4_effect_geometry_change workspace-move-follow app-launch-shortcuts; do
     kwriteconfig6 --file kwinrc --group Plugins --key "${plugin}Enabled" --type bool true
 done
 kwriteconfig6 --file kwinrc --group Plugins --key maxpaddEnabled --type bool false
 busctl --user call org.kde.KWin /KWin org.kde.KWin reconfigure
+if [[ $(busctl --user call org.kde.KWin /Scripting org.kde.kwin.Scripting isScriptLoaded s krohnkite) == 'b true' ]]; then
+    busctl --user call org.kde.KWin /Scripting org.kde.kwin.Scripting unloadScript s krohnkite >/dev/null
+fi
+busctl --user call org.kde.KWin /Scripting org.kde.kwin.Scripting loadDeclarativeScript ss "$HOME/.local/share/kwin/scripts/krohnkite/contents/ui/main.qml" krohnkite >/dev/null
 for name in workspace-move-follow app-launch-shortcuts; do
     if [[ $(busctl --user call org.kde.KWin /Scripting org.kde.kwin.Scripting isScriptLoaded s "$name") == 'b true' ]]; then
         busctl --user call org.kde.KWin /Scripting org.kde.kwin.Scripting unloadScript s "$name" >/dev/null
@@ -52,7 +58,7 @@ for name in workspace-move-follow app-launch-shortcuts; do
     busctl --user call org.kde.KWin /Scripting org.kde.kwin.Scripting loadScript ss "$HOME/.local/share/kwin/scripts/$name/contents/code/main.js" "$name" >/dev/null
 done
 busctl --user call org.kde.KWin /Scripting org.kde.kwin.Scripting start
-for name in workspace-move-follow app-launch-shortcuts; do
+for name in krohnkite workspace-move-follow app-launch-shortcuts; do
     [[ $(busctl --user call org.kde.KWin /Scripting org.kde.kwin.Scripting isScriptLoaded s "$name") == 'b true' ]] || { echo "Script não carregado: $name" >&2; exit 1; }
 done
 busctl --user call org.kde.KWin /Effects org.kde.kwin.Effects loadEffect s kwin4_effect_geometry_change >/dev/null
@@ -77,6 +83,11 @@ shortcut 4 plasmashell 'manage activities' plasmashell 'Mostrar seletor de ativi
 shortcut 4 plasmashell 'activate application launcher' plasmashell 'Ativar o lançador de aplicativos' 1 150994992
 shortcut 4 kwin 'Edit Tiles' kwin 'Alternar Editor de Blocos' 0
 shortcut 4 kwin KrohnkiteTileLayout kwin 'Krohnkite: Select Layout - Tile' 0
+shortcut 4 kwin KrohnkiteToggleFloat kwin 'Krohnkite: Toggle Float' 0
+shortcut 4 kwin KrohnkiteDecrease kwin 'Krohnkite: Decrease' 0
+shortcut 4 kwin KrohnkiteMonocleLayout kwin 'Krohnkite: Select Layout - Monocle' 1 268435526
+shortcut 4 kwin 'Show Desktop' kwin 'Espiar área de trabalho' 0
+shortcut 4 kwin 'Minimize desktop windows' kwin 'Minimize desktop windows' 1 268435524
 shortcut 4 kwin view_actual_size kwin 'Zoom para o tamanho atual' 0
 shortcut 4 org_kde_powerdevil powerProfile 'Gerenciamento de energia' 'Trocar perfil de energia' 1 16777470
 symbols=(33 64 35 36 37 16781911 38 42 40 41)
