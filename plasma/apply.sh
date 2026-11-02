@@ -42,7 +42,7 @@ kwriteconfig6 --file kwinrc --group Script-krohnkite --key screenGapBottom 20
 kwriteconfig6 --file kwinrc --group Script-krohnkite --key monocleMaximize --type bool false
 kwriteconfig6 --file kwinrc --group Script-krohnkite --key binaryTreeLayoutOrder 1
 kwriteconfig6 --file kwinrc --group Script-krohnkite --key tileLayoutOrder 11
-for plugin in krohnkite kwin4_effect_geometry_change workspace-move-follow app-launch-shortcuts; do
+for plugin in krohnkite kwin4_effect_geometry_change wobblywindows workspace-move-follow app-launch-shortcuts; do
     kwriteconfig6 --file kwinrc --group Plugins --key "${plugin}Enabled" --type bool true
 done
 kwriteconfig6 --file kwinrc --group Plugins --key maxpaddEnabled --type bool false
@@ -62,6 +62,7 @@ for name in krohnkite workspace-move-follow app-launch-shortcuts; do
     [[ $(busctl --user call org.kde.KWin /Scripting org.kde.kwin.Scripting isScriptLoaded s "$name") == 'b true' ]] || { echo "Script não carregado: $name" >&2; exit 1; }
 done
 busctl --user call org.kde.KWin /Effects org.kde.kwin.Effects loadEffect s kwin4_effect_geometry_change >/dev/null
+busctl --user call org.kde.KWin /Effects org.kde.kwin.Effects loadEffect s wobblywindows >/dev/null
 get_desktops() { busctl --user --json=short get-property org.kde.KWin /VirtualDesktopManager org.kde.KWin.VirtualDesktopManager desktops; }
 count=$(get_desktops | python3 -c 'import json,sys; print(len(json.load(sys.stdin)["data"]))')
 while (( count < 10 )); do
