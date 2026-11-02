@@ -12,8 +12,11 @@ A sessão atual usa Layan Dark, Krohnkite e Geometry Change. O perfil do Plasma
 está documentado em [plasma/README.md](plasma/README.md); a aplicação em uma
 instalação nova ainda precisa ser validada. A configuração anterior do mise foi preservada em
 `~/.config/mise/config.toml.pre-dotfiles-20261101125604` e os links foram
-implantados. O arquivo `~/.zshrc` existente também permanece intacto;
-o zsh passará a usar o `ZDOTDIR` definido em `~/.zshenv`.
+implantados. O pacote `zsh` instala `~/.zshenv`, que define `ZDOTDIR` como
+`~/.config/zsh`; a configuração interativa fica em `~/.config/zsh/.zshrc`.
+O `~/.zshrc` que já exista não é usado quando esse `ZDOTDIR` está ativo e não
+é substituído pelo deploy. Caso exista um `~/.zshenv` anterior, faça backup e
+resolva o conflito antes de executar o Stow; o deploy não usa `--adopt`.
 
 ## Instalação
 
