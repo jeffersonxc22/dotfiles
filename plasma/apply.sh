@@ -46,6 +46,9 @@ for plugin in krohnkite kwin4_effect_geometry_change wobblywindows workspace-mov
     kwriteconfig6 --file kwinrc --group Plugins --key "${plugin}Enabled" --type bool true
 done
 kwriteconfig6 --file kwinrc --group Plugins --key maxpaddEnabled --type bool false
+# Velocidade padrão do KDE (1.0); distros às vezes deixam 0.25, rápido demais.
+kwriteconfig6 --file kdeglobals --group KDE --key AnimationDurationFactor "${PLASMA_ANIMATION_FACTOR:-1.0}"
+kwriteconfig6 --file kwinrc --group Effect-kwin4_effect_geometry_change --key Duration "${PLASMA_GEOMETRY_DURATION:-500}"
 busctl --user call org.kde.KWin /KWin org.kde.KWin reconfigure
 if [[ $(busctl --user call org.kde.KWin /Scripting org.kde.kwin.Scripting isScriptLoaded s krohnkite) == 'b true' ]]; then
     busctl --user call org.kde.KWin /Scripting org.kde.kwin.Scripting unloadScript s krohnkite >/dev/null
@@ -109,6 +112,6 @@ shortcut 4 kwin 'Open Chrome window' kwin 'Open Chrome window' 1 268435522
 shortcut 4 ksmserver 'Log Out' 'Gerenciamento de sessões' 'Mostrar tela para encerrar sessão' 2 218103815 268435544
 
 # Seleciona o painel pela bandeja, não pelo ID específico desta máquina.
-script='var ps=panels(); var found=false; for (var i=0;i<ps.length;i++) { var p=ps[i]; var trays=p.widgets("org.kde.plasma.systemtray"); if (!trays.length) continue; var pagers=p.widgets("org.kde.plasma.pager"); var pager=pagers.length ? pagers[0] : p.addWidget("org.kde.plasma.pager"); pager.currentConfigGroup=["General"]; pager.writeConfig("displayedText",0); pager.index=trays[0].index-(pager.index<trays[0].index ? 1 : 0); var launchers=p.widgets("org.kde.plasma.kickoff"); var launcher=launchers.length ? launchers[0] : p.addWidget("org.kde.plasma.kickoff"); launcher.currentConfigGroup=["General"]; launcher.writeConfig("icon","fedora-logo-icon"); launcher.index=0; found=true; print("Painel configurado"); break; } if (!found) print("AVISO: painel com bandeja não encontrado");'
+script='var ps=panels(); var found=false; for (var i=0;i<ps.length;i++) { var p=ps[i]; var trays=p.widgets("org.kde.plasma.systemtray"); if (!trays.length) continue; var pagers=p.widgets("org.kde.plasma.pager"); var pager=pagers.length ? pagers[0] : p.addWidget("org.kde.plasma.pager"); pager.currentConfigGroup=["General"]; pager.writeConfig("displayedText",0); pager.index=trays[0].index-(pager.index<trays[0].index ? 1 : 0); var launchers=p.widgets("org.kde.plasma.kickoff"); var launcher=launchers.length ? launchers[0] : p.addWidget("org.kde.plasma.kickoff"); launcher.currentConfigGroup=["General"]; launcher.writeConfig("icon","'"${PLASMA_LAUNCHER_ICON:-fedora-logo-icon}"'"); launcher.index=0; found=true; print("Painel configurado"); break; } if (!found) print("AVISO: painel com bandeja não encontrado");'
 busctl --user call org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell evaluateScript s "$script"
 echo 'Perfil aplicado. Teste os atalhos, o painel e as animações na sessão.'

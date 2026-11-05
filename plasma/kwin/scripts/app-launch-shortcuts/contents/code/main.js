@@ -10,3 +10,7 @@ registerShortcut("Open Kitty window", "Open Kitty window", "", function () {
 registerShortcut("Open Chrome window", "Open Chrome window", "", function () {
     launch("shortcut-chrome.service");
 });
+
+registerShortcut("Open Claude", "Open Claude", "", function () {
+    launch("shortcut-claude.service");
+});

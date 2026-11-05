@@ -36,6 +36,16 @@ Meta+D minimiza as janelas da área de trabalho atual; restaure-as pelo painel.
 Maxpadd fica desativado. Geometry Change anima o redimensionamento; confirme
 visualmente a compatibilidade com a versão do KWin.
 
+## Claude e Configurações
+
+`./plasma/claude-shortcuts.sh --apply` define Meta+C para abrir/focar o app
+Claude, Meta+I para o quick entry do Claude e move as Configurações do Sistema
+de Meta+I (padrão do Plasma) para Meta+S; Krohnkite Increase fica sem atalho.
+Também cria a regra KWin `claude-focus` (prevenção de roubo de foco: nenhuma),
+porque no Wayland o atalho via portal não envia token de ativação e a janela
+abria atrás das outras. O Claude precisa estar aberto e com o quick entry
+ativado pelo menos uma vez, para o atalho existir no kglobalaccel.
+
 ## Layan
 
 `appearance/` preserva o esquema Layan, a configuração Kvantum Dark e a

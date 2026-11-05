@@ -1,8 +1,12 @@
-# Logitech MX Mechanical Mini com keyd
+# Logitech MX Mechanical Mini e MX Keys Mini com keyd
 
 O arquivo `keyd/logitech.conf` é destinado a `/etc/keyd/logitech.conf`.
-Ele identifica o teclado Bluetooth `046d:b367:1432f0af` e mantém o layout
-brasileiro do KDE. O mapeamento é uma aproximação de US International: não
+Ele identifica os teclados pelo par fabricante:produto: `046d:b367` (MX
+Mechanical Mini) e `046d:b369` (MX Keys Mini), ambos via Bluetooth; o terceiro
+campo do ID muda entre máquinas e conexões. Os dois têm o mesmo layout físico
+US ANSI e recebem o mesmo mapeamento. Confirme o ID com `sudo keyd monitor`;
+pelo receptor Bolt o ID é o do receptor, não o do teclado.
+O layout brasileiro do KDE é mantido. O mapeamento é uma aproximação de US International: não
 implementa todas as combinações AltGr e precisa de validação em uso.
 Para `ç`, use AltGr+vírgula; com Shift, produz `Ç`. AltGr+C permanece
 com o comportamento do layout brasileiro (`©`).

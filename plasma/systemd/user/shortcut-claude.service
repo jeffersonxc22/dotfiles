@@ -1,0 +1,6 @@
+[Unit]
+Description=Open or focus Claude Desktop from a keyboard shortcut
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemd-run --user --collect -- claude-desktop
