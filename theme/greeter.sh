@@ -1,85 +1,46 @@
 #!/usr/bin/env bash
-# Configura a tela de login do Plasma Login Manager (plasmalogin): fonte Inter,
-# esquema Layan ou Catppuccin e Future-cursors.
+# Leva o visual da sessão (esquema Catppuccin Mocha Sapphire, fontes, ícones
+# e cursor) para a tela de login do Plasma Login Manager, padrão do Fedora KDE.
+# O greeter lê o HOME próprio (/var/lib/plasmalogin), não o do usuário.
 #
-# Uso: sudo ./theme/greeter.sh [flavour] [accent]
-#      padrão: mocha sapphire
-#      Layan: sudo ./theme/greeter.sh layan
-#
-# O PLM lê o HOME próprio (/var/lib/plasmalogin), por isso os arquivos ficam
-# separados do kdeglobals do usuário. As mudanças valem no próximo login.
+# Uso: sudo ./theme/greeter.sh   (depois de ./plasma/theme.sh)
 set -euo pipefail
 
+[[ $EUID -eq 0 ]] || { echo "Rode com sudo." >&2; exit 1; }
+user="${SUDO_USER:?rode via sudo a partir do seu usuário}"
+home="$(getent passwd "$user" | cut -d: -f6)"
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-# shellcheck source=common.sh
-source "$repo/theme/common.sh"
+scheme=CatppuccinMochaSapphire
+cursor=catppuccin-mocha-sapphire-cursors
+dm_home="$(getent passwd plasmalogin | cut -d: -f6)"
+[[ -n $dm_home ]] || { echo "ERRO: usuário plasmalogin não existe (Plasma Login Manager instalado?)." >&2; exit 1; }
+kw() { kwriteconfig6 "$@"; }
 
-if [[ $EUID -ne 0 ]]; then
-    echo "ERRO: rode com sudo: sudo $0 $*" >&2
-    exit 1
-fi
+backup="/var/backups/dotfiles-greeter-$(date +%Y%m%d%H%M%S)"
+mkdir -p "$backup"
+for f in "$dm_home/.config/kdeglobals" "$dm_home/.config/kcminputrc"; do
+    [[ -e $f ]] && cp -a "$f" "$backup/" || true
+done
+echo "Backup: $backup"
 
-requested="${1:-mocha}"
-if [[ ${requested,,} == layan ]]; then
-    scheme=Layan
-else
-    flavour="$(normalize_flavour "${1:-mocha}")"
-    accent="$(normalize_accent "${2:-sapphire}")"
-    scheme="$(scheme_name "$flavour" "$accent")"
-fi
-
-user_home="$(getent passwd "${SUDO_USER:-$USER}" | cut -d: -f6)"
-scheme_file="/usr/share/color-schemes/$scheme.colors"
-if [[ ! -f $scheme_file && -f $user_home/.local/share/color-schemes/$scheme.colors ]]; then
-    scheme_file="$user_home/.local/share/color-schemes/$scheme.colors"
-fi
-
-if [[ ! -f $scheme_file ]]; then
-    echo "ERRO: esquema $scheme não encontrado. Rode ./theme/install.sh antes." >&2
-    exit 1
-fi
-
-# O greeter não consegue percorrer o HOME privado do usuário.
-if [[ $scheme_file != /usr/share/color-schemes/* ]]; then
-    install -Dm644 "$scheme_file" "/usr/share/color-schemes/$scheme.colors"
-    scheme_file="/usr/share/color-schemes/$scheme.colors"
-fi
-
-install -d -m 700 -o plasmalogin -g plasmalogin /var/lib/plasmalogin/.config
-
-backup_dir="/var/lib/plasmalogin/.config/dotfiles-backup-$(date +%Y%m%d%H%M%S)"
-mkdir -m 700 "$backup_dir"
-for file in kdeglobals kcminputrc; do
-    if [[ -e /var/lib/plasmalogin/.config/$file ]]; then
-        cp -a "/var/lib/plasmalogin/.config/$file" "$backup_dir/$file"
+# O greeter não lê o HOME do usuário: esquema, ícones e cursor vão para /usr/share.
+install -Dm644 "$repo/plasma/appearance/$scheme.colors" "/usr/share/color-schemes/$scheme.colors"
+for theme in "$cursor" Slot-Dark-Icons; do
+    if [[ -d $home/.local/share/icons/$theme && ! -e /usr/share/icons/$theme ]]; then
+        cp -a "$home/.local/share/icons/$theme" /usr/share/icons/
     fi
 done
-echo "Backup da configuração anterior: $backup_dir"
 
-install -m 600 -o plasmalogin -g plasmalogin "$scheme_file" \
-    /var/lib/plasmalogin/.config/kdeglobals
+install -d -m 700 -o plasmalogin -g plasmalogin "$dm_home/.config"
+install -m 600 -o plasmalogin -g plasmalogin "$home/.config/kdeglobals" "$dm_home/.config/kdeglobals"
+icons=Slot-Dark-Icons; [[ -d /usr/share/icons/$icons ]] || icons=breeze-dark
+kw --file "$dm_home/.config/kdeglobals" --group Icons --key Theme "$icons"
+kw --file "$dm_home/.config/kdeglobals" --group KDE --key widgetStyle Breeze
+printf '[Mouse]\ncursorTheme=%s\ncursorSize=24\n' "$cursor" > "$dm_home/.config/kcminputrc"
+chown plasmalogin:plasmalogin "$dm_home/.config/kcminputrc"; chmod 600 "$dm_home/.config/kcminputrc"
+# Rótulos SELinux corretos para o greeter ler os arquivos.
+command -v restorecon >/dev/null && restorecon -R "$dm_home/.config" >/dev/null 2>&1 || true
 
-kwriteconfig6 --file /var/lib/plasmalogin/.config/kdeglobals --group General --key ColorScheme "$scheme"
-kwriteconfig6 --file /var/lib/plasmalogin/.config/kdeglobals --group General --key font "Inter,10,-1,5,50,0,0,0,0,0"
-kwriteconfig6 --file /var/lib/plasmalogin/.config/kdeglobals --group General --key fixed "Cascadia Mono NF,10,-1,5,50,0,0,0,0,0"
-kwriteconfig6 --file /var/lib/plasmalogin/.config/kdeglobals --group General --key menuFont "Inter,10,-1,5,50,0,0,0,0,0"
-kwriteconfig6 --file /var/lib/plasmalogin/.config/kdeglobals --group General --key toolBarFont "Inter,10,-1,5,50,0,0,0,0,0"
-kwriteconfig6 --file /var/lib/plasmalogin/.config/kdeglobals --group General --key smallestReadableFont "Inter,8,-1,5,50,0,0,0,0,0"
-kwriteconfig6 --file /var/lib/plasmalogin/.config/kdeglobals --group Icons --key Theme "Papirus-Dark"
-kwriteconfig6 --file /var/lib/plasmalogin/.config/kdeglobals --group KDE --key widgetStyle "Breeze"
-
-kwriteconfig6 --file /var/lib/plasmalogin/.config/kcminputrc --group Mouse --key cursorTheme "Future-cursors"
-kwriteconfig6 --file /var/lib/plasmalogin/.config/kcminputrc --group Mouse --key cursorSize "24"
-
-chown plasmalogin:plasmalogin \
-    /var/lib/plasmalogin/.config/kdeglobals \
-    /var/lib/plasmalogin/.config/kcminputrc
-chmod 600 \
-    /var/lib/plasmalogin/.config/kdeglobals \
-    /var/lib/plasmalogin/.config/kcminputrc
-
-if command -v restorecon >/dev/null 2>&1; then
-    restorecon -R /var/lib/plasmalogin/.config >/dev/null 2>&1 || true
-fi
-
-echo "Greeter configurado com $scheme, Inter e Future-cursors (aplica no próximo login)."
+echo "Login sincronizado (vale no próximo login). Para desfazer, copie de volta os arquivos de $backup."
+# shortcut: a chave de fundo do /etc/plasmalogin.conf não está documentada; automatizar após ler /usr/lib/plasmalogin/defaults.conf no Fedora.
+echo "Fundo sólido do login: Configurações do Sistema > Tela de Login > papel de parede 'Cor sólida' #1e1e2e."

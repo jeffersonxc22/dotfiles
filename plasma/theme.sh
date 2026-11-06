@@ -1,20 +1,22 @@
 #!/usr/bin/env bash
 # Perfil visual: estilo Layan (Kvantum, decoração Aurorae, tema Plasma) com as
 # cores oficiais Catppuccin Mocha + Sapphire, sem blur e sem transparência,
-# ícones Slot-Dark-Icons, propagado para KDE, GTK, kitty e Flatpak. Também põe o pager à direita,
-# logo antes da bandeja.
+# ícones Slot-Dark-Icons (bandeja Papirus), cursor Catppuccin, fontes Inter e
+# Cascadia, fundo sólido Mocha Base na área de trabalho e no bloqueio,
+# propagado para KDE, GTK, kitty e Flatpak. Também põe o pager à direita,
+# logo antes da bandeja. É a única fonte da aparência.
 #
-# Uso: ./bootstrap/pikaos/theme-layan-catppuccin.sh   (dentro da sessão Plasma)
-# Pré-requisito: ./bootstrap/pikaos/plasma-prereqs.sh (Layan instalado).
+# Uso: ./plasma/theme.sh   (dentro da sessão Plasma)
+# Pré-requisito: ./plasma/prereqs.sh (Layan instalado).
 set -euo pipefail
 
-repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 app="$repo/plasma/appearance"
 scheme=CatppuccinMochaSapphire
 for cmd in kwriteconfig6 plasma-apply-colorscheme busctl python3 systemctl; do
     command -v "$cmd" >/dev/null || { echo "Falta: $cmd" >&2; exit 1; }
 done
-[[ -d $HOME/.config/Kvantum/Layan ]] || { echo "Layan não instalado: rode plasma-prereqs.sh" >&2; exit 1; }
+[[ -d $HOME/.config/Kvantum/Layan ]] || { echo "Layan não instalado: rode plasma/prereqs.sh" >&2; exit 1; }
 
 backup="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles/theme-$(date +%Y%m%d%H%M%S)"
 mkdir -p "$backup"
@@ -41,6 +43,17 @@ save "$HOME/.config/Kvantum/Layan/LayanDark.svg"
 install -m644 "$app/LayanDark.svg" "$HOME/.config/Kvantum/Layan/LayanDark.svg"
 if command -v kvantummanager >/dev/null; then kvantummanager --set LayanDark; fi
 kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle kvantum
+
+echo "== Decoração Aurorae Layan e fontes"
+kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key library org.kde.kwin.aurorae
+kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key theme __aurorae__svg__Layan
+ui_font="Inter,10,-1,5,50,0,0,0,0,0"
+for key in font menuFont toolBarFont taskbarFont; do
+    kwriteconfig6 --file kdeglobals --group General --key "$key" "$ui_font"
+done
+kwriteconfig6 --file kwinrc --group WM --key activeFont "$ui_font"
+kwriteconfig6 --file kdeglobals --group General --key smallestReadableFont "Inter,8,-1,5,50,0,0,0,0,0"
+kwriteconfig6 --file kdeglobals --group General --key fixed "Cascadia Mono NF,10,-1,5,50,0,0,0,0,0"
 
 echo "== Tema Plasma Layan seguindo o esquema Catppuccin"
 pt="$HOME/.local/share/plasma/desktoptheme/Layan"
@@ -73,7 +86,7 @@ mkdir -p "$(dirname "$icons_dst")"
 cp -a "$slot_src/Slot Icons Themes/Slot-Dark-Icons" "$icons_dst"
 gtk-update-icon-cache -f -t "$icons_dst" >/dev/null 2>&1 || true
 # Bandeja com os ícones de painel do Papirus-Dark (arredondados); o resto
-# herda do Slot-Dark-Icons. Os diretórios são links para o Papirus do apt.
+# herda do Slot-Dark-Icons. Os diretórios são links para o Papirus do dnf.
 icon_theme=Slot-Dark-Tray
 tray="$HOME/.local/share/icons/$icon_theme"
 papirus=/usr/share/icons/Papirus-Dark
@@ -98,7 +111,7 @@ else
     echo "aviso: Papirus-Dark não instalado; bandeja fica com Slot/Breeze." >&2
     icon_theme=Slot-Dark-Icons
 fi
-changeicons="$(command -v plasma-changeicons || ls /usr/lib/*/libexec/plasma-changeicons /usr/libexec/plasma-changeicons 2>/dev/null | head -1 || true)"
+changeicons="$(command -v plasma-changeicons || ls /usr/libexec/plasma-changeicons 2>/dev/null || true)"
 if [[ -n $changeicons ]]; then "$changeicons" "$icon_theme"; else kwriteconfig6 --file kdeglobals --group Icons --key Theme "$icon_theme"; fi
 
 echo "== Cursor Catppuccin Mocha Sapphire (catppuccin/cursors v2.0.0)"
@@ -116,25 +129,26 @@ plasma-apply-cursortheme "$cursor" --size 24 || kwriteconfig6 --file kcminputrc 
 echo "== GTK, kitty e Flatpak"
 busctl --user call org.kde.kded6 /kded org.kde.kded6 reconfigure >/dev/null 2>&1 || true
 "$repo/theme/gtk.sh" mocha
-# gtk.sh fixa Future-cursors; aqui o cursor é o Catppuccin.
-for f in "$HOME/.config/gtk-3.0/settings.ini" "$HOME/.config/gtk-4.0/settings.ini"; do
-    sed -i -E "s|^gtk-cursor-theme-name=.*|gtk-cursor-theme-name=$cursor|" "$f"
-done
-command -v gsettings >/dev/null && gsettings set org.gnome.desktop.interface cursor-theme "$cursor" 2>/dev/null || true
-# gtk.sh fixa Papirus-Dark; aqui o conjunto de ícones é o Slot-Dark-Icons.
-for f in "$HOME/.config/gtk-3.0/settings.ini" "$HOME/.config/gtk-4.0/settings.ini"; do
-    sed -i -E "s|^gtk-icon-theme-name=.*|gtk-icon-theme-name=$icon_theme|" "$f"
-done
-command -v gsettings >/dev/null && gsettings set org.gnome.desktop.interface icon-theme "$icon_theme" 2>/dev/null || true
+if command -v gsettings >/dev/null; then
+    gsettings set org.gnome.desktop.interface cursor-theme "$cursor" 2>/dev/null || true
+    gsettings set org.gnome.desktop.interface icon-theme "$icon_theme" 2>/dev/null || true
+fi
 "$repo/theme/kitty-colors.sh"
 if command -v flatpak >/dev/null; then
     "$repo/theme/flatpak.sh"
-    flatpak override --user --env=GTK_THEME=Breeze-Dark --env=ICON_THEME="$icon_theme" --env=XCURSOR_THEME="$cursor"
     # Breeze GTK dentro do sandbox lê o colors.css gerado pelo KDE.
     if flatpak remotes --columns=name | grep -qx flathub; then
         flatpak install -y --noninteractive flathub org.gtk.Gtk3theme.Breeze || echo "aviso: não instalou org.gtk.Gtk3theme.Breeze" >&2
     fi
 fi
+
+echo "== Fundo sólido Mocha Base (#1e1e2e): área de trabalho e tela de bloqueio"
+base='#1e1e2e'
+busctl --user call org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell evaluateScript s \
+    "desktops().forEach(function (d) { d.wallpaperPlugin = 'org.kde.color'; d.currentConfigGroup = ['Wallpaper', 'org.kde.color', 'General']; d.writeConfig('Color', '$base'); });" >/dev/null
+save "$HOME/.config/kscreenlockerrc"
+kwriteconfig6 --file kscreenlockerrc --group Greeter --key WallpaperPlugin org.kde.color
+kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.color --group General --key Color "$base"
 
 echo "== Pager à direita (antes da bandeja)"
 rc="$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc"
@@ -177,5 +191,5 @@ systemctl --user start plasma-plasmashell.service
 
 echo
 echo "Tema aplicado. Backup: $backup"
-echo "Tela de login (SDDM): rode  sudo bash $repo/bootstrap/pikaos/sddm-sync.sh"
+echo "Tela de login: rode  sudo $repo/theme/greeter.sh"
 echo "Apps já abertos (Qt/GTK/Flatpak) pegam o tema ao reabrir."

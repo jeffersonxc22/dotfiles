@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
-# Confere a instalação dos dotfiles no PikaOS e grava o resultado em
-# bootstrap/pikaos/verify.log (ignorado pelo git via **/*.log).
-# Uso: ./bootstrap/pikaos/verify.sh   (dentro da sessão Plasma)
-repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-log="$repo/bootstrap/pikaos/verify.log"
+# Confere a instalação dos dotfiles e grava o resultado em
+# bootstrap/verify.log (ignorado pelo git via **/*.log).
+# Uso: ./bootstrap/verify.sh   (dentro da sessão Plasma)
+repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+log="$repo/bootstrap/verify.log"
+dm="$(basename "$(readlink -f /etc/systemd/system/display-manager.service)" .service)"
+dm_home="$(getent passwd "$dm" | cut -d: -f6)"
 export PATH="$HOME/.local/bin:$PATH"
 ok=0 fail=0
 check() { # check <descrição> <comando...>
@@ -14,11 +16,11 @@ link_to() { [[ -L $1 && $(readlink -f "$1") == "$repo"/* ]]; }
 {
 echo "# verify $(date -Is) — $(. /etc/os-release; echo "$PRETTY_NAME")"
 echo "## Binários"
-for c in zsh kitty fzf zoxide bat eza fd rg nvim git stow starship mise gh wl-copy kpackagetool6 kwriteconfig6 google-chrome; do
+for c in zsh kitty fzf zoxide bat eza fd rg nvim git stow starship mise gh wl-copy kpackagetool6 kwriteconfig6 kvantummanager; do
     check "cmd $c" command -v "$c"
 done
-# No Debian o binário do keyd se chama keyd.rvaiya.
-check "cmd keyd (keyd ou keyd.rvaiya)" bash -c 'command -v keyd.rvaiya || command -v keyd'
+check "cmd google-chrome" bash -c 'command -v google-chrome-stable || command -v google-chrome'
+check "cmd keyd" command -v keyd
 check "keyd ativo e casando o MX Mechanical" bash -c 'systemctl is-active -q keyd && [[ -e /etc/keyd/logitech.conf ]]'
 check "fzf >= 0.48 (fzf --zsh)" fzf --zsh
 check "nvim versão" nvim --version
@@ -70,9 +72,20 @@ check "krohnkite habilitado" bash -c '[[ $(kreadconfig6 --file kwinrc --group Pl
 check "krohnkite carregado" bash -c '[[ $(busctl --user call org.kde.KWin /Scripting org.kde.kwin.Scripting isScriptLoaded s krohnkite) == "b true" ]]'
 check "10 áreas de trabalho" bash -c '(( $(busctl --user get-property org.kde.KWin /VirtualDesktopManager org.kde.KWin.VirtualDesktopManager count | cut -d" " -f2) >= 10 ))'
 check "Kvantum SVG em Catppuccin" grep -q 74c7ec "$HOME/.config/Kvantum/Layan/LayanDark.svg"
-check "SDDM com esquema Catppuccin" grep -q "ColorScheme=CatppuccinMochaSapphire" /var/lib/sddm/.config/kdeglobals
-check "SDDM com cursor Catppuccin" grep -q "CursorTheme=catppuccin-mocha-sapphire-cursors" /etc/sddm.conf.d/kde_settings.conf
+check "greeter ($dm) com esquema Catppuccin" bash -c 'f="$1/.config/kdeglobals"; grep -q "ColorScheme=CatppuccinMochaSapphire" "$f" 2>/dev/null || sudo -n grep -q "ColorScheme=CatppuccinMochaSapphire" "$f"' _ "$dm_home"
+check "greeter ($dm) com cursor Catppuccin" bash -c 'f="$1/.config/kcminputrc"; grep -q "cursorTheme=catppuccin-mocha-sapphire-cursors" "$f" 2>/dev/null || sudo -n grep -q "cursorTheme=catppuccin-mocha-sapphire-cursors" "$f"' _ "$dm_home"
 check "kitty-colors.path ativo" systemctl --user is-active kitty-colors.path
 check "kitty-theme.conf" test -s "$HOME/.cache/dotfiles/kitty-theme.conf"
+check "fundo sólido na área de trabalho" grep -q "wallpaperplugin=org.kde.color" "$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc"
+check "fundo sólido no bloqueio" bash -c '[[ $(kreadconfig6 --file kscreenlockerrc --group Greeter --key WallpaperPlugin) == org.kde.color ]]'
+echo "## Programas"
+for c in google-chrome-stable slack claude; do check "cmd $c" command -v "$c"; done
+check "Chrome navegador padrão" bash -c '[[ $(xdg-settings get default-web-browser) == google-chrome.desktop ]]'
+echo "## Home PARA"
+for d in Projetos Areas Recursos Arquivados Recursos/Downloads; do check "~/$d" test -d "$HOME/$d"; done
+check "Downloads em ~/Recursos/Downloads" bash -c '[[ $(xdg-user-dir DOWNLOAD) == "$HOME/Recursos/Downloads" ]]'
+for d in Documents Pictures Videos Music Templates Public Documentos Imagens Vídeos Música Modelos Público; do
+    check "sem ~/$d" test ! -e "$HOME/$d"
+done
 echo "## Resumo: $ok OK, $fail FAIL"
 } | tee "$log"

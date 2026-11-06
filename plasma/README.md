@@ -1,19 +1,24 @@
 # Perfil Plasma 6
 
-Este diretório guarda o perfil de janelas, painel e atalhos da sessão Fedora
-KDE. Não substitui arquivos completos do Plasma: IDs de telas, atividades e
+Este diretório guarda o perfil de janelas, painel e atalhos da sessão KDE
+Plasma. Não substitui arquivos completos do Plasma: IDs de telas, atividades e
 desktops são específicos de cada instalação.
 
 ## Aplicação
 
-Com uma sessão Plasma Wayland ativa, instale primeiro Kitty, Google Chrome,
-Krohnkite **0.9.10.0** e o efeito **Geometry Change 1.5**. Os dois últimos
-são componentes de terceiros e não são instalados automaticamente:
+O `bootstrap/install.sh` roda estes scripts na ordem certa (etapas 11 e 14
+do [README](../README.md)). À mão, dentro da sessão Plasma:
+`./plasma/prereqs.sh` instala Krohnkite **0.9.10.0**, o efeito
+**Geometry Change 1.5** e o Layan, sem aplicar nada; `./plasma/theme.sh` aplica
+toda a aparência.
 
 - https://codeberg.org/anametologin/Krohnkite/releases/tag/0.9.10.0
 - https://github.com/peterfajdiga/kwin4_effect_geometry_change/releases/tag/v1.5
 
-Depois revise e execute `./plasma/apply.sh --apply`. O script cria um backup
+Depois revise e execute `./plasma/apply.sh --apply`. Ele grava nas units o
+caminho de `kitty` e `google-chrome-stable` encontrado no seu PATH, e usa o
+`LOGO` de `/etc/os-release` como ícone do lançador (`PLASMA_LAUNCHER_ICON`
+sobrescreve). O script cria um backup
 em `~/.local/state/dotfiles/`, instala os scripts e serviços deste diretório,
 configura os gaps e o efeito, cria até dez espaços sem apagar outros existentes,
 e ajusta o primeiro painel com bandeja. Os dez primeiros espaços recebem nomes
@@ -48,18 +53,17 @@ ativado pelo menos uma vez, para o atalho existir no kglobalaccel.
 
 ## Layan
 
-`appearance/` preserva o esquema Layan, a configuração Kvantum Dark e a
+`appearance/` preserva o esquema Catppuccin Mocha Sapphire, a configuração Kvantum Dark e a
 decoração Aurorae personalizada (transparência e botões coloridos), derivadas
 do tema Layan de https://github.com/vinceliuice/Layan-kde e
 https://github.com/vinceliuice/Layan-kvantum. `aurorae-Layan` foi modificado
 em 2026-11-01; a licença GPL-3.0 do projeto
 original está em `appearance/LICENSE-Layan-GPL-3.0`.
 Instale os temas originais e o
-Kvantum antes de aplicar essas personalizações. **Ainda não há instalador
-automatizado e validado para o Layan completo**: não copie estes arquivos por
-cima de uma instalação existente sem fazer backup. O tema Plasma, o SVG do
-Kvantum, os cursores e o greeter não são instalados por `plasma/apply.sh`.
-
-Catppuccin continua como alternativa em `theme/`; o retorno completo entre os
-dois temas ainda precisa ser validado. O greeter é separado e requer sudo:
-`sudo ./theme/greeter.sh layan`, após instalar o esquema e os cursores.
+Kvantum antes de aplicar essas personalizações. `plasma/prereqs.sh` instala
+o Layan upstream e copia estes arquivos por cima, com backup em
+`~/.local/state/dotfiles/`. 
+`./plasma/theme.sh` aplica o perfil atual: estilo Layan com as cores
+Catppuccin Mocha Sapphire. A tela de login é separada e requer sudo:
+`sudo ./theme/greeter.sh` (Plasma Login Manager). O fundo sólido do login
+ainda é escolhido à mão em Configurações > Tela de Login.

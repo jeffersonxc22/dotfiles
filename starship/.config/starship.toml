@@ -37,32 +37,11 @@ palette = 'catppuccin_mocha'
 [os]
 disabled = false
 style = "bg:red fg:crust"
-# Logo Debian sempre (PikaOS é base Debian e o starship não o reconhece).
-format = "[  ]($style)"
+format = "[ $symbol]($style)"
 
 [os.symbols]
-Windows = "󰍲 "
-Ubuntu = "󰕈 "
-SUSE = " "
-Raspbian = "󰐿 "
-Mint = "󰣭 "
-Macos = "󰀵 "
-Manjaro = " "
 Linux = "󰌽 "
-Gentoo = "󰣨 "
 Fedora = "󰣛 "
-Alpine = " "
-Amazon = " "
-Android = " "
-AOSC = " "
-Arch = "󰣇 "
-Artix = "󰣇 "
-EndeavourOS = " "
-CentOS = " "
-Debian = "󰣚 "
-Redhat = "󱄛 "
-RedHatEnterprise = "󱄛 "
-Pop = " "
 
 [username]
 show_always = true

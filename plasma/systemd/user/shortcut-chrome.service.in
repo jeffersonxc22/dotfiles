@@ -3,4 +3,4 @@ Description=Open a Chrome window from a keyboard shortcut
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/systemd-run --user --collect -- /usr/bin/google-chrome --new-window
+ExecStart=/usr/bin/systemd-run --user --collect -- @CHROME@ --new-window

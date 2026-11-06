@@ -52,7 +52,7 @@ mkdir -p "$(dirname "$out")"
 
 cat >"$out" <<EOF
 # Gerado por theme/kitty-colors.sh a partir de ~/.config/kdeglobals.
-# Não edite: rode o script de novo (ou theme/apply.sh).
+# Não edite: rode o script de novo.
 include $HOME/.config/kitty/themes/$flavour.conf
 
 background $bg

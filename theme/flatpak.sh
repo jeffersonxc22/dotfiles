@@ -26,7 +26,9 @@ flatpak override --user \
     --filesystem=xdg-data/color-schemes:ro \
     --filesystem=xdg-data/themes:ro \
     --filesystem=xdg-data/icons:ro \
-    --env=XCURSOR_THEME=Future-cursors \
+    --env=GTK_THEME=Breeze-Dark \
+    --env=ICON_THEME=Slot-Dark-Tray \
+    --env=XCURSOR_THEME=catppuccin-mocha-sapphire-cursors \
     --env=XCURSOR_SIZE=24 \
     --env=XDG_DATA_DIRS=/app/share:/usr/share:/run/host/share
 

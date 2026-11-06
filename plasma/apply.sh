@@ -12,9 +12,10 @@ done
 for pkg in "$HOME/.local/share/kwin/scripts/krohnkite" "$HOME/.local/share/kwin/effects/kwin4_effect_geometry_change"; do
     [[ -f $pkg/metadata.json ]] || { echo "Instale primeiro: $pkg (veja plasma/README.md)" >&2; exit 1; }
 done
-for executable in kitty google-chrome systemd-run; do
-    command -v "$executable" >/dev/null || { echo "Falta: $executable" >&2; exit 1; }
-done
+# Caminhos absolutos: o PATH do systemd do usuário não inclui ~/.local/bin.
+kitty=$(command -v kitty) || { echo 'Falta: kitty' >&2; exit 1; }
+chrome=$(command -v google-chrome-stable || command -v google-chrome) || { echo 'Falta: google-chrome' >&2; exit 1; }
+command -v systemd-run >/dev/null || { echo 'Falta: systemd-run' >&2; exit 1; }
 busctl --user get-property org.kde.KWin /VirtualDesktopManager org.kde.KWin.VirtualDesktopManager count >/dev/null
 busctl --user introspect org.kde.plasmashell /PlasmaShell >/dev/null
 backup="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles/plasma-$(date +%Y%m%d%H%M%S)-$$"
@@ -31,7 +32,7 @@ done
 mkdir -p "$HOME/.config/systemd/user" "$backup/systemd"
 for name in shortcut-kitty.service shortcut-chrome.service; do
     [[ ! -e $HOME/.config/systemd/user/$name ]] || cp -a "$HOME/.config/systemd/user/$name" "$backup/systemd/"
-    install -m 644 "$dir/systemd/user/$name" "$HOME/.config/systemd/user/$name"
+    sed -e "s|@KITTY@|$kitty|" -e "s|@CHROME@|$chrome|" "$dir/systemd/user/$name.in" >"$HOME/.config/systemd/user/$name"
 done
 echo "Backup: $backup"
 systemctl --user daemon-reload
@@ -111,7 +112,8 @@ shortcut 4 kwin 'Open Kitty window' kwin 'Open Kitty window' 1 268435540
 shortcut 4 kwin 'Open Chrome window' kwin 'Open Chrome window' 1 268435522
 shortcut 4 ksmserver 'Log Out' 'Gerenciamento de sessões' 'Mostrar tela para encerrar sessão' 2 218103815 268435544
 
+logo=$(. /etc/os-release; echo "${LOGO:-start-here-kde}")
 # Seleciona o painel pela bandeja, não pelo ID específico desta máquina.
-script='var ps=panels(); var found=false; for (var i=0;i<ps.length;i++) { var p=ps[i]; var trays=p.widgets("org.kde.plasma.systemtray"); if (!trays.length) continue; var pagers=p.widgets("org.kde.plasma.pager"); var pager=pagers.length ? pagers[0] : p.addWidget("org.kde.plasma.pager"); pager.currentConfigGroup=["General"]; pager.writeConfig("displayedText",0); pager.index=trays[0].index-(pager.index<trays[0].index ? 1 : 0); var launchers=p.widgets("org.kde.plasma.kickoff"); var launcher=launchers.length ? launchers[0] : p.addWidget("org.kde.plasma.kickoff"); launcher.currentConfigGroup=["General"]; launcher.writeConfig("icon","'"${PLASMA_LAUNCHER_ICON:-fedora-logo-icon}"'"); launcher.index=0; found=true; print("Painel configurado"); break; } if (!found) print("AVISO: painel com bandeja não encontrado");'
+script='var ps=panels(); var found=false; for (var i=0;i<ps.length;i++) { var p=ps[i]; var trays=p.widgets("org.kde.plasma.systemtray"); if (!trays.length) continue; var pagers=p.widgets("org.kde.plasma.pager"); var pager=pagers.length ? pagers[0] : p.addWidget("org.kde.plasma.pager"); pager.currentConfigGroup=["General"]; pager.writeConfig("displayedText",0); pager.index=trays[0].index-(pager.index<trays[0].index ? 1 : 0); var launchers=p.widgets("org.kde.plasma.kickoff"); var launcher=launchers.length ? launchers[0] : p.addWidget("org.kde.plasma.kickoff"); launcher.currentConfigGroup=["General"]; launcher.writeConfig("icon","'"${PLASMA_LAUNCHER_ICON:-$logo}"'"); launcher.index=0; found=true; print("Painel configurado"); break; } if (!found) print("AVISO: painel com bandeja não encontrado");'
 busctl --user call org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell evaluateScript s "$script"
 echo 'Perfil aplicado. Teste os atalhos, o painel e as animações na sessão.'

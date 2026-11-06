@@ -47,7 +47,7 @@ require_cmd() {
     local cmd
     for cmd in "$@"; do
         if ! command -v "$cmd" >/dev/null 2>&1; then
-            echo "ERRO: comando '$cmd' não encontrado. Rode bootstrap/install.sh primeiro." >&2
+            echo "ERRO: comando '$cmd' não encontrado. Rode ./bootstrap/install.sh primeiro." >&2
             exit 1
         fi
     done

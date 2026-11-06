@@ -6,11 +6,11 @@ usage = { version = "latest", workflow = "publish-cli.yml" }
 herdr = "latest"
 go = "latest"
 node = "24"
-python = "latest"
+python = "3"
 java = "25"
 gcloud = "latest"
 maven = "latest"
 rust = "latest"
 
 [env]
-HIVEMIND_VAULT_PATH = "{{env.HOME}}/Documents/hivemind"
+HIVEMIND_VAULT_PATH = "{{env.HOME}}/Areas/hivemind"

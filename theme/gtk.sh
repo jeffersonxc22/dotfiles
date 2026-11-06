@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Ajusta GTK 3/4 para acompanhar o KDE: fonte Inter, Breeze-GTK, Papirus-Dark
-# e Future-cursors. As cores continuam vindo do colors.css gerado pelo
+# Ajusta GTK 3/4 para acompanhar o KDE: fonte Inter, Breeze-GTK, ícones
+# Slot-Dark-Tray e cursor Catppuccin Mocha Sapphire. As cores continuam vindo do colors.css gerado pelo
 # kde-gtk-config a partir do esquema Catppuccin.
 #
 # Uso: ./theme/gtk.sh [flavour]
@@ -28,9 +28,9 @@ for version in 3.0 4.0; do
 
     set_gtk_key "$file" gtk-application-prefer-dark-theme "$dark"
     set_gtk_key "$file" gtk-theme-name "Breeze"
-    set_gtk_key "$file" gtk-icon-theme-name "Papirus-Dark"
+    set_gtk_key "$file" gtk-icon-theme-name "Slot-Dark-Tray"
     set_gtk_key "$file" gtk-font-name "Inter 10"
-    set_gtk_key "$file" gtk-cursor-theme-name "Future-cursors"
+    set_gtk_key "$file" gtk-cursor-theme-name "catppuccin-mocha-sapphire-cursors"
     set_gtk_key "$file" gtk-cursor-theme-size "24"
     set_gtk_key "$file" gtk-decoration-layout "icon:minimize,maximize,close"
     echo "GTK $version: $file atualizado"

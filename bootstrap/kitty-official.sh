@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
 # kitty-official.sh — instala/atualiza o kitty pelo instalador OFICIAL
 # (https://sw.kovidgoyal.net/kitty/binary/) em ~/.local/kitty.app e o
-# integra como terminal padrão no PikaOS 4 (Debian sid, KDE Plasma 6 Wayland).
+# integra como terminal padrão do KDE Plasma 6 no Fedora.
 #
 # Idempotente: pode ser rodado várias vezes (também serve para atualizar).
 # NÃO toca em ~/.config/kitty/kitty.conf (link do stow).
 #
 # Variáveis opcionais:
-#   REMOVE_APT_KITTY=yes|no   responde de antemão à pergunta sobre `apt remove kitty`
-#   SKIP_ALTERNATIVES=1       não mexe em x-terminal-emulator (evita sudo)
-#   DOTFILES_DIR=...          padrão: ~/dotfiles
+#   REMOVE_DNF_KITTY=yes|no  responde de antemão se remove o kitty do dnf
 
 set -euo pipefail
 
@@ -31,7 +29,7 @@ ask_yes_no() { # $1 = pergunta; retorna 0 para sim. Padrão: não.
 }
 
 [[ $EUID -ne 0 ]] || die "Rode como usuário normal (sem sudo). O script pede sudo só quando precisa."
-have curl || die "curl não encontrado. Instale com: sudo apt install curl"
+have curl || die "curl não encontrado. Rode ./bootstrap/install.sh primeiro."
 
 HOME_REAL="$(readlink -f "$HOME")"
 APP_DIR="$HOME_REAL/.local/kitty.app"
@@ -40,9 +38,7 @@ APPS_DIR="$HOME_REAL/.local/share/applications"
 KITTY_BIN="$APP_DIR/bin/kitty"
 KITTEN_BIN="$APP_DIR/bin/kitten"
 ICON="$APP_DIR/share/icons/hicolor/256x256/apps/kitty.png"
-DOTFILES_DIR="${DOTFILES_DIR:-$HOME_REAL/dotfiles}"
 SVC_NAME="shortcut-kitty.service"
-SVC_SRC="$DOTFILES_DIR/plasma/systemd/user/$SVC_NAME"
 SVC_DST="$HOME_REAL/.config/systemd/user/$SVC_NAME"
 BACKUP_DIR="$HOME_REAL/.local/state/kitty-official/backups"
 STAMP="$(date +%Y%m%d-%H%M%S)"
@@ -110,72 +106,37 @@ else
     ok "xdg-terminals.list atualizado"
 fi
 
-# Debian alternatives (x-terminal-emulator)
-if [[ "${SKIP_ALTERNATIVES:-0}" != "1" ]] && have update-alternatives; then
-    current="$(update-alternatives --query x-terminal-emulator 2>/dev/null | awk '/^Value:/{print $2}')"
-    if [[ "$current" == "$KITTY_BIN" ]]; then
-        ok "x-terminal-emulator já aponta para $KITTY_BIN"
+# ------------------------------------- 4. conflito com o kitty do dnf + service
+info "4/5 Resolvendo conflito com o kitty do dnf e o $SVC_NAME"
+
+# 4a. Unit do atalho Meta+T: plasma/apply.sh grava o kitty do PATH; aponte para o oficial.
+if [[ -f "$SVC_DST" && ! -L "$SVC_DST" ]]; then
+    if grep -q -- "-- $BIN_DIR/kitty\$" "$SVC_DST"; then
+        ok "$SVC_DST já usa $BIN_DIR/kitty"
     else
-        info "Registrando x-terminal-emulator (pede sudo)"
-        sudo update-alternatives --install /usr/bin/x-terminal-emulator \
-            x-terminal-emulator "$KITTY_BIN" 100
-        sudo update-alternatives --set x-terminal-emulator "$KITTY_BIN"
-        ok "x-terminal-emulator -> $KITTY_BIN"
-    fi
-fi
-
-# ------------------------------------- 4. conflito com o kitty do apt + service
-info "4/5 Resolvendo conflito com o kitty do apt e o $SVC_NAME"
-
-# 4a. Unit do atalho Meta+T: trocar /usr/bin/kitty por %h/.local/bin/kitty
-if [[ -f "$SVC_SRC" ]]; then
-    if grep -q -- '-- /usr/bin/kitty' "$SVC_SRC"; then
         mkdir -p "$BACKUP_DIR"
-        cp -a "$SVC_SRC" "$BACKUP_DIR/$SVC_NAME.$STAMP"
-        sed -i 's#-- /usr/bin/kitty#-- %h/.local/bin/kitty#' "$SVC_SRC"
-        ok "Editado $SVC_SRC (backup em $BACKUP_DIR)"
-    else
-        ok "$SVC_SRC já não usa /usr/bin/kitty"
-    fi
-    # Se a unit instalada for link do stow para o arquivo do dotfiles, nada a copiar.
-    if [[ -L "$SVC_DST" ]] && [[ "$(readlink -f "$SVC_DST")" == "$(readlink -f "$SVC_SRC")" ]]; then
-        ok "$SVC_DST é link (stow) para o dotfiles; já reflete a mudança"
-    elif [[ -e "$SVC_DST" ]] && cmp -s "$SVC_SRC" "$SVC_DST"; then
-        ok "$SVC_DST já está atualizado"
-    else
-        mkdir -p "$(dirname "$SVC_DST")"
-        if [[ -e "$SVC_DST" && ! -L "$SVC_DST" ]]; then
-            mkdir -p "$BACKUP_DIR"
-            cp -a "$SVC_DST" "$BACKUP_DIR/$SVC_NAME.installed.$STAMP"
-        fi
-        if [[ -L "$SVC_DST" ]]; then
-            warn "$SVC_DST é link para outro lugar ($(readlink -f "$SVC_DST")); não vou substituí-lo."
-        else
-            install -m 0644 "$SVC_SRC" "$SVC_DST"
-            ok "Unit reinstalada em $SVC_DST"
+        cp -a "$SVC_DST" "$BACKUP_DIR/$SVC_NAME.installed.$STAMP"
+        sed -i "s#^\(ExecStart=.* -- \).*#\1$BIN_DIR/kitty#" "$SVC_DST"
+        ok "$SVC_DST agora usa $BIN_DIR/kitty (backup em $BACKUP_DIR)"
+        if have systemctl; then
+            systemctl --user daemon-reload || warn "systemctl --user daemon-reload falhou."
         fi
     fi
-    if have systemctl; then
-        systemctl --user daemon-reload || warn "systemctl --user daemon-reload falhou."
-    fi
-    info "Lembrete: faça commit da alteração em $DOTFILES_DIR (git)."
 else
-    warn "$SVC_SRC não encontrado; atalho Meta+T não foi ajustado."
+    info "$SVC_DST ausente: plasma/apply.sh --apply a criará com o kitty do PATH."
 fi
 
-# 4b. Pacote apt
-if dpkg-query -W -f='${Status}' kitty 2>/dev/null | grep -q 'install ok installed'; then
-    want="${REMOVE_APT_KITTY:-ask}"
-    if [[ "$want" == "yes" ]] || { [[ "$want" == "ask" ]] && ask_yes_no "Remover o pacote apt 'kitty' (/usr/bin/kitty)? O kitty oficial continuará funcionando."; }; then
-        # Remove só o pacote kitty; kitty-terminfo/kitty-shell-integration ficam (inofensivos).
-        sudo apt remove -y kitty
-        ok "Pacote apt kitty removido."
+# 4b. Pacote do dnf
+if rpm -q kitty >/dev/null 2>&1; then
+    want="${REMOVE_DNF_KITTY:-ask}"
+    if [[ "$want" == "yes" ]] || { [[ "$want" == "ask" ]] && ask_yes_no "Remover o pacote 'kitty' do dnf (/usr/bin/kitty)? O kitty oficial continuará funcionando."; }; then
+        sudo dnf remove -y kitty
+        ok "Pacote kitty do dnf removido."
     else
-        warn "Mantendo o kitty do apt. ~/.local/bin vem antes no PATH, e os .desktop de ~/.local têm prioridade; tudo usará o oficial."
-        warn "Evite misturar: 'apt upgrade' continuará atualizando /usr/bin/kitty separadamente."
+        warn "Mantendo o kitty do dnf. ~/.local/bin vem antes no PATH, e os .desktop de ~/.local têm prioridade; tudo usará o oficial."
     fi
 else
-    ok "Pacote apt kitty não está instalado."
+    ok "Pacote kitty do dnf não está instalado."
 fi
 
 # ------------------------------------------------------------- 5. verificação
@@ -189,10 +150,6 @@ if have kreadconfig6; then
     echo "TerminalApplication (KDE):  $(kreadconfig6 --file kdeglobals --group General --key TerminalApplication)"
 fi
 echo "xdg-terminals.list:         $(head -n1 "$XDG_TERMS")"
-if have update-alternatives; then
-    echo "--- update-alternatives --query x-terminal-emulator ---"
-    update-alternatives --query x-terminal-emulator 2>/dev/null | head || true
-fi
 if [[ -f "$SVC_DST" ]]; then
     echo "--- ExecStart do $SVC_NAME ---"
     grep '^ExecStart=' "$SVC_DST" || true

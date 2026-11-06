@@ -1,6 +1,6 @@
 # Dotfiles — Fedora KDE
 
-Configuração para Fedora KDE: zsh, LazyVim, kitty, Starship, mise e Herdr.
+Configuração para Fedora com KDE Plasma 6: zsh, LazyVim, kitty, Starship, mise e Herdr.
 Cada diretório de configuração é um pacote GNU Stow; arquivos do KDE não são
 stowados. O histórico está na tag `pre-fedora-reorg`; o arquivo local
 `archive/pre-fedora-reorg.tar.gz` não é publicado, pois inclui estado de sessão
@@ -18,28 +18,61 @@ O `~/.zshrc` que já exista não é usado quando esse `ZDOTDIR` está ativo e n�
 é substituído pelo deploy. Caso exista um `~/.zshenv` anterior, faça backup e
 resolva o conflito antes de executar o Stow; o deploy não usa `--adopt`.
 
+## Estrutura
+
+| Pasta | Conteúdo |
+|---|---|
+| `zsh/ nvim/ kitty/ starship/ git/ mise/ herdr/ fontconfig/` | pacotes Stow para `$HOME` |
+| `keyd/` | pacote Stow para `/etc` (ver `keyd/README.md`) |
+| `plasma/` | perfil KDE: `prereqs.sh`, `theme.sh`, `apply.sh` |
+| `theme/` | GTK, kitty, Flatpak, cursor e tela de login |
+| `bootstrap/` | `install.sh` (orquestra tudo), `packages.txt`, `drivers.sh`, `kitty-official.sh`, `keyd.sh`, `para.sh`, `verify.sh` |
+
+Para adicionar um pacote, acrescente uma linha em `bootstrap/packages.txt`.
+
 ## Instalação
 
-1. Revise `bootstrap/packages.txt` e rode `./bootstrap/install.sh` (solicita sudo).
-2. Resolva os conflitos existentes e rode `./deploy.sh`. O script usa
-   `stow --no-folding`, com simulação prévia, sem `--adopt`.
-3. Para o perfil atual de espaços, painel e atalhos, consulte
-   [plasma/README.md](plasma/README.md) e, após instalar os pré-requisitos,
-   rode `./plasma/apply.sh --apply` dentro da sessão Plasma. A instalação
-   completa do Layan ainda não é automatizada.
-4. Opcional: `sudo ./theme/greeter.sh layan` configura o Plasma Login Manager
-   após instalar o esquema Layan e Future Cursors. Não é configuração do SDDM;
-   a aparência deve ser verificada no próximo login.
-5. `mise install` instala as ferramentas configuradas. Starship e mise devem
-   estar instalados separadamente; o bootstrap avisa se faltarem.
+Num Fedora KDE novo, logado na sessão Plasma:
+
+```sh
+sudo dnf install -y git
+git clone https://github.com/jeffersonxc22/dotfiles.git ~/dotfiles && cd ~/dotfiles
+./bootstrap/install.sh
+```
+
+O `install.sh` executa, nesta ordem, sempre pela forma oficial (pacote do
+Fedora, repositório do fabricante ou instalador do projeto quando não há rpm):
+
+1. dnf com `max_parallel_downloads=20`.
+2. `dnf upgrade --refresh`.
+3. RPM Fusion e openh264; `bootstrap/drivers.sh` (ffmpeg completo,
+   `@multimedia`, vídeo Intel e, com confirmação, `akmod-nvidia` open).
+4. Pacotes de `bootstrap/packages.txt` (zsh, zoxide, fzf, eza, stow, neovim…).
+5. mise (COPR oficial `jdxcode/mise`) e starship (instalador oficial).
+6. zsh como shell padrão.
+7. Plugins zsh e tema do bat.
+8. `./deploy.sh`: stow dos pacotes (para em conflito; nunca usa `--adopt`).
+9. `mise install` (go, node 24, python 3, java, rust, gcloud, usage, maven, herdr).
+10. kitty oficial como terminal padrão, com cores seguindo o KDE.
+11. `plasma/prereqs.sh` (Layan, Krohnkite, Geometry Change) e `plasma/theme.sh`
+    (Layan + Catppuccin Mocha Sapphire, Slot Icons com bandeja Papirus, cursor
+    Catppuccin, GTK, Flatpak, fundo sólido `#1e1e2e` na área de trabalho e no bloqueio).
+12. `sudo theme/greeter.sh`: tela de login com o mesmo visual.
+13. Google Chrome (navegador padrão), Slack (.rpm oficial) e Claude Code
+    (repositório dnf oficial).
+14. `bootstrap/keyd.sh` (keyd compilado da tag oficial + `keyd/logitech.conf`) e
+    `plasma/apply.sh --apply`: 10 áreas de trabalho, tiling Krohnkite, atalhos
+    do KWin, efeitos e painel.
+15. `bootstrap/para.sh`: home só com Projetos, Areas, Recursos e Arquivados
+    (Downloads em `~/Recursos/Downloads`).
+16. `bootstrap/verify.sh`: resultado em `bootstrap/verify.log`.
+
+Rodar de novo é seguro: cada etapa pula o que já está feito. Reinicie ao final.
 
 O Neovim usa Catppuccin e tenta acompanhar as cores de `kdeglobals`; sem cores
 válidas usa Mocha. O kitty recebe cores do KDE por um serviço de usuário e usa
-paletas ANSI Catppuccin. GTK usa Breeze e as cores geradas pelo KDE. Aplicativos
-Flatpak e libadwaita podem não respeitar todos os aspectos do tema do host.
-Na sessão atual, Qt usa Kvantum Layan Dark e o KRunner acompanha o tema Plasma
-Layan. O comando de greeter configura cores, fontes e cursor, não instala um
-layout Layan completo; a aparência deve ser conferida no próximo login.
+paletas ANSI Catppuccin. Aplicativos Flatpak e libadwaita podem não respeitar
+todos os aspectos do tema do host.
 
 ## Upgrade do Fedora
 
@@ -47,10 +80,3 @@ layout Layan completo; a aparência deve ser conferida no próximo login.
 partir de `rpm -E %fedora`. Sem `--check`, o script atualiza pacotes, baixa a
 próxima versão e pergunta antes de reiniciar. Verifique antes se ela foi lançada
  e faça backup; não é necessário atualizar o Fedora 44 agora.
-
-## Alternativa Catppuccin
-
-`./theme/install.sh mocha sapphire` instala Catppuccin e altera o tema do
-sistema, incluindo alguns componentes em `/usr/share` e overrides Flatpak.
-Revise os scripts antes de executar; a reversão completa entre Catppuccin e
-Layan ainda não foi validada.

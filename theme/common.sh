@@ -2,7 +2,6 @@
 # Funções comuns dos scripts de tema (não executar direto).
 
 FLAVOURS=(mocha macchiato frappe latte)
-ACCENTS=(rosewater flamingo pink mauve red maroon peach yellow green teal sky sapphire blue lavender)
 
 normalize_flavour() {
     local value="${1:-mocha}"
@@ -17,42 +16,6 @@ normalize_flavour() {
             return 1
             ;;
     esac
-}
-
-normalize_accent() {
-    local value="${1:-sapphire}"
-    value="${value,,}"
-    local accent
-    for accent in "${ACCENTS[@]}"; do
-        if [[ $value == "$accent" ]]; then
-            printf '%s\n' "$value"
-            return 0
-        fi
-    done
-    echo "ERRO: accent inválido: '$1' (use: ${ACCENTS[*]})" >&2
-    return 1
-}
-
-capitalize_flavour() {
-    case "$1" in
-        mocha) printf 'Mocha\n' ;;
-        macchiato) printf 'Macchiato\n' ;;
-        frappe) printf 'Frappe\n' ;;
-        latte) printf 'Latte\n' ;;
-    esac
-}
-
-capitalize_accent() {
-    local value="$1"
-    printf '%s%s\n' "${value:0:1}" "${value:1}" | sed 's/^./\U&/'
-}
-
-scheme_name() {
-    printf 'Catppuccin%s%s\n' "$(capitalize_flavour "$1")" "$(capitalize_accent "$2")"
-}
-
-lookandfeel_name() {
-    printf 'Catppuccin-%s-%s\n' "$(capitalize_flavour "$1")" "$(capitalize_accent "$2")"
 }
 
 kde_get() {
@@ -85,14 +48,4 @@ set_gtk_key() {
     else
         printf '\n[Settings]\n%s=%s\n' "$key" "$value" >>"$file"
     fi
-}
-
-require_kde_tools() {
-    local cmd
-    for cmd in kreadconfig6 kwriteconfig6 plasma-apply-colorscheme; do
-        if ! command -v "$cmd" >/dev/null 2>&1; then
-            echo "ERRO: '$cmd' não encontrado. Instale o Plasma/KDE." >&2
-            exit 1
-        fi
-    done
 }

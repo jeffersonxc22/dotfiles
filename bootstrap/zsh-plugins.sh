@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-# Clona os plugins de zsh que não vêm no Fedora, em commits pinados.
-#
-# zsh-autosuggestions e zsh-syntax-highlighting vêm do dnf (ver packages.txt).
-# fzf-tab e zsh-completions não têm pacote no Fedora, então ficam em
-# ~/.local/share/zsh/plugins — dados locais, fora do stow.
+# Prepara ~/.local/share/zsh/plugins, onde o .zshrc procura os plugins:
+#   - zsh-autosuggestions e zsh-syntax-highlighting vêm do dnf
+#     (packages.txt) e recebem um link para /usr/share/<nome>;
+#   - fzf-tab e zsh-completions são clonados em commits pinados.
 #
 # Uso: ./bootstrap/zsh-plugins.sh
 set -euo pipefail
@@ -17,6 +16,13 @@ PLUGINS=(
 )
 
 mkdir -p "$DEST"
+
+for name in zsh-autosuggestions zsh-syntax-highlighting; do
+    if [[ ! -e $DEST/$name && -r /usr/share/$name/$name.zsh ]]; then
+        ln -s "/usr/share/$name" "$DEST/$name"
+        echo "  $DEST/$name -> /usr/share/$name"
+    fi
+done
 
 for entry in "${PLUGINS[@]}"; do
     IFS='|' read -r name url commit <<<"$entry"

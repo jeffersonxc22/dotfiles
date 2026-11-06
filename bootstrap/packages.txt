@@ -1,9 +1,8 @@
-# Pacotes Fedora instalados pelo bootstrap/install.sh.
-# Linhas em branco e começando com # são ignoradas.
+# Pacotes Fedora instalados por bootstrap/install.sh (um por linha).
+# Linhas em branco e começando com # são ignoradas; ausentes no repositório são pulados.
 
-# Shell e terminal
+# Shell e terminal (kitty vem do instalador oficial: kitty-official.sh)
 zsh
-kitty
 fzf
 zoxide
 bat
@@ -26,11 +25,17 @@ python3
 # Fontes
 rsms-inter-fonts
 cascadia-mono-nf-fonts
+fontconfig
 
 # KDE / tema
 papirus-icon-theme-dark
 kde-gtk-config
+kvantum
 
-# Plugins zsh empacotados no Fedora
+# Plugins zsh (zsh-plugins.sh liga /usr/share/<nome> em ~/.local/share/zsh/plugins)
 zsh-autosuggestions
 zsh-syntax-highlighting
+
+# Utilitários usados pelos scripts e funções
+gh
+pciutils
