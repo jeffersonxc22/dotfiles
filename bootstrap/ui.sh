@@ -58,16 +58,16 @@ ccccccccccccccccccccccccccccc:'.
 :ccccccccccccccccccccccc:;,..
  ':cccccccccccccccc::;,.
 LOGO
-    local info=([5]="$(_rgb 81 162 218)󰣛  ${distro}${_rst}"
+    local info=([5]="${_sapph}󰣛  ${distro}${_rst}"
         [6]="${_mauve}dotfiles${_rst} ${_ovl}·${_rst} ${_text}${variant} do zero${_rst}"
         [8]="${_peach}${_ui_total} etapas${_rst} ${_ovl}· dnf · tema · programas · PARA${_rst}"
         [9]="${_green}idempotente${_rst} ${_ovl}· rode de novo: o feito é pulado${_rst}"
         [11]="${_ovl}${PRETTY_NAME:-Linux}${_rst}")
-    local i n=${#logo[@]} blue white=$_text line plain
+    # Cores oficiais do logo: azul Fedora #51A2DA e "f" branco.
+    local i n=${#logo[@]} blue white line plain
+    blue=$(_rgb 81 162 218) white=$(_rgb 255 255 255)
     echo
     for ((i = 0; i < n; i++)); do
-        # Degradê do azul Fedora (52,101,164) ao blue Catppuccin (137,180,250) no círculo.
-        blue=$(_rgb $((52 + 85 * i / n)) $((101 + 79 * i / n)) $((164 + 86 * i / n)))
         plain=${logo[i]//\$[12]/}
         line=${logo[i]//\$1/$blue}
         line=$blue${line//\$2/$white}
