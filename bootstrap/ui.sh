@@ -34,41 +34,44 @@ ui_banner() { # ui_banner <total de etapas>
     local distro="${NAME% Linux} ${VERSION_ID}" # "Fedora 44": acompanha cada nova versão
     local variant="${VARIANT:-KDE Plasma}"
     variant="${variant%% Desktop*}" # "KDE Plasma Desktop Edition" → "KDE Plasma"
-    # Logo Fedora estilizado em blocos; o "f" é o espaço negativo.
-    local logo=(
-        '      ▄▄██████▄▄      '
-        '   ▄██████████████▄   '
-        '  ██████████▀▀▀▀▀███  '
-        ' ████████▀   ▄▄▄  ███ '
-        ' ████████   ████████▀ '
-        ' ████▀▀▀▀     ▀▀▀███  '
-        ' ████▄▄▄▄     ▄▄▄███  '
-        ' ████████   ████████  '
-        '  ███████   ███████   '
-        '   ▀█████  ▄█████▀    '
-        '      ▀▀██████▀▀      '
-    )
-    # Degradê azul Fedora → sapphire → lavender, linha a linha.
-    local grad=('41 65 114' '52 101 164' '60 110 180' '81 162 218' '96 175 225'
-        '116 199 236' '120 190 240' '137 180 250' '150 184 252' '165 187 253' '180 190 254')
-    local info=(
-        ''
-        ''
-        "$(_rgb 81 162 218)󰣛  ${distro}${_rst}"
-        "${_mauve}dotfiles${_rst} ${_ovl}·${_rst} ${_text}${variant} do zero${_rst}"
-        ''
-        "${_peach}${_ui_total} etapas${_rst} ${_ovl}· dnf · tema · programas · PARA${_rst}"
-        "${_green}idempotente${_rst} ${_ovl}· rode de novo: o feito é pulado${_rst}"
-        ''
-        "${_ovl}${PRETTY_NAME:-Linux}${_rst}"
-        ''
-        ''
-    )
-    local i g
+    # Logo Fedora do fastfetch (src/logo/ascii/f/fedora.txt): $1 = círculo azul,
+    # $2 = "f" branco. fastfetch: MIT License, Copyright (c) 2021-2023 Linus Dierheimer.
+    local logo
+    mapfile -t logo <<'LOGO'
+             .',;::::;,'.
+         .';:cccccccccccc:;,.
+      .;cccccccccccccccccccccc;.
+    .:cccccccccccccccccccccccccc:.
+  .;ccccccccccccc;$2.:dddl:.$1;ccccccc;.
+ .:ccccccccccccc;$2OWMKOOXMWd$1;ccccccc:.
+.:ccccccccccccc;$2KMMc$1;cc;$2xMMc$1;ccccccc:.
+,cccccccccccccc;$2MMM.$1;cc;$2;WW:$1;cccccccc,
+:cccccccccccccc;$2MMM.$1;cccccccccccccccc:
+:ccccccc;$2oxOOOo$1;$2MMM000k.$1;cccccccccccc:
+cccccc;$20MMKxdd:$1;$2MMMkddc.$1;cccccccccccc;
+ccccc;$2XMO'$1;cccc;$2MMM.$1;cccccccccccccccc'
+ccccc;$2MMo$1;ccccc;$2MMW.$1;ccccccccccccccc;
+ccccc;$20MNc.$1ccc$2.xMMd$1;ccccccccccccccc;
+cccccc;$2dNMWXXXWM0:$1;cccccccccccccc:,
+cccccccc;$2.:odl:.$1;cccccccccccccc:,.
+ccccccccccccccccccccccccccccc:'.
+:ccccccccccccccccccccccc:;,..
+ ':cccccccccccccccc::;,.
+LOGO
+    local info=([5]="$(_rgb 81 162 218)󰣛  ${distro}${_rst}"
+        [6]="${_mauve}dotfiles${_rst} ${_ovl}·${_rst} ${_text}${variant} do zero${_rst}"
+        [8]="${_peach}${_ui_total} etapas${_rst} ${_ovl}· dnf · tema · programas · PARA${_rst}"
+        [9]="${_green}idempotente${_rst} ${_ovl}· rode de novo: o feito é pulado${_rst}"
+        [11]="${_ovl}${PRETTY_NAME:-Linux}${_rst}")
+    local i n=${#logo[@]} blue white=$_text line plain
     echo
-    for i in "${!logo[@]}"; do
-        g=(${grad[$i]})
-        printf '  %s%s%s   %s\n' "$(_rgb "${g[@]}")" "${logo[$i]}" "$_rst" "${info[$i]}"
+    for ((i = 0; i < n; i++)); do
+        # Degradê do azul Fedora (52,101,164) ao blue Catppuccin (137,180,250) no círculo.
+        blue=$(_rgb $((52 + 85 * i / n)) $((101 + 79 * i / n)) $((164 + 86 * i / n)))
+        plain=${logo[i]//\$[12]/}
+        line=${logo[i]//\$1/$blue}
+        line=$blue${line//\$2/$white}
+        printf '  %s%*s%s   %s\n' "$line" $((40 - ${#plain})) '' "$_rst" "${info[i]:-}"
     done
     printf '  %s%s%s\n' "$_ovl" "$_ui_rule" "$_rst"
 }
