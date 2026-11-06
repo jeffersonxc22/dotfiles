@@ -12,12 +12,15 @@
 set -euo pipefail
 
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# shellcheck source=ui.sh
+source "$repo/bootstrap/ui.sh"
 [[ $EUID -ne 0 ]] || { echo "Rode como usuário normal (sem sudo)." >&2; exit 1; }
 [[ -r /etc/fedora-release ]] || { echo "ERRO: este script é para Fedora (não encontrei /etc/fedora-release)." >&2; exit 1; }
 busctl --user introspect org.kde.plasmashell /PlasmaShell >/dev/null 2>&1 \
     || { echo "ERRO: rode dentro de uma sessão Plasma (as etapas de tema usam o plasmashell)." >&2; exit 1; }
+ui_banner 16
 sudo -v
-step() { echo; echo "== $1/16 $2"; }
+trap 'ui_fail $?' ERR
 
 step 1 "dnf: 20 downloads paralelos (máximo aceito)"
 sudo dnf config-manager setopt max_parallel_downloads=20
@@ -85,7 +88,7 @@ if ! rpm -q slack >/dev/null 2>&1; then
     slack_rpm="$(curl -fsSL 'https://slack.com/downloads/instructions/linux?ddl=1&build=rpm' \
         | grep -oE 'https://downloads\.slack-edge\.com/desktop-releases/linux/x64/[^"]+\.rpm' | head -1 || true)"
     if [[ -n $slack_rpm ]]; then sudo dnf install -y "$slack_rpm"
-    else echo "aviso: link do .rpm do Slack não encontrado; instale por https://slack.com/downloads/linux" >&2; fi
+    else ui_warn "link do .rpm do Slack não encontrado; instale por https://slack.com/downloads/linux"; fi
 fi
 if ! rpm -q claude-code >/dev/null 2>&1; then # repositório dnf oficial (code.claude.com/docs/en/setup)
     sudo tee /etc/yum.repos.d/claude-code.repo >/dev/null <<'EOF'
@@ -111,8 +114,4 @@ step 15 "Home no método PARA"
 step 16 "Conferência"
 "$repo/bootstrap/verify.sh" || true
 
-cat <<'MSG'
-
-Instalação concluída. Reinicie para valer o shell zsh, o kernel novo e, se
-instalado, o driver NVIDIA. Resultado detalhado em bootstrap/verify.log.
-MSG
+ui_done
