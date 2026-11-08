@@ -4,7 +4,7 @@
 alias zshconfig='$EDITOR ${ZDOTDIR:-$HOME/.config/zsh}/.zshrc'
 alias zshsource='source ${ZDOTDIR:-$HOME/.config/zsh}/.zshrc'
 alias nvimconfig='$EDITOR ${XDG_CONFIG_HOME:-$HOME/.config}/nvim'
-alias dotfiles='cd ~/dotfiles'
+alias dotfiles='cd ~/.dotfiles'
 
 # eza no lugar de ls
 alias ls='eza --icons'

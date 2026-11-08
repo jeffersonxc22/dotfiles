@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# Instala e configura o Fedora KDE do zero, na ordem: dnf → sistema → TUI →
-# shell → dotfiles → ferramentas → terminal → tema → login → programas →
-# teclado, áreas de trabalho, tiling, atalhos e efeitos do Plasma → PARA.
+# Instala e configura o Fedora KDE do zero, na ordem: dnf → sistema/drivers →
+# pacotes → NVIDIA/Podman (CDI) → TUI → shell → dotfiles → ferramentas →
+# terminal → tema → login → programas → teclado, áreas de trabalho, tiling,
+# atalhos e efeitos do Plasma → PARA.
 # Sempre de forma oficial: pacote do Fedora, repositório do fabricante ou,
 # sem rpm, o instalador oficial do projeto.
 #
@@ -18,7 +19,7 @@ source "$repo/bootstrap/ui.sh"
 [[ -r /etc/fedora-release ]] || { echo "ERRO: este script é para Fedora (não encontrei /etc/fedora-release)." >&2; exit 1; }
 busctl --user introspect org.kde.plasmashell /PlasmaShell >/dev/null 2>&1 \
     || { echo "ERRO: rode dentro de uma sessão Plasma (as etapas de tema usam o plasmashell)." >&2; exit 1; }
-ui_banner 16
+ui_banner 17
 sudo -v
 trap 'ui_fail $?' ERR
 
@@ -41,16 +42,19 @@ step 4 "Pacotes do Fedora (TUI, base e tema)"
 mapfile -t packages < <(grep -vE '^[[:space:]]*(#|$)' "$repo/bootstrap/packages.txt")
 sudo dnf install -y --skip-unavailable "${packages[@]}"
 
-step 5 "mise (COPR oficial do autor) e starship (instalador oficial; sem rpm)"
+step 5 "NVIDIA Container Toolkit + CDI para Podman (se houver GPU NVIDIA)"
+"$repo/bootstrap/nvidia-container-toolkit.sh"
+
+step 6 "mise (COPR oficial do autor) e starship (instalador oficial; sem rpm)"
 mkdir -p "$HOME/.local/bin"
 export PATH="$HOME/.local/bin:$PATH"
 rpm -q mise >/dev/null 2>&1 || { sudo dnf copr enable -y jdxcode/mise && sudo dnf install -y mise; }
 command -v starship >/dev/null 2>&1 || curl -fsSL https://starship.rs/install.sh | sh -s -- -y -b "$HOME/.local/bin"
 
-step 6 "zsh como shell padrão"
+step 7 "zsh como shell padrão"
 [[ $(getent passwd "$USER" | cut -d: -f7) == "$(command -v zsh)" ]] || chsh -s "$(command -v zsh)"
 
-step 7 "Plugins de zsh"
+step 8 "Plugins de zsh"
 "$repo/bootstrap/zsh-plugins.sh"
 themes="$(bat --config-dir)/themes"
 if [[ ! -f $themes/Catppuccin\ Mocha.tmTheme ]]; then # BAT_THEME do .zshrc
@@ -60,24 +64,24 @@ if [[ ! -f $themes/Catppuccin\ Mocha.tmTheme ]]; then # BAT_THEME do .zshrc
     bat cache --build >/dev/null
 fi
 
-step 8 "Stow dos dotfiles"
+step 9 "Stow dos dotfiles"
 "$repo/deploy.sh"
 
-step 9 "Ferramentas do mise (mise/.config/mise/config.toml)"
+step 10 "Ferramentas do mise (mise/.config/mise/config.toml)"
 mise install
 
-step 10 "kitty oficial como terminal padrão, com cores seguindo o KDE"
+step 11 "kitty oficial como terminal padrão, com cores seguindo o KDE"
 "$repo/bootstrap/kitty-official.sh"
 "$repo/theme/install-watch.sh"
 
-step 11 "Plasma: Layan, Krohnkite, Geometry Change e tema Catppuccin"
+step 12 "Plasma: Layan, Krohnkite, Geometry Change e tema Catppuccin"
 "$repo/plasma/prereqs.sh"
 "$repo/plasma/theme.sh"
 
-step 12 "Tela de login"
+step 13 "Tela de login"
 sudo "$repo/theme/greeter.sh"
 
-step 13 "Programas: Google Chrome, Slack e Claude Code"
+step 14 "Programas: Google Chrome, Slack e Claude Code"
 # O rpm do Chrome adiciona o repositório do Google; atualiza pelo dnf.
 command -v google-chrome-stable >/dev/null 2>&1 \
     || sudo dnf install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
@@ -102,16 +106,16 @@ EOF
     sudo dnf install -y claude-code
 fi
 
-step 14 "Plasma: teclado (keyd), áreas de trabalho, tiling Krohnkite, atalhos do KWin e efeitos"
+step 15 "Plasma: teclado (keyd), áreas de trabalho, tiling Krohnkite, atalhos do KWin e efeitos"
 "$repo/bootstrap/keyd.sh"
 # 10 áreas de trabalho, Krohnkite (BTree, gaps, Monocle), Geometry Change e
 # wobbly windows, atalhos (Meta+1..0, Meta+T kitty, Meta+B Chrome...) e painel.
 "$repo/plasma/apply.sh" --apply
 
-step 15 "Home no método PARA"
+step 16 "Home no método PARA"
 "$repo/bootstrap/para.sh"
 
-step 16 "Conferência"
+step 17 "Conferência"
 "$repo/bootstrap/verify.sh" || true
 
 ui_done

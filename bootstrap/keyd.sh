@@ -19,9 +19,20 @@ if [[ $(keyd --version 2>/dev/null) != *"${tag#v}"* ]]; then
 fi
 
 cd "$repo"
+# Um link antigo de outra localização do repositório (por exemplo, depois de
+# renomear ~/dotfiles para ~/.dotfiles) fica quebrado e o stow o trata como
+# conflito. Remove só links órfãos; arquivos reais não são tocados.
+keyd_link=/etc/keyd/logitech.conf
+if [[ -L $keyd_link && ! -e $keyd_link ]]; then
+    sudo rm -f "$keyd_link"
+fi
 sudo stow --no-folding --simulate --target=/etc keyd
 sudo stow --no-folding --target=/etc keyd
-sudo keyd check /etc/keyd/logitech.conf
+sudo keyd check "$keyd_link"
 sudo systemctl daemon-reload
-if systemctl is-active -q keyd; then sudo keyd reload; else sudo systemctl enable --now keyd; fi
-echo "keyd $tag ativo (emergência: Backspace + Esc + Enter)."
+if systemctl is-active -q keyd; then
+    echo "Link do keyd aplicado. Rode: sudo keyd reload"
+else
+    echo "Link do keyd aplicado. Rode: sudo systemctl enable --now keyd"
+fi
+echo "keyd $tag configurado (emergência: Backspace + Esc + Enter)."

@@ -5,7 +5,7 @@
 #
 # Arquivos companheiros (todos em ~/.config/zsh):
 #   aliases.zsh        aliases (ls/ll/lt, cat, atalhos de config)
-#   functions.zsh      funções do dia a dia (git-use-ssh, herdr, ...)
+#   functions.zsh      funções do dia a dia (git-use-ssh, podman-gpu, ...)
 #   plugins.txt        lista de plugins usada por install/install-zsh-plugins.sh
 
 # ---------------------------------------------------------------------------

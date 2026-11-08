@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Diagnóstico temporário dos atalhos do Claude; grava em ~/dotfiles/diag-shortcuts.log
-exec > "$HOME/dotfiles/diag-shortcuts.log" 2>&1
+# Diagnóstico temporário dos atalhos do Claude; grava em ~/.dotfiles/diag-shortcuts.log
+exec > "$HOME/.dotfiles/diag-shortcuts.log" 2>&1
 set -x
-cd "$HOME/dotfiles"
+cd "$HOME/.dotfiles"
 bash plasma/claude-shortcuts.sh --apply; echo "exit=$?"
 command -v claude-desktop; ls -l "$(command -v claude-desktop 2>/dev/null)" 2>&1
 pgrep -a -f claude-desktop | head -5

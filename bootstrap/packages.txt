@@ -39,3 +39,6 @@ zsh-syntax-highlighting
 # Utilitários usados pelos scripts e funções
 gh
 pciutils
+
+# Contêineres (o toolkit NVIDIA/CDI é configurado por nvidia-container-toolkit.sh)
+podman

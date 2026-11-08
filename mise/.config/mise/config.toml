@@ -1,9 +1,8 @@
 # Config global do mise.
 #
-# Só o que ainda é usado nesta máquina: o gerador de CLI `usage` e o `herdr`.
+# Só o que ainda é usado nesta máquina: o gerador de CLI `usage`.
 [tools]
 usage = { version = "latest", workflow = "publish-cli.yml" }
-herdr = "latest"
 go = "latest"
 node = "24"
 python = "3"
@@ -13,4 +12,4 @@ maven = "latest"
 rust = "latest"
 
 [env]
-HIVEMIND_VAULT_PATH = "{{env.HOME}}/Areas/hivemind"
+HIVEMIND_VAULT_PATH = "{{env.HOME}}/Áreas/Documentos/hivemind"

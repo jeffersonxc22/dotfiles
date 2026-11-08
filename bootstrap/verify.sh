@@ -16,7 +16,7 @@ link_to() { [[ -L $1 && $(readlink -f "$1") == "$repo"/* ]]; }
 {
 echo "# verify $(date -Is) — $(. /etc/os-release; echo "$PRETTY_NAME")"
 echo "## Binários"
-for c in zsh kitty fzf zoxide bat eza fd rg nvim git stow starship mise gh wl-copy kpackagetool6 kwriteconfig6 kvantummanager; do
+for c in zsh kitty fzf zoxide bat eza fd rg nvim git stow starship mise gh podman wl-copy kpackagetool6 kwriteconfig6 kvantummanager; do
     check "cmd $c" command -v "$c"
 done
 check "cmd google-chrome" bash -c 'command -v google-chrome-stable || command -v google-chrome'
@@ -26,16 +26,16 @@ check "fzf >= 0.48 (fzf --zsh)" fzf --zsh
 check "nvim versão" nvim --version
 check "shell padrão é zsh" bash -c '[[ $(getent passwd "$USER" | cut -d: -f7) == */zsh ]]'
 echo "## Stow"
-for f in .zshenv .gitconfig .config/zsh/.zshrc .config/nvim/init.lua .config/kitty/kitty.conf .config/starship.toml .config/mise/config.toml .config/herdr/config.toml; do
+for f in .zshenv .gitconfig .config/zsh/.zshrc .config/nvim/init.lua .config/kitty/kitty.conf .config/starship.toml .config/mise/config.toml; do
     check "link ~/$f" link_to "$HOME/$f"
 done
 echo "## zsh"
 check "zsh carrega sem erro" zsh -ic 'exit'
 check "plugins carregados" zsh -ic '(( $+functions[_zsh_autosuggest_start] )) && (( $+functions[_zsh_highlight] )) && (( $+functions[fzf-tab-complete] ))'
+check "função podman-gpu" zsh -ic '(( $+functions[podman-gpu] ))'
 check "BAT_THEME existe" zsh -ic 'bat --list-themes | grep -qx "$BAT_THEME"'
 echo "## mise"
 check "mise ls" mise ls
-check "herdr instalado" zsh -ic 'command -v herdr'
 echo "## Fontes"
 check "Cascadia Mono NF" bash -c 'fc-list | grep -qi "Cascadia Mono NF"'
 check "Inter" bash -c 'fc-list | grep -qi "Inter"'
@@ -81,10 +81,31 @@ check "fundo sólido no bloqueio" bash -c '[[ $(kreadconfig6 --file kscreenlocke
 echo "## Programas"
 for c in google-chrome-stable slack claude; do check "cmd $c" command -v "$c"; done
 check "Chrome navegador padrão" bash -c '[[ $(xdg-settings get default-web-browser) == google-chrome.desktop ]]'
+if command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi -L >/dev/null 2>&1; then
+echo "## NVIDIA + Podman (CDI)"
+check "cmd nvidia-ctk" command -v nvidia-ctk
+check "pacote nvidia-container-toolkit" rpm -q nvidia-container-toolkit
+check "dispositivo CDI nvidia.com/gpu=all" bash -c 'nvidia-ctk cdi list | grep -q "nvidia.com/gpu=all"'
+check "spec CDI /var/run/cdi/nvidia.yaml" test -s /var/run/cdi/nvidia.yaml
+check "nvidia-cdi-refresh.path ativo" systemctl is-active nvidia-cdi-refresh.path
+fi
 echo "## Home PARA"
-for d in Projetos Areas Recursos Arquivados Recursos/Downloads; do check "~/$d" test -d "$HOME/$d"; done
-check "Downloads em ~/Recursos/Downloads" bash -c '[[ $(xdg-user-dir DOWNLOAD) == "$HOME/Recursos/Downloads" ]]'
-for d in Documents Pictures Videos Music Templates Public Documentos Imagens Vídeos Música Modelos Público; do
+for d in Projetos Áreas Recursos Arquivados; do check "~/$d" test -d "$HOME/$d"; done
+check "~/Desktop em Projetos" test -d "$HOME/Projetos/Desktop"
+check "~/Público em Projetos" test -d "$HOME/Projetos/Público"
+check "~/Documentos em Áreas" test -d "$HOME/Áreas/Documentos"
+for d in Downloads Imagens Músicas Vídeos Modelos; do
+    check "~/$d em Recursos" test -d "$HOME/Recursos/$d"
+done
+check "XDG_DESKTOP_DIR em Projetos" test "$(xdg-user-dir DESKTOP)" = "$HOME/Projetos/Desktop"
+check "XDG_DOCUMENTS_DIR em Áreas" test "$(xdg-user-dir DOCUMENTS)" = "$HOME/Áreas/Documentos"
+check "XDG_PROJECTS_DIR em Projetos" test "$(xdg-user-dir PROJECTS)" = "$HOME/Projetos"
+check "XDG_PUBLICSHARE_DIR em Projetos" test "$(xdg-user-dir PUBLICSHARE)" = "$HOME/Projetos/Público"
+for k in DOWNLOAD MUSIC PICTURES VIDEOS TEMPLATES; do
+    check "XDG_${k}_DIR em Recursos" bash -c '[[ $(xdg-user-dir "$1") == "$HOME/Recursos/"* ]]' _ "$k"
+done
+for d in Desktop Documents Downloads Music Pictures Public Templates Videos \
+    "Área de trabalho" Documentos Música Músicas Imagens Público Modelos Vídeos; do
     check "sem ~/$d" test ! -e "$HOME/$d"
 done
 echo "## Resumo: $ok OK, $fail FAIL"
