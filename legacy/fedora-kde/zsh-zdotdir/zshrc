@@ -1,7 +1,6 @@
 # Configuração interativa do zsh.
 #
-# Espelho do fish/.config/fish/config.fish: mesmas variáveis, aliases e
-# funções, para que trocar de shell não mude o ambiente de trabalho.
+# Omarchy (Arch + Hyprland).
 #
 # Arquivos companheiros (todos em ~/.config/zsh):
 #   aliases.zsh        aliases (ls/ll/lt, cat, atalhos de config)
@@ -57,8 +56,13 @@ fi
 # ---------------------------------------------------------------------------
 # Completions
 # ---------------------------------------------------------------------------
-ZSH_PLUGIN_DIR="${ZSH_PLUGIN_DIR:-$HOME/.local/share/zsh/plugins}"
-fpath=("$ZSH_PLUGIN_DIR/zsh-completions/src" $fpath)
+# Arch: plugins do pacman ficam em /usr/share/zsh/plugins; clones manuais em
+# ~/.local/share/zsh/plugins têm prioridade.
+ZSH_PLUGIN_DIRS=("$HOME/.local/share/zsh/plugins" /usr/share/zsh/plugins)
+for __d in $ZSH_PLUGIN_DIRS; do
+    [[ -d $__d/zsh-completions/src ]] && fpath=("$__d/zsh-completions/src" $fpath)
+done
+unset __d
 
 # O zcompdump fica no cache (e não no ZDOTDIR, que é um symlink do stow).
 ZSH_COMPDUMP="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump-$ZSH_VERSION"
@@ -81,15 +85,18 @@ zstyle ':fzf-tab:*' fzf-flags --height=60%
 # Plugins (clonados por install/install-zsh-plugins.sh)
 # ---------------------------------------------------------------------------
 __zsh_source_plugin() {
-    [[ -r $1 ]] && source "$1"
+    local d
+    for d in $ZSH_PLUGIN_DIRS; do
+        [[ -r $d/$1 ]] && { source "$d/$1"; return 0; }
+    done
     return 0
 }
 
-__zsh_source_plugin "$ZSH_PLUGIN_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh"
-__zsh_source_plugin "$ZSH_PLUGIN_DIR/fzf-tab/fzf-tab.zsh"
+__zsh_source_plugin "zsh-autosuggestions/zsh-autosuggestions.zsh"
+__zsh_source_plugin "fzf-tab/fzf-tab.zsh"
 
 # Último da fila: o syntax-highlighting reescreve os widgets já existentes.
-__zsh_source_plugin "$ZSH_PLUGIN_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+__zsh_source_plugin "zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 unfunction __zsh_source_plugin
 
@@ -120,5 +127,6 @@ fi
 # ---------------------------------------------------------------------------
 # Aliases e funções
 # ---------------------------------------------------------------------------
+source "${ZDOTDIR:-$HOME/.config/zsh}/omarchy.zsh"
 source "${ZDOTDIR:-$HOME/.config/zsh}/aliases.zsh"
 source "${ZDOTDIR:-$HOME/.config/zsh}/functions.zsh"

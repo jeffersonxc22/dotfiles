@@ -1,4 +1,4 @@
-# Ponto de entrada do zsh no Fedora, instalado em ~/.zshenv pelo Stow.
+# Ponto de entrada do zsh (Omarchy), instalado em ~/.zshenv pelo Stow.
 #
 # O restante da configuração vive em ~/.config/zsh (padrão XDG). Este é o único
 # arquivo que precisa ficar no $HOME porque é o primeiro que o zsh lê e define

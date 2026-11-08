@@ -21,11 +21,3 @@ clone_repos_cometa() {
         | grep -E '(-sdk|cometa-reports-api|infra-modules-iac)' \
         | xargs -P 4 -I {} gh repo clone cometagaming/{}
 }
-
-# Podman com todas as GPUs NVIDIA via CDI. O SELinux do Fedora bloqueia os
-# nós /dev/nvidia* para o tipo container_t, então label=disable é necessário.
-# Para manter o contêiner depois (sem --rm), use `podman run` diretamente.
-podman-gpu() {
-    command podman run --rm --device nvidia.com/gpu=all \
-        --security-opt=label=disable "$@"
-}
