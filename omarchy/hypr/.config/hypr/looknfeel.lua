@@ -55,8 +55,9 @@
 -- })
 
 -- ---------------------------------------------------------------------------
--- Cursor Catppuccin (mesmo do perfil KDE)
+-- Cursor Future-cursors (instalado por ~/Projetos/dotfiles/cursor.sh)
 -- ---------------------------------------------------------------------------
--- Pacote AUR: catppuccin-cursors-mocha. Nome em /usr/share/icons.
-hl.env("XCURSOR_THEME", "catppuccin-mocha-sapphire-cursors")
+-- Tema em ~/.local/share/icons/Future-cursors; GTK e X11 seguem pelo gsettings
+-- e por ~/.local/share/icons/default (pacote stow "cursor").
+hl.env("XCURSOR_THEME", "Future-cursors")
 hl.env("XCURSOR_SIZE", "24")

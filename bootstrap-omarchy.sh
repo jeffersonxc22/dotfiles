@@ -5,7 +5,6 @@ set -euo pipefail
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 omarchy pkg add stow omarchy-zsh zsh-autosuggestions ttf-cascadia-mono-nerd inter-font
-omarchy pkg aur add catppuccin-cursors-mocha
 command -v kitty >/dev/null || omarchy install terminal kitty
 omarchy default terminal kitty
 
@@ -18,9 +17,8 @@ fi
 
 "$repo/deploy.sh"
 
-# Cursor também para apps GTK.
-gsettings set org.gnome.desktop.interface cursor-theme catppuccin-mocha-sapphire-cursors
-gsettings set org.gnome.desktop.interface cursor-size 24
+# Cursor Future-cursors: tema, gsettings (GTK/Flatpak) e sessão atual.
+"$repo/cursor.sh"
 
 echo
 echo 'Feito. Faça logout/login para o cursor valer em toda a sessão.'

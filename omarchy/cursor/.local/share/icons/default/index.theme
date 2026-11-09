@@ -1,0 +1,4 @@
+[Icon Theme]
+Name=Default
+Comment=Cursor padrão: herda do Future-cursors (instalado por cursor.sh)
+Inherits=Future-cursors

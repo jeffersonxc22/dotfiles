@@ -9,12 +9,13 @@ para o `$HOME`.
 
 | Pasta | Conteúdo |
 |---|---|
-| `omarchy/hypr` | `bindings.lua` (atalhos), `input.lua` (layout por teclado), `workspaces.lua` (round robin entre monitores), `hyprland.lua` e `looknfeel.lua` (cursor Catppuccin) |
-| `omarchy/kitty` | kitty com rastro do cursor; as cores seguem o tema do Omarchy |
+| `omarchy/hypr` | `bindings.lua` (atalhos), `input.lua` (layout por teclado), `workspaces.lua` (round robin entre monitores), `hyprland.lua` e `looknfeel.lua` (cursor Future-cursors) |
+| `omarchy/kitty` | kitty com cursor em barra e rastro, fonte CaskaydiaMono 16; as cores seguem o tema do Omarchy |
+| `omarchy/cursor` | `~/.local/share/icons/default` herdando o Future-cursors, para apps X11/XWayland |
 | `omarchy/audio` | placa Intel com som do notebook e dos dois monitores (DisplayPort) ao mesmo tempo |
 | `omarchy/xdg` | `user-dirs.dirs` no método PARA (e `user-dirs.conf` impedindo a recriação das pastas padrão) |
 | `omarchy/hooks` | hook `theme-set` que aponta os fundos de todo tema para `~/Recursos/Imagens/Wallpapers` |
-| `common/` | `zsh`, `starship`, `git`, `mise`: valem em qualquer distro |
+| `common/` | `zsh`, `starship` (o prompt padrão do Omarchy), `git`, `mise`: valem em qualquer distro |
 | `legacy/fedora-kde/` | perfil antigo do Fedora KDE (Plasma, KWin, keyd, bootstrap dnf), mantido só como referência |
 
 ## Instalação
@@ -25,8 +26,9 @@ git clone git@github.com:jeffersonxc22/dotfiles.git ~/Projetos/dotfiles
 ~/Projetos/dotfiles/para.sh
 ```
 
-O bootstrap instala os pacotes (`omarchy pkg add` / `omarchy pkg aur add`),
-define o kitty como terminal padrão e roda o `./deploy.sh`. O deploy move os
+O bootstrap instala os pacotes (`omarchy pkg add`), define o kitty como
+terminal padrão, roda o `./deploy.sh` e o `./cursor.sh` (baixa o Future-cursors
+em `~/.local/share/icons` e aplica no Hyprland, GTK e Flatpak). O deploy move os
 arquivos que estiverem no caminho para `~/.local/state/dotfiles/omarchy-<data>/`,
 cria os links com o stow e valida o Hyprland com `hyprctl configerrors`.
 

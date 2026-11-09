@@ -6,7 +6,7 @@ repo="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 command -v stow >/dev/null || { echo 'Instale o stow: omarchy pkg add stow' >&2; exit 1; }
 
 common=(git starship mise zsh)
-omarchy=(hypr kitty hooks audio xdg)
+omarchy=(hypr kitty hooks audio xdg cursor)
 
 backup="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles/omarchy-$(date +%Y%m%d%H%M%S)"
 move_conflicts() {
