@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Service
+MimeType=inode/directory;
+X-KDE-Protocols=file
+X-KDE-ServiceTypes=KonqPopupMenu/Plugin
+Actions=omarchyAgent;
+
+# Abre o agente padrão do Omarchy (omarchy-agent; hoje o Claude Code CLI no kitty) na pasta
+# clicada ou, no fundo da janela, na pasta atual. Fica no bloco dos menus do Claude Desktop;
+# o "Abrir terminal aqui" do Dolphin sai (kde-theme.sh) para o bloco não passar de 4 itens,
+# limite em que o KIO joga tudo no submenu "Ações". O KIO exige este arquivo executável.
+[Desktop Action omarchyAgent]
+Name=Abrir Claude Code no terminal
+Icon=claude-desktop
+Exec=sh -c 'cd "$0" && exec omarchy-agent' %f

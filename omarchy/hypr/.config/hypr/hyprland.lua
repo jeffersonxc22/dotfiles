@@ -35,5 +35,9 @@ hl.env("XDG_MENU_PREFIX", "arch-")
 -- Toggle config flags dynamically.
 require("default.hypr.toggles")
 
+-- Blur mais forte que o do glassy (size 4, passes 2) em tudo que é translúcido:
+-- kitty, Dolphin, barra e menus. Fica depois dos toggles para o glassy não sobrescrever.
+hl.config({ decoration = { blur = { size = 10, passes = 3 } } })
+
 -- Add any other personal Hyprland configuration below.
 -- o.window("qemu", { workspace = "5" })

@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Service
+MimeType=inode/directory;
+X-KDE-Protocols=file
+X-KDE-ServiceTypes=KonqPopupMenu/Plugin
+Actions=kittyHere;
+# TopLevel: fora do bloco de ações, no fim do menu principal.
+X-KDE-Priority=TopLevel
+
+# Substitui o "Abrir terminal aqui" do Dolphin (escondido no kde-theme.sh), no fim do menu.
+[Desktop Action kittyHere]
+Name=Abrir terminal (kitty)
+Icon=kitty
+Exec=kitty --directory %f

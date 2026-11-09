@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Aparência dos apps KDE (Dolphin) no Omarchy: Kvantum LayanDark com paleta
+# Aparência e integração dos apps KDE (Dolphin) no Omarchy: Kvantum LayanDark com paleta
 # Catppuccin Mocha, esquema CatppuccinMochaSapphire e ícones Slot-Dark-Icons.
 # Fora do Plasma, os apps KDE leem estilo, cores e ícones do ~/.config/kdeglobals
 # (sem ele, caem no Breeze). Os arquivos vêm de legacy/fedora-kde/plasma/appearance.
@@ -37,4 +37,13 @@ PY
 kwriteconfig6 --file kdeglobals --group General --key ColorScheme "$scheme"
 kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle kvantum
 kwriteconfig6 --file kdeglobals --group Icons --key Theme Slot-Dark-Icons
+# Terminal do Dolphin (Alt+Shift+F4): fora do Plasma o padrão é o Konsole (não instalado).
+# Só TerminalApplication: com TerminalService o Dolphin tira o ícone do item do
+# .desktop do kitty e o menu fica sem ícone; sem ele, usa utilities-terminal.
+kwriteconfig6 --file kdeglobals --group General --key TerminalApplication kitty
+kwriteconfig6 --file kdeglobals --group General --key TerminalService --delete
+# No menu de contexto o item do Dolphin sai: o pacote stow "dolphin" põe o
+# "Abrir Claude Code no terminal" junto dos menus do Claude Desktop (o bloco de ações
+# fica com até 4 itens) e o "Abrir terminal (kitty)" no fim do menu.
+kwriteconfig6 --file dolphinrc --group ContextMenu --key ShowOpenTerminal false
 echo "Aparência KDE aplicada. Reabra o Dolphin."

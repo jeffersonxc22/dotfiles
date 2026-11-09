@@ -9,11 +9,12 @@ para o `$HOME`.
 
 | Pasta | Conteúdo |
 |---|---|
-| `omarchy/hypr` | `bindings.lua` (atalhos), `input.lua` (layout por teclado), `workspaces.lua` (round robin entre monitores), `hyprland.lua` e `looknfeel.lua` (cursor Future-cursors, transparência em todos os apps) |
+| `omarchy/hypr` | `bindings.lua` (atalhos), `input.lua` (layout por teclado), `workspaces.lua` (round robin entre monitores), `hyprland.lua` (blur mais forte que o do glassy) e `looknfeel.lua` (cursor Future-cursors; todos os apps a 0.92/0.88 de opacidade, terminais no padrão do Omarchy, mpv/imv/Dolphin opacos) |
 | `omarchy/kitty` | kitty com cursor em barra e rastro, fonte GeistMono Nerd 16; as cores seguem o tema do Omarchy |
 | `omarchy/cursor` | `~/.local/share/icons/default` herdando o Future-cursors, para apps X11/XWayland |
 | `omarchy/audio` | placa Intel com som do notebook e dos dois monitores (DisplayPort) ao mesmo tempo |
 | `omarchy/xdg` | `user-dirs.dirs` no método PARA (e `user-dirs.conf` impedindo a recriação das pastas padrão) |
+| `omarchy/dolphin` | menus de contexto do Dolphin: "Abrir Claude Code no terminal" (`omarchy-agent` na pasta clicada), junto dos menus do Claude Desktop, e "Abrir terminal (kitty)" no fim |
 | `omarchy/hooks` | hooks `theme-set`: `link-wallpapers` aponta os fundos de todo tema para `~/Recursos/Imagens/Wallpapers`; `icon-theme` reaplica o Slot-Dark-Icons |
 | `common/` | `zsh`, `starship` (o prompt padrão do Omarchy), `git`, `mise`: valem em qualquer distro |
 | `legacy/fedora-kde/` | perfil antigo do Fedora KDE (Plasma, KWin, keyd, bootstrap dnf), mantido como referência; o `kde-theme.sh` ainda usa `plasma/appearance/` |
@@ -26,15 +27,15 @@ git clone git@github.com:jeffersonxc22/dotfiles.git ~/Projetos/dotfiles
 ~/Projetos/dotfiles/para.sh
 ```
 
-O bootstrap instala os pacotes (`omarchy pkg add`), define o kitty como
-terminal padrão e roda o `./deploy.sh` e os scripts de aparência, todos idempotentes:
+O bootstrap instala os pacotes (`omarchy pkg add`), troca Nautilus e Papers por
+Dolphin e JOPDF (apps padrão de pastas e PDF), define o kitty como terminal padrão e roda o `./deploy.sh` e os scripts de aparência, todos idempotentes:
 
 | Script | O que aplica |
 |---|---|
 | `cursor.sh` | Future-cursors em `~/.local/share/icons`, no Hyprland, GTK e Flatpak |
 | `icons.sh` | ícones Slot-Dark-Icons (L4ki/Slot-Plasma-Themes, commit fixo) via gsettings; Flatpaks leem os ícones e o `kdeglobals` |
 | `fonts.sh` | Geist na interface (GTK, Qt, Flatpak e barra do Omarchy, por regra do fontconfig só para o quickshell) e GeistMono Nerd nos terminais (`omarchy font set`) |
-| `kde-theme.sh` | apps KDE (Dolphin): Kvantum LayanDark translúcido com paleta Catppuccin, esquema CatppuccinMochaSapphire e ícones no `kdeglobals` |
+| `kde-theme.sh` | apps KDE (Dolphin): Kvantum LayanDark translúcido com paleta Catppuccin, esquema CatppuccinMochaSapphire, ícones e kitty como terminal (`Alt+Shift+F4`) no `kdeglobals`; esconde o "Abrir terminal aqui" do menu (`dolphinrc`) |
 
 O deploy move os arquivos que estiverem no caminho para `~/.local/state/dotfiles/omarchy-<data>/`,
 cria os links com o stow e valida o Hyprland com `hyprctl configerrors`.

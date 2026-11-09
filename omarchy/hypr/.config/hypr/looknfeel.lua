@@ -5,8 +5,13 @@
 -- o.transparent_window("my-app")
 -- o.transparent_window("my-app", "0.9 0.85") -- Custom active/inactive opacity.
 
--- Todos os apps com a transparência padrão do Omarchy (o glassy desfoca o fundo).
-o.transparent_window(".*")
+-- Todos os apps translúcidos para o blur aparecer (GTK, Flatpak, Chromium, Electron):
+-- eles desenham fundo opaco, então só a opacidade da janela inteira mostra o desfoque.
+o.transparent_window(".*", "0.92 0.88")
+-- Terminais voltam ao padrão do Omarchy: o kitty já tem fundo próprio a 65% com
+-- texto nítido, e a regra acima apagaria o texto junto. Mesma lista do
+-- default/hypr/apps/terminals.lua (por classe: a regra por tag não vence a de cima).
+o.transparent_window("(Alacritty|kitty|com.mitchellh.ghostty|foot|org\\.codeberg\\.dnkl\\.foot|wezterm|org\\.omarchy\\..*|TUI\\..*)")
 -- Exceções opacas: vídeo e imagem; o Dolphin já é translúcido pelo Kvantum (texto nítido).
 o.window("(mpv|imv|org\\.kde\\.dolphin)", { opaque = true })
 
