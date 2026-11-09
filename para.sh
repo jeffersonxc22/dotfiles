@@ -10,7 +10,7 @@ set -euo pipefail
 
 mkdir -p "$HOME"/{Projetos,Áreas,Recursos,Arquivados}
 mkdir -p "$HOME/Projetos"/{Desktop,Público} "$HOME/Áreas/Documentos"
-mkdir -p "$HOME/Recursos"/{Downloads,Imagens/Screenshots,Músicas,Vídeos,Modelos}
+mkdir -p "$HOME/Recursos"/{Downloads,Imagens/{Screenshots,Wallpapers},Músicas,Vídeos,Modelos}
 
 if [[ -d $HOME/Work && ! -L $HOME/Work ]]; then
     shopt -s dotglob nullglob

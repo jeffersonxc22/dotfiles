@@ -1,0 +1,22 @@
+#!/bin/bash
+# Aponta ~/.config/omarchy/backgrounds/<tema> para a pasta pessoal de wallpapers.
+# Não mexe em pastas que já tenham arquivos próprios.
+WALLPAPERS="$HOME/Recursos/Imagens/Wallpapers"
+link_theme() {
+  local dir="$HOME/.config/omarchy/backgrounds/$1"
+  [[ -n $1 && -d $WALLPAPERS ]] || return
+  [[ -L $dir ]] && return
+  if [[ -d $dir ]]; then
+    rmdir "$dir" 2>/dev/null || return   # só substitui se estiver vazia
+  fi
+  mkdir -p "$(dirname "$dir")"
+  ln -s "$WALLPAPERS" "$dir"
+}
+if [[ $1 == --all ]]; then
+  for t in /usr/share/omarchy/themes/*/ "$HOME"/.config/omarchy/themes/*/; do
+    [[ -d $t ]] && link_theme "$(basename "$t")"
+  done
+else
+  link_theme "$1"
+fi
+exit 0

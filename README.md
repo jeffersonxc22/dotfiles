@@ -13,7 +13,7 @@ para o `$HOME`.
 | `omarchy/kitty` | kitty com rastro do cursor; as cores seguem o tema do Omarchy |
 | `omarchy/audio` | placa Intel com som do notebook e dos dois monitores (DisplayPort) ao mesmo tempo |
 | `omarchy/xdg` | `user-dirs.dirs` no método PARA (e `user-dirs.conf` impedindo a recriação das pastas padrão) |
-| `omarchy/backgrounds` | wallpapers extras do tema catppuccin (vídeos ficam fora do git) |
+| `omarchy/hooks` | hook `theme-set` que aponta os fundos de todo tema para `~/Recursos/Imagens/Wallpapers` |
 | `common/` | `zsh`, `starship`, `git`, `mise`: valem em qualquer distro |
 | `legacy/fedora-kde/` | perfil antigo do Fedora KDE (Plasma, KWin, keyd, bootstrap dnf), mantido só como referência |
 
@@ -77,15 +77,21 @@ caminho absoluto (`/home/jefferson/...`). Depois do deploy: `systemctl --user re
 
 ## Wallpapers (inclusive animados)
 
-O Omarchy aceita imagem ou vídeo como fundo.
+O Omarchy aceita imagem ou vídeo como fundo, sem plugin extra. Os wallpapers
+ficam em `~/Recursos/Imagens/Wallpapers`, fora do git.
 
-1. Baixe o wallpaper (por exemplo, `.mp4` do Wallmov) para
-   `~/Projetos/dotfiles/omarchy/backgrounds/.config/omarchy/backgrounds/catppuccin/`.
-2. Rode `~/Projetos/dotfiles/deploy.sh` para criar o link.
-3. Escolha com **Super+Ctrl+Space** (seletor) ou `omarchy theme bg next`, ou
-   direto: `omarchy theme bg set ~/.config/omarchy/backgrounds/catppuccin/arquivo.mp4`.
+O seletor (**Super+Ctrl+Space**) lê `~/.config/omarchy/backgrounds/<tema>/`.
+O hook `link-wallpapers` (`omarchy/hooks`) troca essa pasta por um link para
+`~/Recursos/Imagens/Wallpapers`:
 
-Os vídeos (`*.mp4`, `*.webm`, `*.mkv`, `*.gif`) ficam no `.gitignore`.
+- O `deploy.sh` roda `link-wallpapers --all` para todos os temas instalados.
+- A cada troca de tema, o hook cria o link do tema novo, se faltar.
+- A pasta de um tema que já tenha arquivos próprios fica intacta.
+
+Basta baixar o arquivo para a pasta (sem subpastas). Formatos aceitos: `jpg`,
+`jpeg`, `png`, `gif`, `bmp`, `webp`, `mp4`, `m4v`, `mov`, `webm`, `mkv`, `avi`.
+Para aplicar direto: `omarchy theme bg set ~/Recursos/Imagens/Wallpapers/arquivo.mp4`.
+Na primeira vez em um tema novo, o fundo inicial é o padrão do tema.
 
 ## zsh
 

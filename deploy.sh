@@ -6,7 +6,7 @@ repo="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 command -v stow >/dev/null || { echo 'Instale o stow: omarchy pkg add stow' >&2; exit 1; }
 
 common=(git starship mise zsh)
-omarchy=(hypr kitty backgrounds audio xdg)
+omarchy=(hypr kitty hooks audio xdg)
 
 backup="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles/omarchy-$(date +%Y%m%d%H%M%S)"
 move_conflicts() {
@@ -34,6 +34,9 @@ stow_dir() {
 }
 stow_dir common "${common[@]}"
 stow_dir omarchy "${omarchy[@]}"
+
+# Pasta de fundos de cada tema -> ~/Recursos/Imagens/Wallpapers (temas novos: hook theme-set)
+"$HOME/.config/omarchy/hooks/theme-set.d/link-wallpapers" --all
 
 if command -v hyprctl >/dev/null && [[ -n ${HYPRLAND_INSTANCE_SIGNATURE:-} ]]; then
     hyprctl reload >/dev/null

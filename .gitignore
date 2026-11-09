@@ -29,9 +29,3 @@ opencode/**/service.json
 
 # Backup histórico local: contém estado de sessão e histórico de terminal.
 /archive/pre-fedora-reorg.tar.gz
-
-# Wallpapers animados: grandes demais para o git (ficam só na máquina)
-omarchy/backgrounds/**/*.mp4
-omarchy/backgrounds/**/*.webm
-omarchy/backgrounds/**/*.mkv
-omarchy/backgrounds/**/*.gif
