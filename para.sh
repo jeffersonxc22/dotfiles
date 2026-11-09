@@ -2,8 +2,9 @@
 # Home no método PARA: Projetos, Áreas, Recursos e Arquivados.
 # - Desktop e Público ficam em Projetos; Documentos em Áreas; Downloads, Imagens,
 #   Músicas, Vídeos e Modelos em Recursos (caminhos em omarchy/xdg/user-dirs.dirs).
-# - ~/Work (pasta de trabalho do Omarchy: tmux "Work", try ~/Work/tries) é um
-#   link para ~/Projetos; ~/dotfiles é um link para ~/Projetos/dotfiles.
+# - O conteúdo de um ~/Work antigo (pasta de trabalho padrão do Omarchy) vai para
+#   ~/Projetos, e ~/Work deixa de existir; o `try` usa ~/Projetos/tries (.zshrc).
+# - Os dotfiles ficam em ~/Projetos/dotfiles, sem link na home.
 # Idempotente: nunca apaga conteúdo; pastas padrão só saem se estiverem vazias.
 set -euo pipefail
 
@@ -20,7 +21,7 @@ if [[ -d $HOME/Work && ! -L $HOME/Work ]]; then
     for e in "$HOME/Work"/*; do mv "$e" "$HOME/Projetos/"; done
     rmdir "$HOME/Work"
 fi
-[[ -e $HOME/Work ]] || ln -s Projetos "$HOME/Work"
+[[ -L $HOME/Work ]] && rm "$HOME/Work"
 
 for d in Desktop Documents Downloads Music Pictures Public Templates Videos Projects \
     "Área de trabalho" Documentos Música Músicas Imagens Público Modelos Vídeos; do

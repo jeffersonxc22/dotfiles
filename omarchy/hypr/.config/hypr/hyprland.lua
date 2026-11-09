@@ -25,7 +25,7 @@ require("hypr.autostart")
 -- Workspaces 1–10 globais, em round robin entre os monitores (esquerda → direita).
 require("hypr.workspaces")
 
--- Home PARA (ver ~/dotfiles/para.sh): prints e gravações nas pastas de Recursos.
+-- Home PARA (ver ~/Projetos/dotfiles/para.sh): prints e gravações nas pastas de Recursos.
 hl.env("OMARCHY_SCREENSHOT_DIR", os.getenv("HOME") .. "/Recursos/Imagens/Screenshots")
 hl.env("OMARCHY_SCREENRECORD_DIR", os.getenv("HOME") .. "/Recursos/Vídeos")
 

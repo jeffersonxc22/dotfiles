@@ -27,7 +27,7 @@
 -- o.bind("SUPER + PERIOD", nil, { panel = "omarchy.emojis" })
 
 -- ---------------------------------------------------------------------------
--- Atalhos trazidos do perfil KDE (~/dotfiles/legacy/fedora-kde/plasma)
+-- Atalhos trazidos do perfil KDE (legacy/fedora-kde/plasma)
 -- ---------------------------------------------------------------------------
 
 -- Super+T abre o terminal padrão (era: alternar flutuante/mosaico).

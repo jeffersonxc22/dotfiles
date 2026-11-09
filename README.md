@@ -21,9 +21,8 @@ para o `$HOME`.
 
 ```sh
 git clone git@github.com:jeffersonxc22/dotfiles.git ~/Projetos/dotfiles
-ln -s Projetos/dotfiles ~/dotfiles
-~/dotfiles/bootstrap-omarchy.sh
-~/dotfiles/para.sh
+~/Projetos/dotfiles/bootstrap-omarchy.sh
+~/Projetos/dotfiles/para.sh
 ```
 
 O bootstrap instala os pacotes (`omarchy pkg add` / `omarchy pkg aur add`),
@@ -63,8 +62,8 @@ a conta se ajusta sozinha a cada reload.
 | Desktop, Público | `~/Projetos/Desktop`, `~/Projetos/Público` |
 | Documentos | `~/Áreas/Documentos` |
 | Downloads, Imagens, Músicas, Vídeos, Modelos | `~/Recursos/...` |
-| `~/Work` (tmux "Work", `try`) | conteúdo em `~/Projetos`; `~/Work` vira link para `~/Projetos` |
-| `~/dotfiles` | `~/Projetos/dotfiles`, com `~/dotfiles` como link |
+| `~/Work` (pasta de trabalho do Omarchy) | conteúdo em `~/Projetos`; `~/Work` deixa de existir e o `try` usa `~/Projetos/tries` |
+| `~/dotfiles` | `~/Projetos/dotfiles` (o stow cria links relativos para lá) |
 
 Prints vão para `~/Recursos/Imagens/Screenshots` e gravações para `~/Recursos/Vídeos`
 (`OMARCHY_SCREENSHOT_DIR` e `OMARCHY_SCREENRECORD_DIR` no `hyprland.lua`).
@@ -81,8 +80,8 @@ caminho absoluto (`/home/jefferson/...`). Depois do deploy: `systemctl --user re
 O Omarchy aceita imagem ou vídeo como fundo.
 
 1. Baixe o wallpaper (por exemplo, `.mp4` do Wallmov) para
-   `~/dotfiles/omarchy/backgrounds/.config/omarchy/backgrounds/catppuccin/`.
-2. Rode `./deploy.sh` para criar o link.
+   `~/Projetos/dotfiles/omarchy/backgrounds/.config/omarchy/backgrounds/catppuccin/`.
+2. Rode `~/Projetos/dotfiles/deploy.sh` para criar o link.
 3. Escolha com **Super+Ctrl+Space** (seletor) ou `omarchy theme bg next`, ou
    direto: `omarchy theme bg set ~/.config/omarchy/backgrounds/catppuccin/arquivo.mp4`.
 

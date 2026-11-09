@@ -36,3 +36,8 @@ fi
 
 source "$HOME/.config/zsh/aliases.zsh"
 source "$HOME/.config/zsh/functions.zsh"
+
+# try: o Omarchy usa ~/Work/tries; aqui a pasta de trabalho é ~/Projetos (PARA).
+if command -v try >/dev/null; then
+    eval "$(command try init ~/Projetos/tries)"
+fi
