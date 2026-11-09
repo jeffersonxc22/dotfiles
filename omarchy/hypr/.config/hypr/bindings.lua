@@ -43,7 +43,10 @@ o.bind("SUPER + B", "Browser", { omarchy = "browser" })
 o.rebind("SUPER + X", "System menu", { menu = "system" })
 
 -- Super+I abre o Claude Code (era: alternar idioma de entrada).
-o.rebind("SUPER + I", "Claude Code", "omarchy-agent")
+o.rebind("SUPER + I", "Claude Code", "cd ~/Projetos && omarchy-agent")
+
+-- O omarchy-agent só sai do $HOME para ~/Work; aqui a pasta de trabalho é ~/Projetos.
+o.rebind("SUPER + SHIFT + CTRL + A", "Agent", "cd ~/Projetos && omarchy-agent --pick")
 
 -- Super+S tira print (era: alternar scratchpad -> foi para Super+Shift+Alt+S).
 o.rebind("SUPER + S", "Screenshot", "omarchy-capture-screenshot")

@@ -41,3 +41,6 @@ source "$HOME/.config/zsh/functions.zsh"
 if command -v try >/dev/null; then
     eval "$(command try init ~/Projetos/tries)"
 fi
+
+# tmux não está instalado: remove o alias `t` do omarchy-zsh.
+unalias t 2>/dev/null
