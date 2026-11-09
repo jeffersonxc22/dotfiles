@@ -9,6 +9,9 @@ command -v kitty >/dev/null || omarchy install terminal kitty
 omarchy default terminal kitty
 # Dolphin como gerenciador de arquivos, com tema Kvantum.
 omarchy pkg add dolphin kio-extras archlinux-xdg-menu kvantum
+# Família Geist: interface (AUR) e terminais/monospace (Nerd Font).
+omarchy pkg add otf-geist-mono-nerd
+omarchy pkg aur add ttf-geist
 
 # zsh do jeito do Omarchy: o ~/.bashrc passa a fazer `exec zsh` (sem chsh).
 # Só roda uma vez: depois, ~/.zshrc é link para os dotfiles, e o cp do setup
@@ -24,6 +27,9 @@ fi
 
 # Ícones Slot-Dark-Icons em todo o sistema (GTK, Qt, shell e Flatpak).
 "$repo/icons.sh"
+
+# Geist na interface (GTK, Qt, Flatpak, barra do Omarchy) e Geist Mono nos terminais.
+"$repo/fonts.sh"
 
 # Dolphin: LayanDark com paleta Catppuccin, padrão para pastas e cache do "Abrir com".
 "$repo/kde-theme.sh"

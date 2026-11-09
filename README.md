@@ -9,14 +9,14 @@ para o `$HOME`.
 
 | Pasta | Conteúdo |
 |---|---|
-| `omarchy/hypr` | `bindings.lua` (atalhos), `input.lua` (layout por teclado), `workspaces.lua` (round robin entre monitores), `hyprland.lua` e `looknfeel.lua` (cursor Future-cursors) |
-| `omarchy/kitty` | kitty com cursor em barra e rastro, fonte CaskaydiaMono 16; as cores seguem o tema do Omarchy |
+| `omarchy/hypr` | `bindings.lua` (atalhos), `input.lua` (layout por teclado), `workspaces.lua` (round robin entre monitores), `hyprland.lua` e `looknfeel.lua` (cursor Future-cursors, transparência em todos os apps) |
+| `omarchy/kitty` | kitty com cursor em barra e rastro, fonte GeistMono Nerd 16; as cores seguem o tema do Omarchy |
 | `omarchy/cursor` | `~/.local/share/icons/default` herdando o Future-cursors, para apps X11/XWayland |
 | `omarchy/audio` | placa Intel com som do notebook e dos dois monitores (DisplayPort) ao mesmo tempo |
 | `omarchy/xdg` | `user-dirs.dirs` no método PARA (e `user-dirs.conf` impedindo a recriação das pastas padrão) |
-| `omarchy/hooks` | hook `theme-set` que aponta os fundos de todo tema para `~/Recursos/Imagens/Wallpapers` |
+| `omarchy/hooks` | hooks `theme-set`: `link-wallpapers` aponta os fundos de todo tema para `~/Recursos/Imagens/Wallpapers`; `icon-theme` reaplica o Slot-Dark-Icons |
 | `common/` | `zsh`, `starship` (o prompt padrão do Omarchy), `git`, `mise`: valem em qualquer distro |
-| `legacy/fedora-kde/` | perfil antigo do Fedora KDE (Plasma, KWin, keyd, bootstrap dnf), mantido só como referência |
+| `legacy/fedora-kde/` | perfil antigo do Fedora KDE (Plasma, KWin, keyd, bootstrap dnf), mantido como referência; o `kde-theme.sh` ainda usa `plasma/appearance/` |
 
 ## Instalação
 
@@ -27,9 +27,16 @@ git clone git@github.com:jeffersonxc22/dotfiles.git ~/Projetos/dotfiles
 ```
 
 O bootstrap instala os pacotes (`omarchy pkg add`), define o kitty como
-terminal padrão, roda o `./deploy.sh` e o `./cursor.sh` (baixa o Future-cursors
-em `~/.local/share/icons` e aplica no Hyprland, GTK e Flatpak). O deploy move os
-arquivos que estiverem no caminho para `~/.local/state/dotfiles/omarchy-<data>/`,
+terminal padrão e roda o `./deploy.sh` e os scripts de aparência, todos idempotentes:
+
+| Script | O que aplica |
+|---|---|
+| `cursor.sh` | Future-cursors em `~/.local/share/icons`, no Hyprland, GTK e Flatpak |
+| `icons.sh` | ícones Slot-Dark-Icons (L4ki/Slot-Plasma-Themes, commit fixo) via gsettings; Flatpaks leem os ícones e o `kdeglobals` |
+| `fonts.sh` | Geist na interface (GTK, Qt, Flatpak e barra do Omarchy, por regra do fontconfig só para o quickshell) e GeistMono Nerd nos terminais (`omarchy font set`) |
+| `kde-theme.sh` | apps KDE (Dolphin): Kvantum LayanDark translúcido com paleta Catppuccin, esquema CatppuccinMochaSapphire e ícones no `kdeglobals` |
+
+O deploy move os arquivos que estiverem no caminho para `~/.local/state/dotfiles/omarchy-<data>/`,
 cria os links com o stow e valida o Hyprland com `hyprctl configerrors`.
 
 ## Atalhos próprios
@@ -41,7 +48,8 @@ cria os links com o stow e valida o Hyprland com `hyprctl configerrors`.
 | Super+X | menu de sistema (sair, reiniciar, desligar) | recortar universal |
 | Super+I | Claude Code (`omarchy-agent`) | alternar idioma de entrada |
 | Super+S | print da tela | alternar scratchpad (foi para **Super+Shift+Alt+S**) |
-| Super+E | gerenciador de arquivos (Nautilus) | — |
+| Super+E | gerenciador de arquivos (Dolphin) | — |
+| Super+Shift+F, Super+Alt+Shift+F | Dolphin (o segundo na pasta do terminal) | Nautilus |
 | Super+F | maximizar (mantém barra e gaps) | tela cheia (foi para **Super+Alt+F**) |
 
 O resto já vem igual ao que eu usava no KDE: Super+1…0, Super+Shift+N (move e

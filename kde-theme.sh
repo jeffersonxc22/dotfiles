@@ -12,6 +12,13 @@ scheme=CatppuccinMochaSapphire
 install -Dm644 "$app/LayanDark.kvconfig" "$HOME/.config/Kvantum/LayanDark/LayanDark.kvconfig"
 install -Dm644 "$app/LayanDark.svg" "$HOME/.config/Kvantum/LayanDark/LayanDark.svg"
 kwriteconfig6 --file "$HOME/.config/Kvantum/kvantum.kvconfig" --group General --key theme LayanDark
+# Translúcido como o Layan original: só o fundo fica transparente (texto nítido)
+# e o Hyprland desfoca o que está atrás. No Fedora era opaco.
+kv="$HOME/.config/Kvantum/LayanDark/LayanDark.kvconfig"
+kwriteconfig6 --file "$kv" --group %General --key translucent_windows true
+kwriteconfig6 --file "$kv" --group %General --key reduce_window_opacity 20
+kwriteconfig6 --file "$kv" --group %General --key reduce_menu_opacity 15
+kwriteconfig6 --file "$kv" --group %General --key opaque_colors false
 
 install -Dm644 "$app/$scheme.colors" "$HOME/.local/share/color-schemes/$scheme.colors"
 # Copia os grupos de cor do esquema para o kdeglobals (o que o plasma-apply-colorscheme faria).

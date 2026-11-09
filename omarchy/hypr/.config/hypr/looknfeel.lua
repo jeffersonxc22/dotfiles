@@ -5,8 +5,10 @@
 -- o.transparent_window("my-app")
 -- o.transparent_window("my-app", "0.9 0.85") -- Custom active/inactive opacity.
 
--- Dolphin com a mesma transparência que o Omarchy dá ao Nautilus.
-o.transparent_window("org\\.kde\\.dolphin")
+-- Todos os apps com a transparência padrão do Omarchy (o glassy desfoca o fundo).
+o.transparent_window(".*")
+-- Exceções opacas: vídeo e imagem; o Dolphin já é translúcido pelo Kvantum (texto nítido).
+o.window("(mpv|imv|org\\.kde\\.dolphin)", { opaque = true })
 
 -- https://wiki.hypr.land/Configuring/Basics/Variables/#general
 -- hl.config({
