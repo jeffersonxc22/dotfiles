@@ -114,8 +114,13 @@ Segue o jeito oficial do Omarchy, com o pacote `omarchy-zsh`:
 - O `~/.zshrc` (`common/zsh/.zshrc`) é o template do Omarchy: carrega
   `/usr/share/omarchy-zsh/shell/{zoptions,all}`, com aliases, funções,
   mise, starship, zoxide, fzf e syntax-highlighting. As minhas personalizações
-  ficam no fim: autosuggestions, ssh-agent, `BAT_THEME` Catppuccin,
+  ficam no fim: fzf-tab, autosuggestions, ssh-agent, `BAT_THEME` Catppuccin,
   `~/.config/zsh/aliases.zsh` e `functions.zsh`.
+- fzf-tab (AUR): o Tab abre a lista do fzf com descrição e filtro, com prévia de
+  pastas no `cd`/`zd` (`<` e `>` trocam de grupo). O `.zshrc` tira o hook do
+  Omarchy que religa o Tab a cada prompt; sem isso o fzf-tab seria desfeito.
+  O `zd` (o `cd` do Omarchy) completa diretórios como o `cd`.
+- Os aliases do eza (`ls`, `lsa`, `lt`, `lta`) vêm do Omarchy; `ll` é atalho para `lsa`.
 - Para voltar ao bash: `sudo pacman -R omarchy-zsh` e restaurar o
   `~/.bashrc.backup-*`.
 

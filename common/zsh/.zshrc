@@ -30,6 +30,23 @@ if [[ -z ${SSH_AUTH_SOCK-} ]]; then
     ssh-add "$HOME/.ssh/id_ed25519" 2>/dev/null
 fi
 
+# fzf-tab (pacote AUR fzf-tab): completion em lista com descrição e filtro fuzzy.
+# Precisa vir depois do compinit (zoptions) e antes do zsh-autosuggestions.
+if [[ -r /usr/share/zsh/plugins/fzf-tab/fzf-tab.plugin.zsh ]]; then
+    # O Omarchy religa o Tab a cada prompt; sem isto o fzf-tab seria desfeito.
+    add-zsh-hook -d precmd _omarchy-bind-tab-completion
+    source /usr/share/zsh/plugins/fzf-tab/fzf-tab.plugin.zsh
+
+    zstyle ':completion:*' menu no                    # o fzf-tab assume o menu
+    zstyle ':completion:*:descriptions' format '[%d]' # cabeçalho de grupo
+    zstyle ':fzf-tab:*' switch-group '<' '>'
+    zstyle ':fzf-tab:*' fzf-flags --height=60%
+    zstyle ':fzf-tab:complete:(cd|zd|z):*' fzf-preview 'eza -1 --color=always --icons=auto $realpath'
+fi
+
+# O Omarchy troca `cd` por `zd`; faz o zd completar diretórios como o cd.
+(( $+functions[zd] )) && compdef zd=cd
+
 # Sugestões do histórico enquanto digita (pacote zsh-autosuggestions).
 [[ -r /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]] &&
     source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh

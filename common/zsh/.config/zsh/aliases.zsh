@@ -6,10 +6,8 @@ alias zshsource='source ~/.zshrc'
 alias nvimconfig='$EDITOR ${XDG_CONFIG_HOME:-$HOME/.config}/nvim'
 alias dotfiles='cd ~/Projetos/dotfiles'
 
-# eza no lugar de ls
-alias ls='eza --icons'
-alias ll='eza -la --icons'
-alias lt='eza --tree --level=2 --icons'
+# eza: ls, lsa, lt e lta vêm do Omarchy; ll é só um atalho para o lsa dele.
+alias ll='lsa'
 
 # bat no lugar de cat 
 if command -v bat >/dev/null 2>&1; then

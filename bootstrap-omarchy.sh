@@ -5,6 +5,7 @@ set -euo pipefail
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 omarchy pkg add stow omarchy-zsh zsh-autosuggestions ttf-cascadia-mono-nerd inter-font
+omarchy pkg aur add fzf-tab
 command -v kitty >/dev/null || omarchy install terminal kitty
 omarchy default terminal kitty
 # Dolphin como gerenciador de arquivos, com tema Kvantum.
