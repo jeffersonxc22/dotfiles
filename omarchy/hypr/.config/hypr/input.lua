@@ -64,4 +64,4 @@
 -- (at-translated-set-2-keyboard). O Logitech MX Keys Mini é US ANSI e usa
 -- US internacional com teclas mortas: ' + c = ç, AltGr + , = ç.
 -- Nomes dos dispositivos: hyprctl devices
-hl.device({ name = "mx-keys-mini", kb_layout = "us", kb_variant = "intl" })
+hl.device({ name = "logitech-mx-keys-mini", kb_layout = "us", kb_variant = "intl" })
