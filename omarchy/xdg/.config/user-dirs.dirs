@@ -1,0 +1,11 @@
+# Home no método PARA (ver para.sh). xdg-user-dirs-update está desligado em
+# user-dirs.conf para não recriar Documents, Downloads, Pictures...
+XDG_DESKTOP_DIR="$HOME/Projetos/Desktop"
+XDG_DOWNLOAD_DIR="$HOME/Recursos/Downloads"
+XDG_DOCUMENTS_DIR="$HOME/Áreas/Documentos"
+XDG_PROJECTS_DIR="$HOME/Projetos"
+XDG_MUSIC_DIR="$HOME/Recursos/Músicas"
+XDG_PICTURES_DIR="$HOME/Recursos/Imagens"
+XDG_VIDEOS_DIR="$HOME/Recursos/Vídeos"
+XDG_TEMPLATES_DIR="$HOME/Recursos/Modelos"
+XDG_PUBLICSHARE_DIR="$HOME/Projetos/Público"

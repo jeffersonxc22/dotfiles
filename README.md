@@ -12,6 +12,7 @@ para o `$HOME`.
 | `omarchy/hypr` | `bindings.lua` (atalhos), `input.lua` (layout por teclado), `workspaces.lua` (round robin entre monitores), `hyprland.lua` e `looknfeel.lua` (cursor Catppuccin) |
 | `omarchy/kitty` | kitty com rastro do cursor; as cores seguem o tema do Omarchy |
 | `omarchy/audio` | placa Intel com som do notebook e dos dois monitores (DisplayPort) ao mesmo tempo |
+| `omarchy/xdg` | `user-dirs.dirs` no método PARA (e `user-dirs.conf` impedindo a recriação das pastas padrão) |
 | `omarchy/backgrounds` | wallpapers extras do tema catppuccin (vídeos ficam fora do git) |
 | `common/` | `zsh`, `starship`, `git`, `mise`: valem em qualquer distro |
 | `legacy/fedora-kde/` | perfil antigo do Fedora KDE (Plasma, KWin, keyd, bootstrap dnf), mantido só como referência |
@@ -19,8 +20,10 @@ para o `$HOME`.
 ## Instalação
 
 ```sh
-git clone git@github.com:jeffersonxc22/dotfiles.git ~/dotfiles
+git clone git@github.com:jeffersonxc22/dotfiles.git ~/Projetos/dotfiles
+ln -s Projetos/dotfiles ~/dotfiles
 ~/dotfiles/bootstrap-omarchy.sh
+~/dotfiles/para.sh
 ```
 
 O bootstrap instala os pacotes (`omarchy pkg add` / `omarchy pkg aur add`),
@@ -50,6 +53,21 @@ No lugar dos blocos de 1–10 por monitor do Omarchy, os workspaces são globais
 e distribuídos em round robin da esquerda para a direita (`omarchy/hypr/.config/hypr/workspaces.lua`).
 Com notebook | DP-1 | DP-3: notebook 1 4 7 10, DP-1 2 5 8, DP-3 3 6 9. Com menos monitores,
 a conta se ajusta sozinha a cada reload.
+
+## Home no método PARA
+
+`./para.sh` organiza a home em `~/Projetos`, `~/Áreas`, `~/Recursos` e `~/Arquivados`:
+
+| Pasta padrão | Vai para |
+|---|---|
+| Desktop, Público | `~/Projetos/Desktop`, `~/Projetos/Público` |
+| Documentos | `~/Áreas/Documentos` |
+| Downloads, Imagens, Músicas, Vídeos, Modelos | `~/Recursos/...` |
+| `~/Work` (tmux "Work", `try`) | conteúdo em `~/Projetos`; `~/Work` vira link para `~/Projetos` |
+| `~/dotfiles` | `~/Projetos/dotfiles`, com `~/dotfiles` como link |
+
+Prints vão para `~/Recursos/Imagens/Screenshots` e gravações para `~/Recursos/Vídeos`
+(`OMARCHY_SCREENSHOT_DIR` e `OMARCHY_SCREENRECORD_DIR` no `hyprland.lua`).
 
 ## Áudio dos monitores
 
