@@ -1,0 +1,6 @@
+#!/bin/bash
+# O omarchy-theme-set troca o tema de ícones a cada tema; aqui volta para o Slot-Dark-Icons.
+# Roda depois do omarchy-theme-set-gnome. Sem o tema instalado (icons.sh), não faz nada.
+[[ -d $HOME/.local/share/icons/Slot-Dark-Icons ]] &&
+  gsettings set org.gnome.desktop.interface icon-theme Slot-Dark-Icons
+exit 0

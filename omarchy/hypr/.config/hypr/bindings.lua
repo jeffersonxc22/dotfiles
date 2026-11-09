@@ -52,8 +52,10 @@ o.rebind("SUPER + SHIFT + CTRL + A", "Agent", "cd ~/Projetos && omarchy-agent --
 o.rebind("SUPER + S", "Screenshot", "omarchy-capture-screenshot")
 o.bind("SUPER + SHIFT + ALT + S", "Toggle scratchpad", hl.dsp.workspace.toggle_special("scratchpad"))
 
--- Super+E abre o gerenciador de arquivos (tecla livre; Super+Shift+F continua).
-o.bind("SUPER + E", "File manager", { omarchy = "nautilus" })
+-- Gerenciador de arquivos: Dolphin no lugar do Nautilus (Super+E é tecla livre).
+o.bind("SUPER + E", "File manager", { launch = "dolphin" })
+o.rebind("SUPER + SHIFT + F", "File manager", { launch = "dolphin" })
+o.rebind("SUPER + ALT + SHIFT + F", "File manager (cwd)", 'uwsm-app -- dolphin --new-window "$(omarchy-cmd-terminal-cwd)"')
 
 -- Super+F maximiza (mantém barra e gaps); tela cheia de verdade vai para Super+Alt+F.
 o.rebind("SUPER + F", "Maximize", hl.dsp.window.fullscreen({ mode = "maximized" }))

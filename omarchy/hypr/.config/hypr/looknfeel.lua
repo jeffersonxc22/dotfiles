@@ -5,6 +5,9 @@
 -- o.transparent_window("my-app")
 -- o.transparent_window("my-app", "0.9 0.85") -- Custom active/inactive opacity.
 
+-- Dolphin com a mesma transparência que o Omarchy dá ao Nautilus.
+o.transparent_window("org\\.kde\\.dolphin")
+
 -- https://wiki.hypr.land/Configuring/Basics/Variables/#general
 -- hl.config({
 --   general = {

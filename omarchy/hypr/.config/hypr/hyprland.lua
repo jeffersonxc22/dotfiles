@@ -29,6 +29,9 @@ require("hypr.workspaces")
 hl.env("OMARCHY_SCREENSHOT_DIR", os.getenv("HOME") .. "/Recursos/Imagens/Screenshots")
 hl.env("OMARCHY_SCREENRECORD_DIR", os.getenv("HOME") .. "/Recursos/Vídeos")
 
+-- Dolphin fora do KDE: menu de aplicativos do archlinux-xdg-menu para o "Abrir com".
+hl.env("XDG_MENU_PREFIX", "arch-")
+
 -- Toggle config flags dynamically.
 require("default.hypr.toggles")
 
