@@ -64,10 +64,16 @@ place() { # place <origem> <destino>
     mkdir -p "$(dirname "$2")"; cp -a "$1" "$2"
 }
 app="$repo/plasma/appearance"
+# Desliga a transparência adaptativa do Layan (senão o Plasma usa a variante
+# translucent/ dos diálogos, deixando menu/KRunner com o wallpaper vazando).
+place "$app/Layan-metadata.desktop" "$HOME/.local/share/plasma/desktoptheme/Layan/metadata.desktop"
 place "$app/LayanDark.kvconfig"    "$HOME/.config/Kvantum/Layan/LayanDark.kvconfig"
 place "$app/aurorae-Layan"         "$HOME/.local/share/aurorae/themes/Layan"
 # Diálogos (menu de contexto, KRunner) opacos, com o fundo Mocha dos dotfiles.
+# O Plasma usa a variante "translucent" do tema Layan; patch as duas para valer
+# independentemente da seleção (a variante "solid" já é opaca por padrão).
 place "$app/dialog-background.svg" "$HOME/.local/share/plasma/desktoptheme/Layan/dialogs/background.svg"
+place "$app/dialog-background.svg" "$HOME/.local/share/plasma/desktoptheme/Layan/translucent/dialogs/background.svg"
 
 echo
 echo "Pré-requisitos instalados. Backup (se houve substituição): $backup"

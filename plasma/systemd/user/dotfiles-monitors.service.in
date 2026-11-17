@@ -1,0 +1,11 @@
+[Unit]
+Description=Aplica o layout de monitores dos dotfiles
+After=plasma-workspace.target graphical-session.target
+Wants=plasma-workspace.target
+
+[Service]
+Type=oneshot
+ExecStart=@REPO@/plasma/monitors.sh
+
+[Install]
+WantedBy=graphical-session.target

@@ -24,7 +24,7 @@ resolva o conflito antes de executar o Stow; o deploy não usa `--adopt`.
 |---|---|
 | `zsh/ nvim/ kitty/ starship/ git/ mise/ fontconfig/` | pacotes Stow para `$HOME` |
 | `keyd/` | pacote Stow para `/etc` (ver `keyd/README.md`) |
-| `plasma/` | perfil KDE: `prereqs.sh`, `theme.sh`, `apply.sh` |
+| `plasma/` | perfil KDE: `prereqs.sh`, `theme.sh`, `apply.sh`, `monitors.sh` |
 | `theme/` | GTK, kitty, Flatpak, cursor e tela de login |
 | `bootstrap/` | `install.sh` (orquestra tudo, com a interface de `ui.sh`), `packages.txt`, `drivers.sh`, `nvidia-container-toolkit.sh`, `kitty-official.sh`, `keyd.sh`, `para.sh`, `verify.sh` |
 
@@ -72,7 +72,7 @@ fabricante ou, quando não há rpm, o instalador do próprio projeto.
 | 12 | Tema | Layan + Catppuccin Mocha Sapphire, Slot Icons com bandeja Papirus, cursor Catppuccin, GTK, Flatpak, papel de parede (`plasma/appearance/wallpaper.jpg`) na área de trabalho e no bloqueio |
 | 13 | Login | Plasma Login Manager com o mesmo esquema, fontes, ícones, cursor e papel de parede |
 | 14 | Programas | Helium (navegador padrão, COPR `imput/helium`), Slack (.rpm oficial), Claude Code (repositório dnf oficial); Chrome removido |
-| 15 | Plasma | keyd (teclados Logitech), 10 áreas de trabalho, tiling Krohnkite, atalhos do KWin, efeitos e painel |
+| 15 | Plasma | keyd (teclados Logitech), 10 áreas de trabalho, tiling Krohnkite, atalhos do KWin, efeitos e painel; monitores (DP-1 primária, notebook desligada) |
 | 16 | Home PARA | só `Projetos`, `Áreas`, `Recursos`, `Arquivados`; Desktop e Público em `~/Projetos`, Documentos em `~/Áreas/Documentos` e Downloads/Imagens/Músicas/Vídeos/Modelos em `~/Recursos` |
 | 17 | Conferência | `bootstrap/verify.sh`, com o resultado em `bootstrap/verify.log` |
 

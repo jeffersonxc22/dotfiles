@@ -71,8 +71,11 @@ check "terminal padrão KDE = kitty" bash -c '[[ $(kreadconfig6 --group General 
 check "krohnkite habilitado" bash -c '[[ $(kreadconfig6 --file kwinrc --group Plugins --key krohnkiteEnabled) == true ]]'
 check "krohnkite carregado" bash -c '[[ $(busctl --user call org.kde.KWin /Scripting org.kde.kwin.Scripting isScriptLoaded s krohnkite) == "b true" ]]'
 check "10 áreas de trabalho" bash -c '(( $(busctl --user get-property org.kde.KWin /VirtualDesktopManager org.kde.KWin.VirtualDesktopManager count | cut -d" " -f2) >= 10 ))'
+check "unit de monitores ativa" systemctl --user is-enabled -q dotfiles-monitors.service
+check "layout DP-1 primária / notebook off" python3 -c 'import json,subprocess; o={x["name"]:x for x in json.loads(subprocess.check_output(["kscreen-doctor","--json"],text=True))["outputs"]}; assert o["DP-1"]["enabled"] and o["DP-1"]["priority"]==1; assert o.get("DP-3",{}).get("enabled"); assert not o["eDP-1"]["enabled"]'
 check "Kvantum SVG em Catppuccin" grep -q 74c7ec "$HOME/.config/Kvantum/Layan/LayanDark.svg"
-check "diálogos opacos (Layan)" grep -q 'id="dotfiles-opaque-background"' "$HOME/.local/share/plasma/desktoptheme/Layan/dialogs/background.svg"
+check "diálogos opacos (Layan)" bash -c 'for f in "$HOME/.local/share/plasma/desktoptheme/Layan/dialogs/background.svg" "$HOME/.local/share/plasma/desktoptheme/Layan/translucent/dialogs/background.svg"; do grep -q "dotfiles-opaque-background" "$f" || exit 1; done'
+check "transparência adaptativa do Layan desligada" python3 -c 'import configparser,os; c=configparser.ConfigParser(); c.read(os.path.expanduser("~/.local/share/plasma/desktoptheme/Layan/metadata.desktop")); assert c["AdaptiveTransparency"]["enabled"].lower()=="false"'
 check "greeter ($dm) com esquema Catppuccin" bash -c 'f="$1/.config/kdeglobals"; grep -q "ColorScheme=CatppuccinMochaSapphire" "$f" 2>/dev/null || sudo -n grep -q "ColorScheme=CatppuccinMochaSapphire" "$f"' _ "$dm_home"
 check "greeter ($dm) com cursor Catppuccin" bash -c 'f="$1/.config/kcminputrc"; grep -q "cursorTheme=catppuccin-mocha-sapphire-cursors" "$f" 2>/dev/null || sudo -n grep -q "cursorTheme=catppuccin-mocha-sapphire-cursors" "$f"' _ "$dm_home"
 check "kitty-colors.path ativo" systemctl --user is-active kitty-colors.path

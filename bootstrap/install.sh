@@ -116,6 +116,7 @@ step 15 "Plasma: teclado (keyd), áreas de trabalho, tiling Krohnkite, atalhos d
 # 10 áreas de trabalho, Krohnkite (BTree, gaps, Monocle), Geometry Change e
 # wobbly windows, atalhos (Meta+1..0, Meta+T kitty, Meta+B Helium...) e painel.
 "$repo/plasma/apply.sh" --apply
+"$repo/plasma/install-monitors.sh"
 
 step 16 "Home no método PARA"
 "$repo/bootstrap/para.sh"
