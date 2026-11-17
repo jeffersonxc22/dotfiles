@@ -57,8 +57,8 @@ fabricante ou, quando não há rpm, o instalador do próprio projeto.
 | 9 | Dotfiles | `./deploy.sh`: stow sem `--adopt`; arquivos no caminho vão para `~/.local/state/dotfiles/` |
 | 10 | Ferramentas | `mise install`: go, node 24, python 3, java, rust, gcloud, usage, maven |
 | 11 | Terminal | kitty oficial como terminal padrão, com cores seguindo o KDE |
-| 12 | Tema | Layan + Catppuccin Mocha Sapphire, Slot Icons com bandeja Papirus, cursor Future-cursors, fontes Geist, GTK, Flatpak, fundo sólido `#1e1e2e` na área de trabalho e no bloqueio |
-| 13 | Login | Plasma Login Manager com o mesmo esquema, fontes, ícones e cursor |
+| 12 | Tema | Layan + Catppuccin Mocha Sapphire, Slot Icons com bandeja Papirus, cursor Future-cursors, fontes Geist, GTK, Flatpak, papel de parede (`plasma/appearance/wallpaper.jpg`) na área de trabalho e no bloqueio |
+| 13 | Login | Plasma Login Manager com o mesmo esquema, fontes, ícones, cursor e papel de parede |
 | 14 | Programas | Helium (COPR oficial `imput/helium`, navegador padrão), Slack (.rpm oficial), Claude Code (repositório dnf oficial) |
 | 15 | Plasma | keyd (teclados Logitech), 10 áreas de trabalho, tiling Krohnkite, atalhos do KWin, efeitos e painel |
 | 16 | Home PARA | só `Projetos`, `Áreas`, `Recursos`, `Arquivados`; Desktop e Público em `~/Projetos`, Documentos em `~/Áreas/Documentos` e Downloads/Imagens/Músicas/Vídeos/Modelos em `~/Recursos` |
@@ -78,11 +78,9 @@ etapas já feitas são puladas. Casos comuns:
    No caso do NVIDIA, espere `modinfo -F version nvidia` mostrar a versão
    antes de reiniciar; o CDI do Podman é gerado no boot seguinte.
 2. Confira `bootstrap/verify.log`: o ideal é 0 FAIL.
-3. **Fundo do login** (ainda manual): Configurações do Sistema > Tela de Login
-   > papel de parede *Cor sólida* `#1e1e2e`.
-4. Ative o keyd (o install só cria o link, de propósito): `sudo systemctl enable --now keyd`.
-5. Coloque o vault do Hivemind em `~/Áreas/Documentos/hivemind` (`gh repo clone jeffersonxc22/hivemind ~/Áreas/Documentos/hivemind`).
-6. Para atualizar o kitty ou o Slack no futuro, rode o script de novo, ou só
+3. Ative o keyd (o install só cria o link, de propósito): `sudo systemctl enable --now keyd`.
+4. Coloque o vault do Hivemind em `~/Áreas/Documentos/hivemind` (`gh repo clone jeffersonxc22/hivemind ~/Áreas/Documentos/hivemind`).
+5. Para atualizar o kitty ou o Slack no futuro, rode o script de novo, ou só
    `./bootstrap/kitty-official.sh`.
 
 O Neovim usa Catppuccin e tenta acompanhar as cores de `kdeglobals`; sem cores

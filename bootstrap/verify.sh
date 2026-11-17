@@ -75,8 +75,9 @@ check "greeter ($dm) com esquema Catppuccin" bash -c 'f="$1/.config/kdeglobals";
 check "greeter ($dm) com cursor Future-cursors" bash -c 'f="$1/.config/kcminputrc"; grep -q "cursorTheme=Future-cursors" "$f" 2>/dev/null || sudo -n grep -q "cursorTheme=Future-cursors" "$f"' _ "$dm_home"
 check "kitty-colors.path ativo" systemctl --user is-active kitty-colors.path
 check "kitty-theme.conf" test -s "$HOME/.cache/dotfiles/kitty-theme.conf"
-check "fundo sólido na área de trabalho" grep -q "wallpaperplugin=org.kde.color" "$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc"
-check "fundo sólido no bloqueio" bash -c '[[ $(kreadconfig6 --file kscreenlockerrc --group Greeter --key WallpaperPlugin) == org.kde.color ]]'
+check "papel de parede na área de trabalho" grep -q "^Image=file://$HOME/.local/share/wallpapers/dotfiles.jpg" "$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc"
+check "papel de parede no bloqueio" bash -c '[[ $(kreadconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image) == */wallpapers/dotfiles.jpg ]]'
+check "papel de parede no login" bash -c '[[ $(kreadconfig6 --file /etc/plasmalogin.conf --group Greeter --group Wallpaper --group org.kde.image --group General --key Image) == file:///usr/share/wallpapers/dotfiles.jpg ]]'
 echo "## Programas"
 for c in helium slack claude; do check "cmd $c" command -v "$c"; done
 check "Helium navegador padrão" bash -c '[[ $(xdg-settings get default-web-browser) == helium.desktop ]]'

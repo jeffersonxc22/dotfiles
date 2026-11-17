@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Leva o visual da sessão (esquema Catppuccin Mocha Sapphire, fontes, ícones
-# e cursor) para a tela de login do Plasma Login Manager, padrão do Fedora KDE.
+# Leva o visual da sessão (esquema Catppuccin Mocha Sapphire, fontes, ícones,
+# cursor e papel de parede) para a tela de login do Plasma Login Manager, padrão do Fedora KDE.
 # O greeter lê o HOME próprio (/var/lib/plasmalogin), não o do usuário.
 #
 # Uso: sudo ./theme/greeter.sh   (depois de ./plasma/theme.sh)
@@ -18,7 +18,7 @@ kw() { kwriteconfig6 "$@"; }
 
 backup="/var/backups/dotfiles-greeter-$(date +%Y%m%d%H%M%S)"
 mkdir -p "$backup"
-for f in "$dm_home/.config/kdeglobals" "$dm_home/.config/kcminputrc"; do
+for f in "$dm_home/.config/kdeglobals" "$dm_home/.config/kcminputrc" /etc/plasmalogin.conf; do
     [[ -e $f ]] && cp -a "$f" "$backup/" || true
 done
 echo "Backup: $backup"
@@ -41,6 +41,13 @@ chown plasmalogin:plasmalogin "$dm_home/.config/kcminputrc"; chmod 600 "$dm_home
 # Rótulos SELinux corretos para o greeter ler os arquivos.
 command -v restorecon >/dev/null && restorecon -R "$dm_home/.config" >/dev/null 2>&1 || true
 
+# Papel de parede: o greeter não lê o HOME do usuário, então a imagem vai para /usr/share.
+# Chaves lidas pelo plasma-login-manager (src/frontend/settings: WallpaperPluginId e
+# Greeter/Wallpaper/<plugin>), as mesmas que o KCM "Tela de Login" grava.
+wall=/usr/share/wallpapers/dotfiles.jpg
+install -Dm644 "$repo/plasma/appearance/wallpaper.jpg" "$wall"
+kw --file /etc/plasmalogin.conf --group Greeter --key WallpaperPluginId org.kde.image
+kw --file /etc/plasmalogin.conf --group Greeter --group Wallpaper --group org.kde.image --group General --key Image "file://$wall"
+chmod 644 /etc/plasmalogin.conf
+
 echo "Login sincronizado (vale no próximo login). Para desfazer, copie de volta os arquivos de $backup."
-# shortcut: a chave de fundo do /etc/plasmalogin.conf não está documentada; automatizar após ler /usr/lib/plasmalogin/defaults.conf no Fedora.
-echo "Fundo sólido do login: Configurações do Sistema > Tela de Login > papel de parede 'Cor sólida' #1e1e2e."
