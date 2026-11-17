@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Service
+MimeType=inode/directory;
+X-KDE-Protocols=file
+X-KDE-ServiceTypes=KonqPopupMenu/Plugin
+Actions=claudeCode;
+
+# Abre o Claude Code CLI no kitty, na pasta clicada ou, no fundo da janela, na pasta atual.
+# O terminal puro já está no "Abrir terminal aqui" do Dolphin (kitty é o terminal padrão do
+# KDE: bootstrap/kitty-official.sh). Caminho absoluto do kitty oficial: o PATH da sessão
+# Plasma pode não ter ~/.local/bin. O KIO exige este arquivo executável.
+[Desktop Action claudeCode]
+Name=Abrir Claude Code no terminal
+Icon=utilities-terminal
+Exec=sh -c 'exec "$HOME/.local/bin/kitty" --directory "$0" claude' %f

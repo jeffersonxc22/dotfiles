@@ -1,127 +1,136 @@
-# Dotfiles — Omarchy
+# Dotfiles — Fedora KDE
 
-Configuração pessoal em cima do [Omarchy](https://omarchy.org) (Arch + Hyprland).
-O Omarchy já cuida do tema, do tiling, das workspaces e do Neovim (LazyVim).
-Aqui ficam só as diferenças que são minhas. Cada pasta é um pacote GNU Stow
-para o `$HOME`.
+Perfil para Fedora com KDE Plasma 6: zsh, LazyVim, kitty, Starship, mise, Krohnkite e
+tema Layan + Catppuccin. O perfil do Omarchy (Arch + Hyprland) ficou na branch `omarchy`.
 
 ## Estrutura
 
 | Pasta | Conteúdo |
 |---|---|
-| `omarchy/hypr` | `bindings.lua` (atalhos), `input.lua` (layout por teclado), `workspaces.lua` (round robin entre monitores), `hyprland.lua` (blur mais forte que o do glassy) e `looknfeel.lua` (cursor Future-cursors; todos os apps a 0.92/0.88 de opacidade, terminais no padrão do Omarchy, mpv/imv/Dolphin opacos) |
-| `omarchy/kitty` | kitty com cursor em barra e rastro, fonte GeistMono Nerd 16; as cores seguem o tema do Omarchy |
-| `omarchy/cursor` | `~/.local/share/icons/default` herdando o Future-cursors, para apps X11/XWayland |
-| `omarchy/audio` | placa Intel com som do notebook e dos dois monitores (DisplayPort) ao mesmo tempo |
-| `omarchy/xdg` | `user-dirs.dirs` no método PARA (e `user-dirs.conf` impedindo a recriação das pastas padrão) |
-| `omarchy/dolphin` | menus de contexto do Dolphin: "Abrir Claude Code no terminal" (`omarchy-agent` na pasta clicada), junto dos menus do Claude Desktop, e "Abrir terminal (kitty)" no fim |
-| `omarchy/hooks` | hooks `theme-set`: `link-wallpapers` aponta os fundos de todo tema para `~/Recursos/Imagens/Wallpapers`; `icon-theme` reaplica o Slot-Dark-Icons |
-| `common/` | `zsh`, `starship` (o prompt padrão do Omarchy), `git`, `mise`: valem em qualquer distro |
-| `legacy/fedora-kde/` | perfil antigo do Fedora KDE (Plasma, KWin, keyd, bootstrap dnf), mantido como referência; o `kde-theme.sh` ainda usa `plasma/appearance/` |
+| `zsh/ git/ starship/ mise/ kitty/ nvim/ fontconfig/ dolphin/` | pacotes Stow para `$HOME` (`dolphin` é o menu "Abrir Claude Code no terminal") |
+| `keyd/` | pacote Stow para `/etc` (ver `keyd/README.md`) |
+| `plasma/` | perfil KDE: `prereqs.sh`, `theme.sh`, `apply.sh`, `claude-shortcuts.sh` e `appearance/` |
+| `theme/` | GTK, kitty, Flatpak, cursor e tela de login |
+| `bootstrap/` | `install.sh` (orquestra tudo, com a interface de `ui.sh`), `packages.txt`, `fonts.sh`, `drivers.sh`, `nvidia-container-toolkit.sh`, `kitty-official.sh`, `zsh-plugins.sh`, `keyd.sh`, `para.sh`, `verify.sh`, `fedora-upgrade.sh` |
 
-## Instalação
+Os links são criados pelo `./deploy.sh`. Arquivos do KDE não são
+stowados: os scripts de `plasma/` e `theme/` os escrevem.
+
+Para adicionar um pacote, acrescente uma linha em `bootstrap/packages.txt`.
+
+## Guia de instalação (Fedora KDE do zero)
+
+### 1. Antes de começar
+- Instale o **Fedora KDE Plasma Desktop** (ISO em https://fedoraproject.org/kde/)
+  e faça o primeiro login. O script precisa da sessão Plasma ativa.
+- Conecte-se à internet. Se a máquina tiver GPU NVIDIA, **desative o Secure
+  Boot** na BIOS ou planeje assinar o módulo: com ele ativo, o driver é pulado.
+- Tenha a senha do seu usuário à mão: o sudo pode pedir mais de uma vez.
+
+### 2. Baixar e rodar
+Abra o Konsole e rode:
 
 ```sh
-git clone git@github.com:jeffersonxc22/dotfiles.git ~/Projetos/dotfiles
-~/Projetos/dotfiles/bootstrap-omarchy.sh
-~/Projetos/dotfiles/para.sh
+sudo dnf install -y git
+git clone https://github.com/jeffersonxc22/dotfiles.git ~/Projetos/dotfiles
+~/Projetos/dotfiles/bootstrap/install.sh
 ```
 
-O bootstrap instala os pacotes (`omarchy pkg add`), troca Nautilus e Papers por
-Dolphin e JOPDF (apps padrão de pastas e PDF), define o kitty como terminal padrão e roda o `./deploy.sh` e os scripts de aparência, todos idempotentes:
+A tela mostra a barra de progresso, a etapa atual e o tempo de cada uma, além
+da saída real dos comandos. O script só para para perguntar duas coisas: a
+senha do sudo e se você quer instalar o driver NVIDIA.
 
-| Script | O que aplica |
-|---|---|
-| `cursor.sh` | Future-cursors em `~/.local/share/icons`, no Hyprland, GTK e Flatpak |
-| `icons.sh` | ícones Slot-Dark-Icons (L4ki/Slot-Plasma-Themes, commit fixo) via gsettings; Flatpaks leem os ícones e o `kdeglobals` |
-| `fonts.sh` | Geist na interface (GTK, Qt, Flatpak e barra do Omarchy, por regra do fontconfig só para o quickshell) e GeistMono Nerd nos terminais (`omarchy font set`) |
-| `kde-theme.sh` | apps KDE (Dolphin): Kvantum LayanDark translúcido com paleta Catppuccin, esquema CatppuccinMochaSapphire, ícones e kitty como terminal (`Alt+Shift+F4`) no `kdeglobals`; esconde o "Abrir terminal aqui" do menu (`dolphinrc`) |
+### 3. O que cada etapa faz
+Tudo é instalado pela forma oficial: pacote do Fedora, repositório do
+fabricante ou, quando não há rpm, o instalador do próprio projeto.
 
-O deploy move os arquivos que estiverem no caminho para `~/.local/state/dotfiles/omarchy-<data>/`,
-cria os links com o stow e valida o Hyprland com `hyprctl configerrors`.
-
-## Atalhos próprios
-
-| Tecla | Ação | Substitui o padrão do Omarchy |
+| # | Etapa | Detalhe |
 |---|---|---|
-| Super+T | terminal padrão (vira kitty quando ele for o padrão) | alternar flutuante (foi para **Super+Alt+T**) |
-| Super+B | navegador padrão do Omarchy (Chromium) | — |
-| Super+X | menu de sistema (sair, reiniciar, desligar) | recortar universal |
-| Super+I | Claude Code (`omarchy-agent`) | alternar idioma de entrada |
-| Super+S | print da tela | alternar scratchpad (foi para **Super+Shift+Alt+S**) |
-| Super+E | gerenciador de arquivos (Dolphin) | — |
-| Super+Shift+F, Super+Alt+Shift+F | Dolphin (o segundo na pasta do terminal) | Nautilus |
-| Super+F | maximizar (mantém barra e gaps) | tela cheia (foi para **Super+Alt+F**) |
+| 1 | dnf paralelo | `max_parallel_downloads=20` |
+| 2 | Atualização | `dnf upgrade --refresh` |
+| 3 | Sistema | RPM Fusion, openh264, ffmpeg completo, `@multimedia`, vídeo Intel, `akmod-nvidia` (open) com confirmação |
+| 4 | Pacotes e fontes | `bootstrap/packages.txt`: zsh, zoxide, fzf, eza, stow, neovim, bat, ripgrep, fd, podman…; `bootstrap/fonts.sh`: Geist e GeistMono Nerd Font em `/usr/share/fonts` |
+| 5 | NVIDIA/Podman | NVIDIA Container Toolkit pelo repositório oficial e CDI (`nvidia.com/gpu=all`) para o Podman que já vem no Fedora; roda se houver GPU NVIDIA com o driver instalado, mesmo antes do reboot |
+| 6 | mise e starship | mise pelo COPR oficial `jdxcode/mise`; starship pelo instalador oficial |
+| 7 | Shell | zsh como shell padrão |
+| 8 | Plugins zsh | autosuggestions, syntax-highlighting, fzf-tab, completions e tema do bat |
+| 9 | Dotfiles | `./deploy.sh`: stow sem `--adopt`; arquivos no caminho vão para `~/.local/state/dotfiles/` |
+| 10 | Ferramentas | `mise install`: go, node 24, python 3, java, rust, gcloud, usage, maven |
+| 11 | Terminal | kitty oficial como terminal padrão, com cores seguindo o KDE |
+| 12 | Tema | Layan + Catppuccin Mocha Sapphire, Slot Icons com bandeja Papirus, cursor Future-cursors, fontes Geist, GTK, Flatpak, fundo sólido `#1e1e2e` na área de trabalho e no bloqueio |
+| 13 | Login | Plasma Login Manager com o mesmo esquema, fontes, ícones e cursor |
+| 14 | Programas | Helium (COPR oficial `imput/helium`, navegador padrão), Slack (.rpm oficial), Claude Code (repositório dnf oficial) |
+| 15 | Plasma | keyd (teclados Logitech), 10 áreas de trabalho, tiling Krohnkite, atalhos do KWin, efeitos e painel |
+| 16 | Home PARA | só `Projetos`, `Áreas`, `Recursos`, `Arquivados`; Desktop e Público em `~/Projetos`, Documentos em `~/Áreas/Documentos` e Downloads/Imagens/Músicas/Vídeos/Modelos em `~/Recursos` |
+| 17 | Conferência | `bootstrap/verify.sh`, com o resultado em `bootstrap/verify.log` |
 
-O resto já vem igual ao que eu usava no KDE: Super+1…0, Super+Shift+N (move e
-segue), Super+Q, Super+Space (launcher). A lista completa está em
-`omarchy menu keybindings --print` ou em Super+K.
+### 4. Se algo falhar
+O script para e mostra a etapa que falhou e o código de erro. Corrija o que a
+mensagem acima do quadro indicar e rode `./bootstrap/install.sh` de novo: as
+etapas já feitas são puladas. Casos comuns:
+- **Conflito no stow (etapa 9):** um link antigo, de outro lugar do repositório,
+  ficou quebrado. Apague o link e rode de novo.
+- **Slack não encontrado:** a página da Slack mudou. Baixe o .rpm em
+  https://slack.com/downloads/linux e rode `sudo dnf install ./slack-*.rpm`.
 
-## Workspaces
+### 5. Depois de terminar
+1. **Reinicie**: vale o zsh, o kernel novo e, se instalado, o driver NVIDIA.
+   No caso do NVIDIA, espere `modinfo -F version nvidia` mostrar a versão
+   antes de reiniciar; o CDI do Podman é gerado no boot seguinte.
+2. Confira `bootstrap/verify.log`: o ideal é 0 FAIL.
+3. **Fundo do login** (ainda manual): Configurações do Sistema > Tela de Login
+   > papel de parede *Cor sólida* `#1e1e2e`.
+4. Ative o keyd (o install só cria o link, de propósito): `sudo systemctl enable --now keyd`.
+5. Coloque o vault do Hivemind em `~/Áreas/Documentos/hivemind` (`gh repo clone jeffersonxc22/hivemind ~/Áreas/Documentos/hivemind`).
+6. Para atualizar o kitty ou o Slack no futuro, rode o script de novo, ou só
+   `./bootstrap/kitty-official.sh`.
 
-No lugar dos blocos de 1–10 por monitor do Omarchy, os workspaces são globais 1–10
-e distribuídos em round robin da esquerda para a direita (`omarchy/hypr/.config/hypr/workspaces.lua`).
-Com notebook | DP-1 | DP-3: notebook 1 4 7 10, DP-1 2 5 8, DP-3 3 6 9. Com menos monitores,
-a conta se ajusta sozinha a cada reload.
+O Neovim usa Catppuccin e tenta acompanhar as cores de `kdeglobals`; sem cores
+válidas usa Mocha. O kitty recebe cores do KDE por um serviço de usuário e usa
+paletas ANSI Catppuccin. Aplicativos Flatpak e libadwaita podem não respeitar
+todos os aspectos do tema do host.
 
-## Home no método PARA
+## NVIDIA Container Toolkit + Podman
 
-`./para.sh` organiza a home em `~/Projetos`, `~/Áreas`, `~/Recursos` e `~/Arquivados`:
+A etapa 5, logo depois do driver, instala o `nvidia-container-toolkit` pelo
+repositório oficial da NVIDIA e configura o Podman (já incluso no Fedora) via CDI, o modo recomendado pela NVIDIA: não usa o hook OCI
+do Docker e funciona também com Podman rootless. O serviço `nvidia-cdi-refresh`
+mantém `/var/run/cdi/nvidia.yaml` atualizado a cada boot e atualização do driver.
 
-| Pasta padrão | Vai para |
-|---|---|
-| Desktop, Público | `~/Projetos/Desktop`, `~/Projetos/Público` |
-| Documentos | `~/Áreas/Documentos` |
-| Downloads, Imagens, Músicas, Vídeos, Modelos | `~/Recursos/...` |
-| `~/Work` (pasta de trabalho do Omarchy) | conteúdo em `~/Projetos`; `~/Work` deixa de existir e o `try` usa `~/Projetos/tries` |
-| `~/dotfiles` | `~/Projetos/dotfiles` (o stow cria links relativos para lá) |
+Para rodar um contêiner com todas as GPUs:
 
-Prints vão para `~/Recursos/Imagens/Screenshots` e gravações para `~/Recursos/Vídeos`
-(`OMARCHY_SCREENSHOT_DIR` e `OMARCHY_SCREENRECORD_DIR` no `hyprland.lua`).
+```sh
+podman run --rm --device nvidia.com/gpu=all --security-opt=label=disable \
+  docker.io/library/ubuntu:24.04 nvidia-smi -L
+```
 
-## Áudio dos monitores
+`--security-opt=label=disable` é necessário no Fedora com SELinux para o
+contêiner acessar os dispositivos e as bibliotecas do driver. O dotfiles já
+define a função `podman-gpu`, que inclui as duas opções:
 
-O perfil padrão da placa Intel só liga uma saída por vez: ou as caixas do notebook, ou o HDMI/DisplayPort.
-`omarchy/audio` cria um perfil com as três juntas (notebook, monitor do meio e monitor da direita),
-para elas aparecerem na troca de saída do Omarchy. A regra do WirePlumber aponta para o perfil por
-caminho absoluto (`/home/jefferson/...`). Depois do deploy: `systemctl --user restart wireplumber`.
+```sh
+podman-gpu docker.io/library/ubuntu:24.04 nvidia-smi -L
+```
 
-## Wallpapers (inclusive animados)
+Para listar os dispositivos CDI disponíveis:
 
-O Omarchy aceita imagem ou vídeo como fundo, sem plugin extra. Os wallpapers
-ficam em `~/Recursos/Imagens/Wallpapers`, fora do git.
+```sh
+nvidia-ctk cdi list
+```
 
-O seletor (**Super+Ctrl+Space**) lê `~/.config/omarchy/backgrounds/<tema>/`.
-O hook `link-wallpapers` (`omarchy/hooks`) troca essa pasta por um link para
-`~/Recursos/Imagens/Wallpapers`:
+Se o dispositivo sumir depois de atualizar o driver ou o toolkit, regenere a
+especificação:
 
-- O `deploy.sh` roda `link-wallpapers --all` para todos os temas instalados.
-- A cada troca de tema, o hook cria o link do tema novo, se faltar.
-- A pasta de um tema que já tenha arquivos próprios fica intacta.
+```sh
+sudo systemctl restart nvidia-cdi-refresh.service
+```
 
-Basta baixar o arquivo para a pasta (sem subpastas). Formatos aceitos: `jpg`,
-`jpeg`, `png`, `gif`, `bmp`, `webp`, `mp4`, `m4v`, `mov`, `webm`, `mkv`, `avi`.
-Para aplicar direto: `omarchy theme bg set ~/Recursos/Imagens/Wallpapers/arquivo.mp4`.
-Na primeira vez em um tema novo, o fundo inicial é o padrão do tema.
+O `./bootstrap/verify.sh` confere o binário, o pacote, a especificação CDI e o
+serviço quando o driver NVIDIA está carregado.
 
-## zsh
+## Upgrade do Fedora
 
-Segue o jeito oficial do Omarchy, com o pacote `omarchy-zsh`:
-
-- O `omarchy-setup-zsh`, que o bootstrap roda uma vez, troca o `~/.bashrc` por um
-  que faz `exec zsh` e copia o `~/.inputrc`. O shell de login continua bash
-  (sem `chsh`), e o terminal abre direto no zsh.
-- O `~/.zshrc` (`common/zsh/.zshrc`) é o template do Omarchy: carrega
-  `/usr/share/omarchy-zsh/shell/{zoptions,all}`, com aliases, funções,
-  mise, starship, zoxide, fzf e syntax-highlighting. As minhas personalizações
-  ficam no fim: fzf-tab, autosuggestions, ssh-agent, `BAT_THEME` Catppuccin,
-  `~/.config/zsh/aliases.zsh` e `functions.zsh`.
-- fzf-tab (AUR): o Tab abre a lista do fzf com descrição e filtro, com prévia de
-  pastas no `cd`/`zd` (`<` e `>` trocam de grupo). O `.zshrc` tira o hook do
-  Omarchy que religa o Tab a cada prompt; sem isso o fzf-tab seria desfeito.
-  O `zd` (o `cd` do Omarchy) completa diretórios como o `cd`.
-- Os aliases do eza (`ls`, `lsa`, `lt`, `lta`) vêm do Omarchy; `ll` é atalho para `lsa`.
-- Para voltar ao bash: `sudo pacman -R omarchy-zsh` e restaurar o
-  `~/.bashrc.backup-*`.
-
-A versão antiga (com `ZDOTDIR`, do Fedora) está em `legacy/fedora-kde/zsh-zdotdir/`.
+`./bootstrap/fedora-upgrade.sh --check` mostra a próxima versão, calculada a
+partir de `rpm -E %fedora`. Sem `--check`, o script atualiza pacotes, baixa a
+próxima versão e pergunta antes de reiniciar. Verifique antes se ela foi lançada
+ e faça backup; não é necessário atualizar o Fedora 44 agora.

@@ -1,0 +1,37 @@
+add_newline = true
+command_timeout = 200
+format = "[$directory$git_branch$git_status]($style)$character"
+# Catppuccin Mocha com destaque Sapphire, igual ao fzf (.zshrc) e ao Dolphin.
+palette = "catppuccin_mocha"
+
+[character]
+error_symbol = "[✗](bold sapphire)"
+success_symbol = "[❯](bold sapphire)"
+
+[directory]
+truncation_length = 2
+truncation_symbol = "…/"
+repo_root_style = "bold sapphire"
+repo_root_format = "[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "
+
+[git_branch]
+format = "[$branch]($style) "
+style = "italic sapphire"
+
+[git_status]
+format     = '[$all_status]($style)'
+style      = "sapphire"
+ahead      = "⇡${count} "
+diverged   = "⇕⇡${ahead_count}⇣${behind_count} "
+behind     = "⇣${count} "
+conflicted = " "
+up_to_date = " "
+untracked  = "? "
+modified   = " "
+stashed    = ""
+staged     = ""
+renamed    = ""
+deleted    = ""
+
+[palettes.catppuccin_mocha]
+sapphire = "#74c7ec"
