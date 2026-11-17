@@ -12,4 +12,4 @@ maven = "latest"
 rust = "latest"
 
 [env]
-HIVEMIND_VAULT_PATH = "{{env.HOME}}/Áreas/Documentos/hivemind"
+HIVEMIND_VAULT_PATH = "{{env.HOME}}/Projetos/IA/hivemind"
