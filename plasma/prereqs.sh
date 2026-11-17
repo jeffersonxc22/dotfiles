@@ -66,6 +66,8 @@ place() { # place <origem> <destino>
 app="$repo/plasma/appearance"
 place "$app/LayanDark.kvconfig"    "$HOME/.config/Kvantum/Layan/LayanDark.kvconfig"
 place "$app/aurorae-Layan"         "$HOME/.local/share/aurorae/themes/Layan"
+# Diálogos (menu de contexto, KRunner) opacos, com o fundo Mocha dos dotfiles.
+place "$app/dialog-background.svg" "$HOME/.local/share/plasma/desktoptheme/Layan/dialogs/background.svg"
 
 echo
 echo "Pré-requisitos instalados. Backup (se houve substituição): $backup"

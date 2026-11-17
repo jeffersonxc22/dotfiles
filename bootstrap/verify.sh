@@ -72,6 +72,7 @@ check "krohnkite habilitado" bash -c '[[ $(kreadconfig6 --file kwinrc --group Pl
 check "krohnkite carregado" bash -c '[[ $(busctl --user call org.kde.KWin /Scripting org.kde.kwin.Scripting isScriptLoaded s krohnkite) == "b true" ]]'
 check "10 áreas de trabalho" bash -c '(( $(busctl --user get-property org.kde.KWin /VirtualDesktopManager org.kde.KWin.VirtualDesktopManager count | cut -d" " -f2) >= 10 ))'
 check "Kvantum SVG em Catppuccin" grep -q 74c7ec "$HOME/.config/Kvantum/Layan/LayanDark.svg"
+check "diálogos opacos (Layan)" grep -q 'id="dotfiles-opaque-background"' "$HOME/.local/share/plasma/desktoptheme/Layan/dialogs/background.svg"
 check "greeter ($dm) com esquema Catppuccin" bash -c 'f="$1/.config/kdeglobals"; grep -q "ColorScheme=CatppuccinMochaSapphire" "$f" 2>/dev/null || sudo -n grep -q "ColorScheme=CatppuccinMochaSapphire" "$f"' _ "$dm_home"
 check "greeter ($dm) com cursor Catppuccin" bash -c 'f="$1/.config/kcminputrc"; grep -q "cursorTheme=catppuccin-mocha-sapphire-cursors" "$f" 2>/dev/null || sudo -n grep -q "cursorTheme=catppuccin-mocha-sapphire-cursors" "$f"' _ "$dm_home"
 check "kitty-colors.path ativo" systemctl --user is-active kitty-colors.path
