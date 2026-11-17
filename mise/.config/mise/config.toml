@@ -10,6 +10,7 @@ java = "25"
 gcloud = "latest"
 maven = "latest"
 rust = "latest"
+uv = "latest"
 
 [env]
 HIVEMIND_VAULT_PATH = "{{env.HOME}}/Projetos/IA/hivemind"
