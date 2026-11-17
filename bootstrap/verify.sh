@@ -19,7 +19,7 @@ echo "## Binários"
 for c in zsh kitty fzf zoxide bat eza fd rg nvim git stow starship mise gh podman wl-copy kpackagetool6 kwriteconfig6 kvantummanager; do
     check "cmd $c" command -v "$c"
 done
-check "cmd google-chrome" bash -c 'command -v google-chrome-stable || command -v google-chrome'
+check "cmd helium" command -v helium
 check "cmd keyd" command -v keyd
 check "keyd ativo e casando o MX Mechanical" bash -c 'systemctl is-active -q keyd && [[ -e /etc/keyd/logitech.conf ]]'
 check "fzf >= 0.48 (fzf --zsh)" fzf --zsh
@@ -76,11 +76,13 @@ check "greeter ($dm) com esquema Catppuccin" bash -c 'f="$1/.config/kdeglobals";
 check "greeter ($dm) com cursor Catppuccin" bash -c 'f="$1/.config/kcminputrc"; grep -q "cursorTheme=catppuccin-mocha-sapphire-cursors" "$f" 2>/dev/null || sudo -n grep -q "cursorTheme=catppuccin-mocha-sapphire-cursors" "$f"' _ "$dm_home"
 check "kitty-colors.path ativo" systemctl --user is-active kitty-colors.path
 check "kitty-theme.conf" test -s "$HOME/.cache/dotfiles/kitty-theme.conf"
-check "fundo sólido na área de trabalho" grep -q "wallpaperplugin=org.kde.color" "$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc"
-check "fundo sólido no bloqueio" bash -c '[[ $(kreadconfig6 --file kscreenlockerrc --group Greeter --key WallpaperPlugin) == org.kde.color ]]'
+check "papel de parede na área de trabalho" grep -q "^Image=file://$HOME/.local/share/wallpapers/dotfiles.jpg" "$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc"
+check "papel de parede no bloqueio" bash -c '[[ $(kreadconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image) == */wallpapers/dotfiles.jpg ]]'
+check "papel de parede no login" bash -c '[[ $(kreadconfig6 --file /etc/plasmalogin.conf --group Greeter --group Wallpaper --group org.kde.image --group General --key Image) == file:///usr/share/wallpapers/dotfiles.jpg ]]'
 echo "## Programas"
-for c in google-chrome-stable slack claude; do check "cmd $c" command -v "$c"; done
-check "Chrome navegador padrão" bash -c '[[ $(xdg-settings get default-web-browser) == google-chrome.desktop ]]'
+for c in helium slack claude; do check "cmd $c" command -v "$c"; done
+check "Helium navegador padrão" bash -c '[[ $(xdg-settings get default-web-browser) == helium.desktop ]]'
+check "sem Google Chrome" bash -c '! rpm -q google-chrome-stable >/dev/null 2>&1'
 if command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi -L >/dev/null 2>&1; then
 echo "## NVIDIA + Podman (CDI)"
 check "cmd nvidia-ctk" command -v nvidia-ctk

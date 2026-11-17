@@ -7,8 +7,8 @@ registerShortcut("Open Kitty window", "Open Kitty window", "", function () {
     launch("shortcut-kitty.service");
 });
 
-registerShortcut("Open Chrome window", "Open Chrome window", "", function () {
-    launch("shortcut-chrome.service");
+registerShortcut("Open Helium window", "Open Helium window", "", function () {
+    launch("shortcut-helium.service");
 });
 
 registerShortcut("Open Claude", "Open Claude", "", function () {

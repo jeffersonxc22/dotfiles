@@ -16,7 +16,7 @@ toda a aparência.
 - https://github.com/peterfajdiga/kwin4_effect_geometry_change/releases/tag/v1.5
 
 Depois revise e execute `./plasma/apply.sh --apply`. Ele grava nas units o
-caminho de `kitty` e `google-chrome-stable` encontrado no seu PATH, e usa o
+caminho de `kitty` e `helium` encontrado no seu PATH, e usa o
 `LOGO` de `/etc/os-release` como ícone do lançador (`PLASMA_LAUNCHER_ICON`
 sobrescreve). O script cria um backup
 em `~/.local/state/dotfiles/`, instala os scripts e serviços deste diretório,
@@ -31,7 +31,7 @@ Meta+Shift+2 é registrado como Meta+@, por exemplo. Outros layouts podem
 precisar de ajustes. Meta+1…9 e Meta+0 mudam de espaço; acrescentar Shift move
 a janela ativa e acompanha a janela. Meta sozinho abre KRunner; Meta+Espaço
 também. Meta+Q fecha a janela, Meta+T abre Kitty, Meta+B abre uma nova janela
-do Chrome e Meta+X abre a tela de sessão. Meta+E e Meta+L dependem dos atalhos
+do Helium e Meta+X abre a tela de sessão. Meta+E e Meta+L dependem dos atalhos
 existentes do KDE. O possível conflito de Meta+L com foco do Krohnkite deve ser
 verificado em cada instalação. Alt+F4 e Ctrl+Alt+Del são preservados.
 
@@ -65,5 +65,5 @@ o Layan upstream e copia estes arquivos por cima, com backup em
 `~/.local/state/dotfiles/`. 
 `./plasma/theme.sh` aplica o perfil atual: estilo Layan com as cores
 Catppuccin Mocha Sapphire. A tela de login é separada e requer sudo:
-`sudo ./theme/greeter.sh` (Plasma Login Manager). O fundo sólido do login
-ainda é escolhido à mão em Configurações > Tela de Login.
+`sudo ./theme/greeter.sh` (Plasma Login Manager), que também aplica o papel de
+parede `plasma/appearance/wallpaper.jpg` na tela de login.

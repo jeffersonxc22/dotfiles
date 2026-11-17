@@ -14,7 +14,7 @@ for pkg in "$HOME/.local/share/kwin/scripts/krohnkite" "$HOME/.local/share/kwin/
 done
 # Caminhos absolutos: o PATH do systemd do usuário não inclui ~/.local/bin.
 kitty=$(command -v kitty) || { echo 'Falta: kitty' >&2; exit 1; }
-chrome=$(command -v google-chrome-stable || command -v google-chrome) || { echo 'Falta: google-chrome' >&2; exit 1; }
+browser=$(command -v helium) || { echo 'Falta: helium' >&2; exit 1; }
 command -v systemd-run >/dev/null || { echo 'Falta: systemd-run' >&2; exit 1; }
 busctl --user get-property org.kde.KWin /VirtualDesktopManager org.kde.KWin.VirtualDesktopManager count >/dev/null
 busctl --user introspect org.kde.plasmashell /PlasmaShell >/dev/null
@@ -30,10 +30,15 @@ for name in workspace-move-follow app-launch-shortcuts; do
     cp -a "$dir/kwin/scripts/$name/." "$target/"
 done
 mkdir -p "$HOME/.config/systemd/user" "$backup/systemd"
-for name in shortcut-kitty.service shortcut-chrome.service; do
+for name in shortcut-kitty.service shortcut-helium.service; do
     [[ ! -e $HOME/.config/systemd/user/$name ]] || cp -a "$HOME/.config/systemd/user/$name" "$backup/systemd/"
-    sed -e "s|@KITTY@|$kitty|" -e "s|@CHROME@|$chrome|" "$dir/systemd/user/$name.in" >"$HOME/.config/systemd/user/$name"
+    sed -e "s|@KITTY@|$kitty|" -e "s|@BROWSER@|$browser|" "$dir/systemd/user/$name.in" >"$HOME/.config/systemd/user/$name"
 done
+# Unit antiga do Chrome não faz mais parte do perfil.
+if [[ -e $HOME/.config/systemd/user/shortcut-chrome.service ]]; then
+    mkdir -p "$backup/systemd"
+    mv "$HOME/.config/systemd/user/shortcut-chrome.service" "$backup/systemd/"
+fi
 echo "Backup: $backup"
 systemctl --user daemon-reload
 for key in screenGapLeft screenGapRight screenGapTop screenGapBetween; do
@@ -109,7 +114,7 @@ done
 shortcut 4 kwin 'Window Close' kwin 'Fechar janela' 2 150994995 268435537
 shortcut 4 org.kde.krunner.desktop _launch KRunner KRunner 5 150994993 134217760 16777362 268435488 16777250
 shortcut 4 kwin 'Open Kitty window' kwin 'Open Kitty window' 1 268435540
-shortcut 4 kwin 'Open Chrome window' kwin 'Open Chrome window' 1 268435522
+shortcut 4 kwin 'Open Helium window' kwin 'Open Helium window' 1 268435522
 shortcut 4 ksmserver 'Log Out' 'Gerenciamento de sessões' 'Mostrar tela para encerrar sessão' 2 218103815 268435544
 
 logo=$(. /etc/os-release; echo "${LOGO:-start-here-kde}")

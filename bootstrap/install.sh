@@ -31,9 +31,12 @@ sudo dnf upgrade -y --refresh
 
 step 3 "Sistema: RPM Fusion, openh264, codecs e drivers"
 v="$(rpm -E %fedora)"
-rpm -q rpmfusion-free-release rpmfusion-nonfree-release >/dev/null 2>&1 || sudo dnf install -y \
-    "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$v.noarch.rpm" \
-    "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$v.noarch.rpm"
+# dnf5 invalida a transação se os dois releases adicionam repositórios de uma
+# vez; instale cada um separadamente.
+for flavor in free nonfree; do
+    rpm -q "rpmfusion-$flavor-release" >/dev/null 2>&1 || sudo dnf install -y \
+        "https://mirrors.rpmfusion.org/$flavor/fedora/rpmfusion-$flavor-release-$v.noarch.rpm"
+done
 sudo dnf config-manager setopt fedora-cisco-openh264.enabled=1
 sudo dnf install -y pciutils # lspci, usado pelo drivers.sh
 "$repo/bootstrap/drivers.sh"
@@ -81,12 +84,14 @@ step 12 "Plasma: Layan, Krohnkite, Geometry Change e tema Catppuccin"
 step 13 "Tela de login"
 sudo "$repo/theme/greeter.sh"
 
-step 14 "Programas: Google Chrome, Slack e Claude Code"
-# O rpm do Chrome adiciona o repositório do Google; atualiza pelo dnf.
-command -v google-chrome-stable >/dev/null 2>&1 \
-    || sudo dnf install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
-[[ $(xdg-settings get default-web-browser 2>/dev/null) == google-chrome.desktop ]] \
-    || xdg-settings set default-web-browser google-chrome.desktop
+step 14 "Programas: Helium (padrão), Slack e Claude Code"
+# Helium pelo COPR oficial (imput/helium); não há rpm nos repos do Fedora.
+rpm -q helium-bin >/dev/null 2>&1 || { sudo dnf copr enable -y imput/helium && sudo dnf install -y helium-bin; }
+[[ $(xdg-settings get default-web-browser 2>/dev/null) == helium.desktop ]] \
+    || xdg-settings set default-web-browser helium.desktop
+if rpm -q google-chrome-stable >/dev/null 2>&1; then
+    sudo dnf remove -y google-chrome-stable
+fi
 if ! rpm -q slack >/dev/null 2>&1; then
     # shortcut: a Slack não publica URL "latest" nem repositório; o link vem do HTML da página de download. Atualize rodando de novo.
     slack_rpm="$(curl -fsSL 'https://slack.com/downloads/instructions/linux?ddl=1&build=rpm' \
@@ -109,7 +114,7 @@ fi
 step 15 "Plasma: teclado (keyd), áreas de trabalho, tiling Krohnkite, atalhos do KWin e efeitos"
 "$repo/bootstrap/keyd.sh"
 # 10 áreas de trabalho, Krohnkite (BTree, gaps, Monocle), Geometry Change e
-# wobbly windows, atalhos (Meta+1..0, Meta+T kitty, Meta+B Chrome...) e painel.
+# wobbly windows, atalhos (Meta+1..0, Meta+T kitty, Meta+B Helium...) e painel.
 "$repo/plasma/apply.sh" --apply
 
 step 16 "Home no método PARA"

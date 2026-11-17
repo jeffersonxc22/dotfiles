@@ -2,7 +2,7 @@
 # Perfil visual: estilo Layan (Kvantum, decoração Aurorae, tema Plasma) com as
 # cores oficiais Catppuccin Mocha + Sapphire, sem blur e sem transparência,
 # ícones Slot-Dark-Icons (bandeja Papirus), cursor Catppuccin, fontes Inter e
-# Cascadia, fundo sólido Mocha Base na área de trabalho e no bloqueio,
+# Cascadia, papel de parede (appearance/wallpaper.jpg) na área de trabalho e no bloqueio,
 # propagado para KDE, GTK, kitty e Flatpak. Também põe o pager à direita,
 # logo antes da bandeja. É a única fonte da aparência.
 #
@@ -142,13 +142,14 @@ if command -v flatpak >/dev/null; then
     fi
 fi
 
-echo "== Fundo sólido Mocha Base (#1e1e2e): área de trabalho e tela de bloqueio"
-base='#1e1e2e'
-busctl --user call org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell evaluateScript s \
-    "desktops().forEach(function (d) { d.wallpaperPlugin = 'org.kde.color'; d.currentConfigGroup = ['Wallpaper', 'org.kde.color', 'General']; d.writeConfig('Color', '$base'); });" >/dev/null
+echo "== Papel de parede: área de trabalho e tela de bloqueio"
+# Cópia fora do repositório: o caminho gravado no Plasma não muda se o repo mudar de lugar.
+wall="$HOME/.local/share/wallpapers/dotfiles.jpg"
+install -Dm644 "$app/wallpaper.jpg" "$wall"
+plasma-apply-wallpaperimage "$wall" >/dev/null
 save "$HOME/.config/kscreenlockerrc"
-kwriteconfig6 --file kscreenlockerrc --group Greeter --key WallpaperPlugin org.kde.color
-kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.color --group General --key Color "$base"
+kwriteconfig6 --file kscreenlockerrc --group Greeter --key WallpaperPlugin org.kde.image
+kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image "file://$wall"
 
 echo "== Pager à direita (antes da bandeja)"
 rc="$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc"

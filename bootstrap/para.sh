@@ -9,6 +9,7 @@
 set -euo pipefail
 
 cfg="${XDG_CONFIG_HOME:-$HOME/.config}"
+state="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles/xdg-metadata-$(date +%Y%m%d%H%M%S)"
 mkdir -p "$cfg"
 mkdir -p "$HOME"/{Projetos,Áreas,Recursos,Arquivados}
 mkdir -p "$HOME/Projetos/Desktop"
@@ -41,6 +42,12 @@ fi
 for d in Desktop Documents Downloads Music Pictures Public Templates Videos \
     "Área de trabalho" Documentos Música Músicas Imagens Público Modelos Vídeos; do
     [[ -d $HOME/$d && ! -L $HOME/$d ]] || continue
+    # O KDE põe um .directory de metadados mesmo em pastas vazias; guarde-o em
+    # vez de deixar a pasta fora do PARA (nunca apagar conteúdo do usuário).
+    if [[ -f $HOME/$d/.directory ]] && (( $(find "$HOME/$d" -mindepth 1 -maxdepth 1 | wc -l) == 1 )); then
+        mkdir -p "$state/$d"
+        mv "$HOME/$d/.directory" "$state/$d/.directory"
+    fi
     if rmdir "$HOME/$d" 2>/dev/null; then
         echo "  removida ~/$d (vazia)"
     else

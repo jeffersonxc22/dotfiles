@@ -3,7 +3,7 @@
   "KPlugin": {
     "Id": "app-launch-shortcuts",
     "Name": "Application launch shortcuts",
-    "Description": "Launch Kitty and Chrome windows",
+    "Description": "Launch Kitty and Helium windows",
     "Version": "1.0"
   },
   "X-Plasma-API": "javascript",
